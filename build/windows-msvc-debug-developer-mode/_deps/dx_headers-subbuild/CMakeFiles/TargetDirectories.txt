@@ -1,3 +1,0 @@
-E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_headers-subbuild/CMakeFiles/dx_headers-populate.dir
-E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_headers-subbuild/CMakeFiles/ALL_BUILD.dir
-E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_headers-subbuild/CMakeFiles/ZERO_CHECK.dir
