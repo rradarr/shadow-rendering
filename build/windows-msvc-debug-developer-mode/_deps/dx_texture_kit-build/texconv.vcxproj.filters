@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-src\Texconv\texconv.cpp">
+      <Filter>texconv</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-src\Texconv\ExtendedBMP.cpp">
+      <Filter>texconv</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-src\Texconv\PortablePixMap.cpp">
+      <Filter>texconv</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-src\Texconv\Texconv.rc">
+      <Filter>texconv</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="texconv">
+      <UniqueIdentifier>{47358594-50CA-31A3-846C-1595282C2B6E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

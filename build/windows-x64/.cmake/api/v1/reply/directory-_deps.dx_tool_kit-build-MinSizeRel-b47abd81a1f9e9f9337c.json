@@ -1,0 +1,142 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"build/windows-x64/_deps/dx_tool_kit-src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 346,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 356,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 361,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 364,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 392,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"lib/MinSizeRel/DirectXTK12.lib"
+			],
+			"targetId" : "DirectXTK12::@183575ff26ed4e7fe269",
+			"targetIndex" : 11,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "share/directxtk12",
+			"exportName" : "DirectXTK12-targets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "DirectXTK12::@183575ff26ed4e7fe269",
+					"index" : 11
+				}
+			],
+			"paths" : 
+			[
+				"_deps/dx_tool_kit-build/CMakeFiles/Export/dc79b1416ca4e830525952dfb83a96c7/DirectXTK12-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "include/directxtk12",
+			"paths" : 
+			[
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/BufferHelpers.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/CommonStates.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/DDSTextureLoader.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/DescriptorHeap.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/DirectXHelpers.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/Effects.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/EffectPipelineStateDescription.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/GeometricPrimitive.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/GraphicsMemory.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/Model.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/PostProcess.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/PrimitiveBatch.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/RenderTargetState.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/ResourceUploadBatch.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/ScreenGrab.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/SpriteBatch.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/SpriteFont.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/VertexTypes.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/WICTextureLoader.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/GamePad.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/Keyboard.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/Mouse.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/SimpleMath.h",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/SimpleMath.inl",
+				"build/windows-x64/_deps/dx_tool_kit-src/Inc/Audio.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "share/directxtk12",
+			"paths" : 
+			[
+				"build/windows-x64/_deps/dx_tool_kit-build/directxtk12-config.cmake",
+				"build/windows-x64/_deps/dx_tool_kit-build/directxtk12-config-version.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "lib/pkgconfig",
+			"paths" : 
+			[
+				"build/windows-x64/_deps/dx_tool_kit-build/DirectXTK12.pc"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/dx_tool_kit-build",
+		"source" : "build/windows-x64/_deps/dx_tool_kit-src"
+	}
+}

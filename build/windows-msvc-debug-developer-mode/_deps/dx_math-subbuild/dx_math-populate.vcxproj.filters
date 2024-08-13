@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\0240073cd2e2074a1478f23e2b759e83\dx_math-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\0240073cd2e2074a1478f23e2b759e83\dx_math-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\0240073cd2e2074a1478f23e2b759e83\dx_math-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\0240073cd2e2074a1478f23e2b759e83\dx_math-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\0240073cd2e2074a1478f23e2b759e83\dx_math-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\0240073cd2e2074a1478f23e2b759e83\dx_math-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\0240073cd2e2074a1478f23e2b759e83\dx_math-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\0240073cd2e2074a1478f23e2b759e83\dx_math-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\743369a9607ed88a635ed9acf78b4a51\dx_math-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\a213d55e7a998d2ab78ba374722db86a\dx_math-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-subbuild\CMakeFiles\dx_math-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{A30F19EB-F81F-364B-A642-2BAC0423BCB6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

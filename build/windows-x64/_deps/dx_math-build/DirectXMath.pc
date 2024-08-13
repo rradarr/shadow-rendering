@@ -1,0 +1,10 @@
+prefix=C:/Program Files/CmakeTestProject
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: DirectXMath
+Description: DirectXMath SIMD C++ math library
+URL: https://go.microsoft.com/fwlink/?LinkID=615560
+Version: 3.1.9
+Cflags: -I${includedir}
+Libs:

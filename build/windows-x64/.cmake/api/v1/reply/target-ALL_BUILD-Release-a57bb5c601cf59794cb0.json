@@ -1,0 +1,48 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"build/windows-x64/_deps/dx_texture_kit-src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "texconv::@7f3b663a382e33e0d738"
+		},
+		{
+			"id" : "texdiag::@7f3b663a382e33e0d738"
+		},
+		{
+			"id" : "DirectXTex::@7f3b663a382e33e0d738"
+		},
+		{
+			"id" : "ddsview::@7f3b663a382e33e0d738"
+		},
+		{
+			"id" : "texassemble::@7f3b663a382e33e0d738"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "ALL_BUILD::@7f3b663a382e33e0d738",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "_deps/dx_texture_kit-build",
+		"source" : "build/windows-x64/_deps/dx_texture_kit-src"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

@@ -1,0 +1,11 @@
+prefix=C:/Program Files/CmakeTestProject
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: DirectXMesh
+Description: DirectXMesh geometry Library
+URL: https://go.microsoft.com/fwlink/?LinkID=324981
+Version: 1.6.6
+Requires:
+Cflags: -I${includedir}
+Libs: -lDirectXMesh

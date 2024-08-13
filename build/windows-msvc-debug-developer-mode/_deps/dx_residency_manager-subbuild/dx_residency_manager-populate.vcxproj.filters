@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\bd1a288688557a8c00d9699e08475a78\dx_residency_manager-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\bd1a288688557a8c00d9699e08475a78\dx_residency_manager-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\bd1a288688557a8c00d9699e08475a78\dx_residency_manager-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\bd1a288688557a8c00d9699e08475a78\dx_residency_manager-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\bd1a288688557a8c00d9699e08475a78\dx_residency_manager-populate-copyfile.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\bd1a288688557a8c00d9699e08475a78\dx_residency_manager-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\bd1a288688557a8c00d9699e08475a78\dx_residency_manager-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\bd1a288688557a8c00d9699e08475a78\dx_residency_manager-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\bd1a288688557a8c00d9699e08475a78\dx_residency_manager-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\9b213afc9862f6f526b5914b80bc5d2f\dx_residency_manager-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\afcfc30fb59a50a66cb1c93cd935f4d7\dx_residency_manager-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_residency_manager-subbuild\CMakeFiles\dx_residency_manager-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{74C387B2-5E05-34AC-A096-DCFA17121FC8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

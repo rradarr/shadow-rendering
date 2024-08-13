@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\3b45bb5e7328f88395f32d02d87042bd\dx_mesh_kit-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\3b45bb5e7328f88395f32d02d87042bd\dx_mesh_kit-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\3b45bb5e7328f88395f32d02d87042bd\dx_mesh_kit-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\3b45bb5e7328f88395f32d02d87042bd\dx_mesh_kit-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\3b45bb5e7328f88395f32d02d87042bd\dx_mesh_kit-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\3b45bb5e7328f88395f32d02d87042bd\dx_mesh_kit-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\3b45bb5e7328f88395f32d02d87042bd\dx_mesh_kit-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\3b45bb5e7328f88395f32d02d87042bd\dx_mesh_kit-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\fb6c636d20d4204a5f52cb5f1686e484\dx_mesh_kit-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\09fb187195657ce27423241677ff1b19\dx_mesh_kit-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-subbuild\CMakeFiles\dx_mesh_kit-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{8E210BCB-DE39-36F5-909C-EE592179F97E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

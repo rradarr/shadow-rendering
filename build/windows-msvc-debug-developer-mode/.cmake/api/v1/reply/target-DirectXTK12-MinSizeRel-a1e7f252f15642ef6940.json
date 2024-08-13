@@ -1,0 +1,1169 @@
+{
+	"archive" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/machine:x64",
+				"role" : "flags"
+			}
+		]
+	},
+	"artifacts" : 
+	[
+		{
+			"path" : "lib/MinSizeRel/DirectXTK12.lib"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"target_compile_options",
+			"target_compile_definitions",
+			"target_include_directories",
+			"target_precompile_headers",
+			"target_compile_features"
+		],
+		"files" : 
+		[
+			"build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 267,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 346,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 397,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 408,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 407,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 448,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 269,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 279,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 288,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 272,
+				"parent" : 0
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 283,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O1 /Ob1 /DNDEBUG -std:c++17"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/Wall"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/EHsc"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/GR"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/guard:cf"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/guard:ehcont"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/sdl"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/permissive-"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/JMC-"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:__cplusplus"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:inline"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/fp:fast"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/ZH:SHA_256"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:preprocessor"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/wd5104"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/wd5105"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:lambda"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:checkGwOdr"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:templateScope"
+				},
+				{
+					"fragment" : "-WX"
+				},
+				{
+					"fragment" : "\"/YcE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/CMakeFiles/DirectXTK12.dir/MinSizeRel/cmake_pch.hxx\" \"/FpE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/DirectXTK12.dir/MinSizeRel/cmake_pch.pch\" \"/FIE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/CMakeFiles/DirectXTK12.dir/MinSizeRel/cmake_pch.hxx\""
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 5,
+					"define" : "UNICODE"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "_UNICODE"
+				},
+				{
+					"backtrace" : 6,
+					"define" : "_WIN32_WINNT=0x0A00"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 7,
+					"path" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/Shaders/Compiled"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src"
+				},
+				{
+					"backtrace" : 8,
+					"path" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					11
+				],
+				"standard" : "17"
+			},
+			"precompileHeaders" : 
+			[
+				{
+					"backtrace" : 10,
+					"header" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/pch.h"
+				}
+			],
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O1 /Ob1 /DNDEBUG -std:c++17"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/Wall"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/EHsc"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/GR"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/guard:cf"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/guard:ehcont"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/sdl"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/permissive-"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/JMC-"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:__cplusplus"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:inline"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/fp:fast"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/ZH:SHA_256"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:preprocessor"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/wd5104"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/wd5105"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:lambda"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:checkGwOdr"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/Zc:templateScope"
+				},
+				{
+					"fragment" : "-WX"
+				},
+				{
+					"fragment" : "\"/YuE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/CMakeFiles/DirectXTK12.dir/MinSizeRel/cmake_pch.hxx\" \"/FpE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/DirectXTK12.dir/MinSizeRel/cmake_pch.pch\" \"/FIE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/CMakeFiles/DirectXTK12.dir/MinSizeRel/cmake_pch.hxx\""
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 5,
+					"define" : "UNICODE"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "_UNICODE"
+				},
+				{
+					"backtrace" : 6,
+					"define" : "_WIN32_WINNT=0x0A00"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 7,
+					"path" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/Shaders/Compiled"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src"
+				},
+				{
+					"backtrace" : 8,
+					"path" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					11
+				],
+				"standard" : "17"
+			},
+			"precompileHeaders" : 
+			[
+				{
+					"backtrace" : 10,
+					"header" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/pch.h"
+				}
+			],
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				58,
+				59,
+				60,
+				62,
+				63,
+				64,
+				65,
+				66,
+				68
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "DirectXTK12::@183575ff26ed4e7fe269",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "C:/Program Files/CmakeTestProject"
+		}
+	},
+	"name" : "DirectXTK12",
+	"nameOnDisk" : "DirectXTK12.lib",
+	"paths" : 
+	{
+		"build" : "_deps/dx_tool_kit-build",
+		"source" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Src",
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				100
+			]
+		},
+		{
+			"name" : "Audio",
+			"sourceIndexes" : 
+			[
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69
+			]
+		},
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				70
+			]
+		},
+		{
+			"name" : "Inc",
+			"sourceIndexes" : 
+			[
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95
+			]
+		},
+		{
+			"name" : "Precompile Header File",
+			"sourceIndexes" : 
+			[
+				96,
+				97,
+				98,
+				99
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/CMakeFiles/DirectXTK12.dir/cmake_pch.cxx",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/AlphaTestEffect.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/BasicEffect.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/BasicPostProcess.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/BufferHelpers.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/CommonStates.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/d3dx12.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/DDSTextureLoader.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/DebugEffect.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/DescriptorHeap.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/DirectXHelpers.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/DualPostProcess.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/DualTextureEffect.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/EffectCommon.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/EffectCommon.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/EffectFactory.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/EffectPipelineStateDescription.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/EffectTextureFactory.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/EnvironmentMapEffect.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/GeometricPrimitive.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/GraphicsMemory.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/LinearAllocator.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/LinearAllocator.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/Model.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/ModelLoadCMO.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/ModelLoadSDKMESH.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/ModelLoadVBO.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/NormalMapEffect.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/PBREffect.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/PBREffectFactory.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/pch.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/PrimitiveBatch.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/ResourceUploadBatch.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/ScreenGrab.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/SkinnedEffect.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/SpriteBatch.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/SpriteFont.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/ToneMapPostProcess.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/VertexTypes.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/WICTextureLoader.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/BinaryReader.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/GamePad.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/Geometry.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/Keyboard.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/Mouse.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/SimpleMath.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/AlignedNew.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/Bezier.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/BinaryReader.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/DDS.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/DemandCreate.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/Geometry.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/LoaderHelpers.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/PlatformHelpers.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/SDKMesh.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/SharedResourcePool.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/vbo.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/TeapotData.inc",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/AudioEngine.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/DynamicSoundEffectInstance.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/SoundCommon.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/SoundCommon.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/SoundEffect.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/SoundEffectInstance.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/SoundStreamInstance.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/WaveBank.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/WaveBankReader.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/WaveBankReader.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/WAVFileReader.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Audio/WAVFileReader.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/Shaders/Compiled/SpriteEffect_SpriteVertexShader.inc",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/BufferHelpers.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/CommonStates.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/DDSTextureLoader.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/DescriptorHeap.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/DirectXHelpers.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/Effects.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/EffectPipelineStateDescription.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/GeometricPrimitive.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/GraphicsMemory.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/Model.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/PostProcess.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/PrimitiveBatch.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/RenderTargetState.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/ResourceUploadBatch.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/ScreenGrab.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/SpriteBatch.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/SpriteFont.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/VertexTypes.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/WICTextureLoader.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/GamePad.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/Keyboard.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/Mouse.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/SimpleMath.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/SimpleMath.inl",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Inc/Audio.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 0,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/CMakeFiles/DirectXTK12.dir/Debug/cmake_pch.hxx",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 0,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/CMakeFiles/DirectXTK12.dir/Release/cmake_pch.hxx",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 0,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/CMakeFiles/DirectXTK12.dir/MinSizeRel/cmake_pch.hxx",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 0,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-build/CMakeFiles/DirectXTK12.dir/RelWithDebInfo/cmake_pch.hxx",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 0,
+			"path" : "build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-src/Src/Shaders/CompileShaders.cmd",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

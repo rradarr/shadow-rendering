@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/dx_tool_kit-populate"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/1692fc5d0ae95009b1045b89b1e7332c/dx_tool_kit-populate.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/fd6fd95be7d9e0155e82165adf8c5acd/dx_tool_kit-populate-complete.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/eb5a98111b1c9bc705dba48c9e1d1c1e/dx_tool_kit-populate-build.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/eb5a98111b1c9bc705dba48c9e1d1c1e/dx_tool_kit-populate-configure.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/eb5a98111b1c9bc705dba48c9e1d1c1e/dx_tool_kit-populate-download.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/eb5a98111b1c9bc705dba48c9e1d1c1e/dx_tool_kit-populate-install.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/eb5a98111b1c9bc705dba48c9e1d1c1e/dx_tool_kit-populate-mkdir.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/eb5a98111b1c9bc705dba48c9e1d1c1e/dx_tool_kit-populate-patch.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/eb5a98111b1c9bc705dba48c9e1d1c1e/dx_tool_kit-populate-test.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_tool_kit-subbuild/CMakeFiles/eb5a98111b1c9bc705dba48c9e1d1c1e/dx_tool_kit-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"dx_tool_kit-populate"
+		],
+		"name" : "dx_tool_kit-populate"
+	}
+}

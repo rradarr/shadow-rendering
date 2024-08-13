@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/dx_texture_kit-populate"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/57bb73a5e825d4084e468461a885a03c/dx_texture_kit-populate.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/6854b3621ba64f71c4f79226a62b34dc/dx_texture_kit-populate-complete.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/c8699f0dc9f21eb27ed4c8c075573cf7/dx_texture_kit-populate-build.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/c8699f0dc9f21eb27ed4c8c075573cf7/dx_texture_kit-populate-configure.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/c8699f0dc9f21eb27ed4c8c075573cf7/dx_texture_kit-populate-download.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/c8699f0dc9f21eb27ed4c8c075573cf7/dx_texture_kit-populate-install.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/c8699f0dc9f21eb27ed4c8c075573cf7/dx_texture_kit-populate-mkdir.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/c8699f0dc9f21eb27ed4c8c075573cf7/dx_texture_kit-populate-patch.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/c8699f0dc9f21eb27ed4c8c075573cf7/dx_texture_kit-populate-test.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_texture_kit-subbuild/CMakeFiles/c8699f0dc9f21eb27ed4c8c075573cf7/dx_texture_kit-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"dx_texture_kit-populate"
+		],
+		"name" : "dx_texture_kit-populate"
+	}
+}

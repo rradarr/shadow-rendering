@@ -1,0 +1,330 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build\CMakeFiles\DirectXTK12.dir\cmake_pch.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\AlphaTestEffect.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\BasicEffect.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\BasicPostProcess.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\BufferHelpers.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\CommonStates.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\DDSTextureLoader.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\DebugEffect.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\DescriptorHeap.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\DirectXHelpers.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\DualPostProcess.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\DualTextureEffect.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\EffectCommon.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\EffectFactory.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\EffectPipelineStateDescription.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\EffectTextureFactory.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\EnvironmentMapEffect.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\GeometricPrimitive.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\GraphicsMemory.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\LinearAllocator.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\Model.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\ModelLoadCMO.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\ModelLoadSDKMESH.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\ModelLoadVBO.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\NormalMapEffect.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\PBREffect.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\PBREffectFactory.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\PrimitiveBatch.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\ResourceUploadBatch.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\ScreenGrab.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\SkinnedEffect.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\SpriteBatch.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\SpriteFont.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\ToneMapPostProcess.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\VertexTypes.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\WICTextureLoader.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\BinaryReader.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\GamePad.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\Geometry.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\Keyboard.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\Mouse.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\SimpleMath.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\AudioEngine.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\DynamicSoundEffectInstance.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\SoundCommon.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\SoundEffect.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\SoundEffectInstance.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\SoundStreamInstance.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\WaveBank.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\WaveBankReader.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\WAVFileReader.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\d3dx12.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\EffectCommon.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\LinearAllocator.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\pch.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\AlignedNew.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\Bezier.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\BinaryReader.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\DDS.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\DemandCreate.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\Geometry.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\LoaderHelpers.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\PlatformHelpers.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\SDKMesh.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\SharedResourcePool.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\vbo.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\SoundCommon.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\WaveBankReader.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Audio\WAVFileReader.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\BufferHelpers.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\CommonStates.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\DDSTextureLoader.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\DescriptorHeap.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\DirectXHelpers.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\Effects.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\EffectPipelineStateDescription.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\GeometricPrimitive.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\GraphicsMemory.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\Model.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\PostProcess.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\PrimitiveBatch.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\RenderTargetState.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\ResourceUploadBatch.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\ScreenGrab.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\SpriteBatch.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\SpriteFont.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\VertexTypes.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\WICTextureLoader.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\GamePad.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\Keyboard.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\Mouse.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\SimpleMath.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\SimpleMath.inl">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Inc\Audio.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build\CMakeFiles\DirectXTK12.dir\Debug\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build\CMakeFiles\DirectXTK12.dir\Release\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build\CMakeFiles\DirectXTK12.dir\MinSizeRel\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build\CMakeFiles\DirectXTK12.dir\RelWithDebInfo\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\Shaders\CompileShaders.cmd">
+      <Filter>Src</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-src\Src\TeapotData.inc">
+      <Filter>Src</Filter>
+    </None>
+    <None Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build\Shaders\Compiled\SpriteEffect_SpriteVertexShader.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{71CC694E-2B53-3F1B-ACD2-51551B6B8A47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{337967B9-93AF-3452-BD67-2E57E0D7D683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Precompile Header File">
+      <UniqueIdentifier>{D50B794B-D97B-3E0F-B310-438FF4E4C59B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{B07D677B-7510-3133-B637-E7734D612096}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{74EE3739-3CDA-3FEE-8F22-C5C5AE65E713}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

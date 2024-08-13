@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_texture_kit-src\DDSView\ddsview.cpp">
+      <Filter>ddsview</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_texture_kit-src\DDSView\hlsl.cmd">
+      <Filter>ddsview</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_texture_kit-src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_texture_kit-build\Shaders\Compiled\ddsview_ps1D.inc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_texture_kit-src\DDSView\DDSView.rc">
+      <Filter>ddsview</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ddsview">
+      <UniqueIdentifier>{A1E1B3AF-8DE2-3639-B31E-ED131702A17B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

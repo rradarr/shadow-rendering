@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\c8699f0dc9f21eb27ed4c8c075573cf7\dx_texture_kit-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\c8699f0dc9f21eb27ed4c8c075573cf7\dx_texture_kit-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\c8699f0dc9f21eb27ed4c8c075573cf7\dx_texture_kit-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\c8699f0dc9f21eb27ed4c8c075573cf7\dx_texture_kit-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\c8699f0dc9f21eb27ed4c8c075573cf7\dx_texture_kit-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\c8699f0dc9f21eb27ed4c8c075573cf7\dx_texture_kit-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\c8699f0dc9f21eb27ed4c8c075573cf7\dx_texture_kit-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\c8699f0dc9f21eb27ed4c8c075573cf7\dx_texture_kit-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\6854b3621ba64f71c4f79226a62b34dc\dx_texture_kit-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\57bb73a5e825d4084e468461a885a03c\dx_texture_kit-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_texture_kit-subbuild\CMakeFiles\dx_texture_kit-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{9A5BC0E3-D3EB-36C1-A225-A7B14F16E878}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

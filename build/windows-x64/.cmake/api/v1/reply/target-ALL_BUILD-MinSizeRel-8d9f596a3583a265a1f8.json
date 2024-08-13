@@ -1,0 +1,39 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"build/windows-x64/_deps/dx_headers-src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "DirectX-Guids::@acf537c57def89d3cc57"
+		},
+		{
+			"id" : "DirectX-Headers::@acf537c57def89d3cc57"
+		},
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "ALL_BUILD::@acf537c57def89d3cc57",
+	"isGeneratorProvided" : true,
+	"name" : "ALL_BUILD",
+	"paths" : 
+	{
+		"build" : "_deps/dx_headers-build",
+		"source" : "build/windows-x64/_deps/dx_headers-src"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

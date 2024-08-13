@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-src\Meshconvert\Meshconvert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-src\Meshconvert\MeshOBJ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-src\Meshconvert\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-src\Meshconvert\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-src\Meshconvert\SDKMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_mesh_kit-src\Meshconvert\meshconvert.rc">
+      <Filter>meshconvert</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{9E4CC81E-94FD-3DD2-8766-A6E6F04997A1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{B07D677B-7510-3133-B637-E7734D612096}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="meshconvert">
+      <UniqueIdentifier>{B82B59C0-02ED-3724-B5A8-E54726021F0F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

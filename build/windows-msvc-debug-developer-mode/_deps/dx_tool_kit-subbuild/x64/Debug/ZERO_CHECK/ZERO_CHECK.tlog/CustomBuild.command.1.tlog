@@ -1,0 +1,10 @@
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\8F7E474016EBD6212A25171CBA252072\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild" "-BE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

@@ -1,0 +1,12 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=url
+command=C:/Program Files/CMake/bin/cmake.exe;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_mesh_kit-subbuild/dx_mesh_kit-populate-prefix/src/dx_mesh_kit-populate-stamp/download-dx_mesh_kit-populate.cmake;COMMAND;C:/Program Files/CMake/bin/cmake.exe;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_mesh_kit-subbuild/dx_mesh_kit-populate-prefix/src/dx_mesh_kit-populate-stamp/verify-dx_mesh_kit-populate.cmake;COMMAND;C:/Program Files/CMake/bin/cmake.exe;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_mesh_kit-subbuild/dx_mesh_kit-populate-prefix/src/dx_mesh_kit-populate-stamp/extract-dx_mesh_kit-populate.cmake
+source_dir=E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_mesh_kit-src
+work_dir=E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps
+url(s)=https://github.com/microsoft/DirectXMesh/archive/refs/tags/jun2024.zip
+hash=
+      no_extract=
+

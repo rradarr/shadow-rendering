@@ -1,0 +1,191 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"build/windows-x64/_deps/dx_texture_kit-src/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 334,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 344,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 349,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 352,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 390,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 643,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 643,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 643,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 643,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"lib/Debug/DirectXTex.lib"
+			],
+			"targetId" : "DirectXTex::@7f3b663a382e33e0d738",
+			"targetIndex" : 12,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "share/directxtex",
+			"exportName" : "DirectXTex-targets",
+			"exportTargets" : 
+			[
+				{
+					"id" : "DirectXTex::@7f3b663a382e33e0d738",
+					"index" : 12
+				}
+			],
+			"paths" : 
+			[
+				"_deps/dx_texture_kit-build/CMakeFiles/Export/b4b8ccd0ed55b608a430a1ab561f6d94/DirectXTex-targets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"build/windows-x64/_deps/dx_texture_kit-src/DirectXTex/DirectXTex.h",
+				"build/windows-x64/_deps/dx_texture_kit-src/DirectXTex/DirectXTex.inl"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "share/directxtex",
+			"paths" : 
+			[
+				"build/windows-x64/_deps/dx_texture_kit-build/directxtex-config.cmake",
+				"build/windows-x64/_deps/dx_texture_kit-build/directxtex-config-version.cmake"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "lib/pkgconfig",
+			"paths" : 
+			[
+				"build/windows-x64/_deps/dx_texture_kit-build/DirectXTex.pc"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"bin/Debug/texassemble.exe"
+			],
+			"targetId" : "texassemble::@7f3b663a382e33e0d738",
+			"targetIndex" : 19,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"bin/Debug/texconv.exe"
+			],
+			"targetId" : "texconv::@7f3b663a382e33e0d738",
+			"targetIndex" : 20,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 8,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"bin/Debug/texdiag.exe"
+			],
+			"targetId" : "texdiag::@7f3b663a382e33e0d738",
+			"targetIndex" : 21,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 9,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"bin/Debug/ddsview.exe"
+			],
+			"targetId" : "ddsview::@7f3b663a382e33e0d738",
+			"targetIndex" : 17,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/dx_texture_kit-build",
+		"source" : "build/windows-x64/_deps/dx_texture_kit-src"
+	}
+}

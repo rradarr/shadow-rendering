@@ -1,0 +1,152 @@
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\6371AA94B20C2E4E1CC094CD5650B2BB\DX_TOOL_KIT-POPULATE-MKDIR.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -Dcfgdir=/Debug -P "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/tmp/dx_tool_kit-populate-mkdirs.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/Debug/dx_tool_kit-populate-mkdir"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\6371AA94B20C2E4E1CC094CD5650B2BB\DX_TOOL_KIT-POPULATE-DOWNLOAD.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/download-dx_tool_kit-populate.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/verify-dx_tool_kit-populate.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/extract-dx_tool_kit-populate.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/Debug/dx_tool_kit-populate-download"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\6371AA94B20C2E4E1CC094CD5650B2BB\DX_TOOL_KIT-POPULATE-UPDATE.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/Debug/dx_tool_kit-populate-update"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\6371AA94B20C2E4E1CC094CD5650B2BB\DX_TOOL_KIT-POPULATE-PATCH.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/Debug/dx_tool_kit-populate-patch"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\6371AA94B20C2E4E1CC094CD5650B2BB\DX_TOOL_KIT-POPULATE-CONFIGURE.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/Debug/dx_tool_kit-populate-configure"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\6371AA94B20C2E4E1CC094CD5650B2BB\DX_TOOL_KIT-POPULATE-BUILD.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/Debug/dx_tool_kit-populate-build"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\6371AA94B20C2E4E1CC094CD5650B2BB\DX_TOOL_KIT-POPULATE-INSTALL.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/Debug/dx_tool_kit-populate-install"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\6371AA94B20C2E4E1CC094CD5650B2BB\DX_TOOL_KIT-POPULATE-TEST.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_tool_kit-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/Debug/dx_tool_kit-populate-test"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\B88F53D9DC8652C714BD234912D74AD9\DX_TOOL_KIT-POPULATE-COMPLETE.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/Debug"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/Debug/dx_tool_kit-populate-complete"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/dx_tool_kit-populate-prefix/src/dx_tool_kit-populate-stamp/Debug/dx_tool_kit-populate-done"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKEFILES\8F7E474016EBD6212A25171CBA252072\DX_TOOL_KIT-POPULATE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_TOOL_KIT-SUBBUILD\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild" "-BE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild" --check-stamp-file "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

@@ -1,0 +1,152 @@
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\0240073CD2E2074A1478F23E2B759E83\DX_MATH-POPULATE-MKDIR.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -Dcfgdir=/Debug -P "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/tmp/dx_math-populate-mkdirs.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/Debug/dx_math-populate-mkdir"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\0240073CD2E2074A1478F23E2B759E83\DX_MATH-POPULATE-DOWNLOAD.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/download-dx_math-populate.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/verify-dx_math-populate.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/extract-dx_math-populate.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/Debug/dx_math-populate-download"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\0240073CD2E2074A1478F23E2B759E83\DX_MATH-POPULATE-UPDATE.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/Debug/dx_math-populate-update"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\0240073CD2E2074A1478F23E2B759E83\DX_MATH-POPULATE-PATCH.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/Debug/dx_math-populate-patch"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\0240073CD2E2074A1478F23E2B759E83\DX_MATH-POPULATE-CONFIGURE.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/Debug/dx_math-populate-configure"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\0240073CD2E2074A1478F23E2B759E83\DX_MATH-POPULATE-BUILD.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/Debug/dx_math-populate-build"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\0240073CD2E2074A1478F23E2B759E83\DX_MATH-POPULATE-INSTALL.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/Debug/dx_math-populate-install"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\0240073CD2E2074A1478F23E2B759E83\DX_MATH-POPULATE-TEST.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\build\windows-msvc-debug-developer-mode\_deps\dx_math-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/Debug/dx_math-populate-test"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\743369A9607ED88A635ED9ACF78B4A51\DX_MATH-POPULATE-COMPLETE.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/CMakeFiles/Debug"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/CMakeFiles/Debug/dx_math-populate-complete"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/dx_math-populate-prefix/src/dx_math-populate-stamp/Debug/dx_math-populate-done"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKEFILES\A213D55E7A998D2AB78BA374722DB86A\DX_MATH-POPULATE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\BUILD\WINDOWS-MSVC-DEBUG-DEVELOPER-MODE\_DEPS\DX_MATH-SUBBUILD\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild" "-BE:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild" --check-stamp-file "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_math-subbuild/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

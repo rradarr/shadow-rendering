@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/dx_tool_kit-populate"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/8f7e474016ebd6212a25171cba252072/dx_tool_kit-populate.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/b88f53d9dc8652c714bd234912d74ad9/dx_tool_kit-populate-complete.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/6371aa94b20c2e4e1cc094cd5650b2bb/dx_tool_kit-populate-build.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/6371aa94b20c2e4e1cc094cd5650b2bb/dx_tool_kit-populate-configure.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/6371aa94b20c2e4e1cc094cd5650b2bb/dx_tool_kit-populate-download.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/6371aa94b20c2e4e1cc094cd5650b2bb/dx_tool_kit-populate-install.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/6371aa94b20c2e4e1cc094cd5650b2bb/dx_tool_kit-populate-mkdir.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/6371aa94b20c2e4e1cc094cd5650b2bb/dx_tool_kit-populate-patch.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/6371aa94b20c2e4e1cc094cd5650b2bb/dx_tool_kit-populate-test.rule"
+		},
+		{
+			"file" : "E:/programistyczne/Masters Project/build/windows-msvc-debug-developer-mode/_deps/dx_tool_kit-subbuild/CMakeFiles/6371aa94b20c2e4e1cc094cd5650b2bb/dx_tool_kit-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"dx_tool_kit-populate"
+		],
+		"name" : "dx_tool_kit-populate"
+	}
+}

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_texture_kit-subbuild\CMakeFiles\20556f36bb5537b3b73675ba46c0f086\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{E8EEC04B-127A-3BEF-AEC9-EA75F5991088}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

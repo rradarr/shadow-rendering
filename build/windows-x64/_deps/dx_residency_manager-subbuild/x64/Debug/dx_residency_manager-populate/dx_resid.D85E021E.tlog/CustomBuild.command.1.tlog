@@ -1,0 +1,162 @@
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\CE3E6B08AEA3B2C3E96A747FF33A7531\DX_RESIDENCY_MANAGER-POPULATE-MKDIR.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -Dcfgdir=/Debug -P "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/tmp/dx_residency_manager-populate-mkdirs.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-mkdir"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\CE3E6B08AEA3B2C3E96A747FF33A7531\DX_RESIDENCY_MANAGER-POPULATE-DOWNLOAD.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\test2\build\windows-x64\_deps"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/download-dx_residency_manager-populate.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/verify-dx_residency_manager-populate.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-download"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\CE3E6B08AEA3B2C3E96A747FF33A7531\DX_RESIDENCY_MANAGER-POPULATE-UPDATE.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-update"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\CE3E6B08AEA3B2C3E96A747FF33A7531\DX_RESIDENCY_MANAGER-POPULATE-PATCH.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-patch"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\CE3E6B08AEA3B2C3E96A747FF33A7531\DX_RESIDENCY_MANAGER-POPULATE-COPYFILE.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/d3dx12Residency.h" "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-src"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-copyfile"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\CE3E6B08AEA3B2C3E96A747FF33A7531\DX_RESIDENCY_MANAGER-POPULATE-CONFIGURE.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_residency_manager-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-configure"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\CE3E6B08AEA3B2C3E96A747FF33A7531\DX_RESIDENCY_MANAGER-POPULATE-BUILD.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_residency_manager-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-build"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\CE3E6B08AEA3B2C3E96A747FF33A7531\DX_RESIDENCY_MANAGER-POPULATE-INSTALL.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_residency_manager-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-install"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\CE3E6B08AEA3B2C3E96A747FF33A7531\DX_RESIDENCY_MANAGER-POPULATE-TEST.RULE
+setlocal
+cd "E:\programistyczne\Masters Project\test2\build\windows-x64\_deps\dx_residency_manager-build"
+if %errorlevel% neq 0 goto :cmEnd
+E:
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-test"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\909247FAEA22E8A8AB16DD0CDE7ADBF1\DX_RESIDENCY_MANAGER-POPULATE-COMPLETE.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E make_directory "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/CMakeFiles/Debug"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/CMakeFiles/Debug/dx_residency_manager-populate-complete"
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E touch "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/dx_residency_manager-populate-prefix/src/dx_residency_manager-populate-stamp/Debug/dx_residency_manager-populate-done"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKEFILES\1A01271217291D03D73E4D711C0AD8D1\DX_RESIDENCY_MANAGER-POPULATE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^E:\PROGRAMISTYCZNE\MASTERS PROJECT\TEST2\BUILD\WINDOWS-X64\_DEPS\DX_RESIDENCY_MANAGER-SUBBUILD\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SE:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild" "-BE:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild" --check-stamp-file "E:/programistyczne/Masters Project/test2/build/windows-x64/_deps/dx_residency_manager-subbuild/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
