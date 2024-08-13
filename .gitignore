@@ -1,7 +1,3 @@
-# Own Rules
-build/
-!Resources/
-
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -447,3 +443,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Own Rules
+build/
+!Resources/*
