@@ -16,7 +16,7 @@ DefaultTexturedMaterial.cpp
 DXContext.cpp
 Engine.cpp
 EngineHelpers.cpp
-EngineObject.cpp
+SceneObject.cpp
 LitMaterial.cpp
 Material.cpp
 Mesh.cpp

@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "DefaultRenderer.h"
 
-#include "EngineObject.h"
+#include "SceneObject.h"
 // #include "ResourceManager.h"
 
-void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, const std::vector<EngineObject> &sceneObjects, UINT currentFrameBufferIndex)
+void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, const std::vector<SceneObject> &sceneObjects, UINT currentFrameBufferIndex)
 {
     // Indicate that the back buffer will be used as a render target.
     auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargetResource.Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
@@ -23,7 +23,7 @@ void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, cons
 
     if(sceneObjects.size() > 0){
         commandList->SetGraphicsRootSignature(sceneObjects[0].GetMaterial()->GetRootSignature().Get());
-        for(const EngineObject& sceneObject : sceneObjects) {
+        for(const SceneObject& sceneObject : sceneObjects) {
             commandList->SetPipelineState(sceneObject.GetMaterial()->GetPSO().Get());
 
             commandList->SetGraphicsRootDescriptorTable(StandardMaterial::TABLE_TEXTURE_ALBEDO, sceneObject.GetAlbedoTextureDescriptorHandle());
@@ -62,10 +62,10 @@ void DefaultRenderer::SetViewport(CD3DX12_VIEWPORT viewport)
     this->scissor = CreateScissor(viewport);
 }
 
-void DefaultRenderer::SetDescriptorHeapStartHandle(CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapHandle)
-{
-    this->descriptorHeapHandle;
-}
+// void DefaultRenderer::SetDescriptorHeapStartHandle(CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapHandle)
+// {
+//     this->descriptorHeapHandle;
+// }
 
 void DefaultRenderer::SetLightingParametersBuffer(MappedResourceLocation lightingParameters)
 {

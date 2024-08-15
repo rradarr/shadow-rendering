@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "EngineObject.h"
+#include "SceneObject.h"
 
 Renderer::~Renderer()
 {

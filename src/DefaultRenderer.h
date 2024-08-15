@@ -10,7 +10,7 @@ public:
     DefaultRenderer() {};
     ~DefaultRenderer() {};
 
-    virtual void Render(ComPtr<ID3D12GraphicsCommandList> commandList, const std::vector<EngineObject>& sceneObjects, UINT currentFrameBufferIndex);
+    virtual void Render(ComPtr<ID3D12GraphicsCommandList> commandList, const std::vector<SceneObject>& sceneObjects, UINT currentFrameBufferIndex);
 
     /* This pointer will be used in state barrires. */
     void SetRenderTargetResource(ComPtr<ID3D12Resource> renderTargetResource);
@@ -22,7 +22,7 @@ public:
 
     /* The descriptor heap needs to be already bound by the application. It needs to contain
     all descriptors that will be used for rendering. */
-    void SetDescriptorHeapStartHandle(CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapHandle);
+    // void SetDescriptorHeapStartHandle(CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapHandle);
 
     void SetLightingParametersBuffer(MappedResourceLocation lightingParameters);
 
@@ -34,7 +34,7 @@ private:
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle;
     CD3DX12_VIEWPORT viewport;
     CD3DX12_RECT scissor;
-    CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapHandle;
+    // CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapHandle;
 
     MappedResourceLocation lightingParametersBuffer;
 };

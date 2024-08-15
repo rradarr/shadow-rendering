@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "Mesh.h"
 #include "RenderingComponents.h"
-#include "EngineObject.h"
+#include "SceneObject.h"
 #include "ResourceManager.h"
 #include "DefaultRenderer.h"
 
@@ -77,11 +77,11 @@ private:
     bool useWireframe = false;
 
     Mesh shipMesh;
-    EngineObject ship;
+    SceneObject ship;
 
     Texture sampleTexture;
 
-    std::vector<EngineObject> engineObjects;
+    std::vector<SceneObject> sceneObjects;
 
     ResourceManager resourceManager;
     MappedResourceLocation lightingParamsBuffer;

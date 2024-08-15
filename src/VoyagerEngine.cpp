@@ -10,7 +10,7 @@
 #include "BufferMemoryManager.h"
 #include "EngineHelpers.h"
 
-#include "EngineObject.h"
+#include "SceneObject.h"
 #include <random>
 #include <limits>
 
@@ -93,14 +93,14 @@ void VoyagerEngine::OnUpdate()
     DirectX::XMMATRIX viewMat = DirectX::XMLoadFloat4x4(&m_mainCamera.viewMat); // load view matrix
     DirectX::XMMATRIX projMat = DirectX::XMLoadFloat4x4(&m_mainCamera.projMat); // load projection matrix
 
-    for (EngineObject &engineObject : engineObjects) {
+    for (SceneObject &sceneObject : sceneObjects) {
 
-        DirectX::XMMATRIX rotMat = DirectX::XMLoadFloat4x4(&engineObject.rotation) * engineObject.delta_rotXMat * engineObject.delta_rotYMat * engineObject.delta_rotZMat;
+        DirectX::XMMATRIX rotMat = DirectX::XMLoadFloat4x4(&sceneObject.rotation) * sceneObject.delta_rotXMat * sceneObject.delta_rotYMat * sceneObject.delta_rotZMat;
 
         // create translation matrix for cube 1 from cube 1's position vector
-        DirectX::XMMATRIX translationMat = DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat4(&engineObject.position));
+        DirectX::XMMATRIX translationMat = DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat4(&sceneObject.position));
 
-        DirectX::XMStoreFloat4x4(&engineObject.rotation, rotMat);
+        DirectX::XMStoreFloat4x4(&sceneObject.rotation, rotMat);
 
         // we want cube 2 to be half the size of cube 1, so we scale it by .5 in all dimensions
 
@@ -109,7 +109,7 @@ void VoyagerEngine::OnUpdate()
 
         // create cube1's world matrix by first rotating the cube, then positioning the rotated cube
         DirectX::XMMATRIX worldMat = scaleMat * translationMat *rotMat;
-        DirectX::XMStoreFloat4x4(&engineObject.worldMat, worldMat);
+        DirectX::XMStoreFloat4x4(&sceneObject.worldMat, worldMat);
         // store cube1's world matrix
 
         DirectX::XMStoreFloat4x4(&m_wvpPerObject.worldMat, DirectX::XMMatrixTranspose(worldMat));
@@ -121,12 +121,12 @@ void VoyagerEngine::OnUpdate()
         // update constant buffer for cube1
         // create the wvp matrix and store in constant buffer
 
-        DirectX::XMMATRIX wvpMat = DirectX::XMLoadFloat4x4(&engineObject.worldMat) * viewMat * projMat; // create wvp matrix
+        DirectX::XMMATRIX wvpMat = DirectX::XMLoadFloat4x4(&sceneObject.worldMat) * viewMat * projMat; // create wvp matrix
         DirectX::XMMATRIX transposed = DirectX::XMMatrixTranspose(wvpMat); // must transpose wvp matrix for the gpu
         DirectX::XMStoreFloat4x4(&m_wvpPerObject.wvpMat, transposed); // store transposed wvp matrix in constant buffer
         // copy our ConstantBuffer instance to the mapped constant buffer resource
-        engineObject.UpdateWVPMatrices(&m_wvpPerObject, sizeof(m_wvpPerObject), m_frameBufferIndex);
-        // memcpy(m_WVPConstantBuffersGPUAddress[m_frameBufferIndex] + sizeof(m_wvpPerObject)* engineObject.idx, &m_wvpPerObject, sizeof(m_wvpPerObject));
+        sceneObject.UpdateWVPMatrices(&m_wvpPerObject, sizeof(m_wvpPerObject), m_frameBufferIndex);
+        // memcpy(m_WVPConstantBuffersGPUAddress[m_frameBufferIndex] + sizeof(m_wvpPerObject)* sceneObject.idx, &m_wvpPerObject, sizeof(m_wvpPerObject));
 
     }
 
@@ -477,7 +477,7 @@ void VoyagerEngine::LoadAssets()
     // Create the vertex and index buffers.
     {
         shipMesh.CreateFromFile("ship_v1_normals_test.obj");
-        ship = EngineObject(int(engineObjects.size()), &shipMesh);
+        ship = SceneObject(int(sceneObjects.size()), &shipMesh);
         
         // TODO new code
         CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
@@ -493,7 +493,7 @@ void VoyagerEngine::LoadAssets()
         ship.SetWVPPerFrameBufferLocations(WVPResources);
         // /TODO new code
 
-        //EngineObject engineObject = EngineObject(engineObjects.size(), shipMesh);
+        //SceneObject sceneObject = SceneObject(sceneObjects.size(), shipMesh);
         ship.position = DirectX::XMFLOAT4(2.f, 0.0f, 0.0f, 0.0f);
         ship.delta_rotXMat = DirectX::XMMatrixRotationX(0.0f);
         ship.delta_rotYMat = DirectX::XMMatrixRotationY(0.01f);
@@ -592,8 +592,8 @@ void VoyagerEngine::PopulateCommandList()
 
     DefaultRenderer renderer;
 
-    CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapStartHandle{CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart()};
-    renderer.SetDescriptorHeapStartHandle(descriptorHeapStartHandle);
+    // CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapStartHandle{CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart()};
+    // renderer.SetDescriptorHeapStartHandle(descriptorHeapStartHandle);
     
     renderer.SetRenderTargetResource(m_renderTargets[m_frameBufferIndex].Get());
 
@@ -606,7 +606,7 @@ void VoyagerEngine::PopulateCommandList()
     
     renderer.SetViewport(m_viewport);
 
-    std::vector<EngineObject> sceneObjects{ship};
+    std::vector<SceneObject> sceneObjects{ship};
     renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
 
     /*
@@ -658,11 +658,11 @@ void VoyagerEngine::PopulateCommandList()
 
         // draw ball
         int idx = 0;
-        for (int i = 0; i < engineObjects.size(); i++) {
-            engineObjects[i].mesh.InsertBufferBind(m_commandList);
+        for (int i = 0; i < sceneObjects.size(); i++) {
+            sceneObjects[i].mesh.InsertBufferBind(m_commandList);
             // set the root constant at index 0 for mvp matix
-            m_commandList->SetGraphicsRootConstantBufferView(0, m_WVPConstantBuffers[m_frameBufferIndex]->GetGPUVirtualAddress() + sizeof(wvpConstantBuffer) * engineObjects[i].idx);
-            engineObjects[i].mesh.InsertDrawIndexed(m_commandList);
+            m_commandList->SetGraphicsRootConstantBufferView(0, m_WVPConstantBuffers[m_frameBufferIndex]->GetGPUVirtualAddress() + sizeof(wvpConstantBuffer) * sceneObjects[i].idx);
+            sceneObjects[i].mesh.InsertDrawIndexed(m_commandList);
         }
 
         // draw ship

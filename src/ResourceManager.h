@@ -2,6 +2,8 @@
 
 using Microsoft::WRL::ComPtr;
 
+/* This class represents a resource location that is whithin
+a CPU-mapped buffer memory. */
 class MappedResourceLocation {
 public:
     MappedResourceLocation() = default;
@@ -20,6 +22,8 @@ private:
     D3D12_GPU_VIRTUAL_ADDRESS gpuResourceVirtualAddress;
 };
 
+/* This class is responsible for allocating GPU buffers
+and storing data into them.*/
 class ResourceManager {
 public:
     ResourceManager() = default;
@@ -37,6 +41,7 @@ private:
     };
 
     std::vector<ManagedBuffer> residentBuffers;
+    /* mappedBuffers elements map 1:1 to mappedMemory pointers */
     std::vector<ManagedBuffer> mappedBuffers;
     std::vector<UINT8 *> mappedMemory;
 };

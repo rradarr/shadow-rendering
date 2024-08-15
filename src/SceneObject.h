@@ -4,11 +4,11 @@
 #include "StandardMaterial.h"
 #include "ResourceManager.h"
 
-class EngineObject
+class SceneObject
 {
 public:
-	EngineObject(int index, Mesh* mesh);
-	EngineObject() = default;
+	SceneObject(int index, Mesh* mesh);
+	SceneObject() = default;
 
 	void SetMaterial(StandardMaterial* material);
 	void SetAlbedoTexture(D3D12_GPU_DESCRIPTOR_HANDLE descriptorHandle);
