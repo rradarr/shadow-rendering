@@ -10,6 +10,10 @@
 #include "BufferMemoryManager.h"
 #include "EngineHelpers.h"
 
+#include "imgui.h"
+#include "imgui_impl_dx12.h"
+#include "imgui_impl_win32.h"
+
 #include "SceneObject.h"
 #include <random>
 #include <limits>
@@ -172,7 +176,7 @@ void VoyagerEngine::OnRender()
     ThrowIfFailed(m_commandQueue->Signal(m_fence[m_frameBufferIndex].Get(), m_fenceValue[m_frameBufferIndex]));
 
     // Present the frame.
-    ThrowIfFailed(m_swapChain->Present(0, 0));
+    ThrowIfFailed(m_swapChain->Present(1, 0));
 
     //WaitForPreviousFrame();
 

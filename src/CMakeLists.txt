@@ -4,7 +4,7 @@ file(GLOB MY_SHADERS
 )
 file(COPY ${MY_SHADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/Resources)
 
-add_executable(CmakeTestProject WIN32
+add_executable(${CMAKE_PROJECT_NAME} WIN32
 main.cpp
 stdafx.cpp
 BufferMemoryManager.cpp
@@ -30,3 +30,5 @@ Timer.cpp
 VoyagerEngine.cpp
 WindowsApplication.cpp
 WireframeMaterial.cpp)
+
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE imgui)

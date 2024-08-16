@@ -46,13 +46,37 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(dx_math)
 
+FetchContent_Declare(
+    imgui_external
+    URL https://github.com/ocornut/imgui/archive/refs/tags/v1.91.0.zip
+    EXCLUDE_FROM_ALL
+)
+FetchContent_MakeAvailable(imgui_external)
+
+add_library(imgui
+	${imgui_external_SOURCE_DIR}/imgui.cpp
+	${imgui_external_SOURCE_DIR}/imgui_draw.cpp
+	${imgui_external_SOURCE_DIR}/imgui_tables.cpp
+	${imgui_external_SOURCE_DIR}/imgui_widgets.cpp
+	${imgui_external_SOURCE_DIR}/backends/imgui_impl_dx12.cpp
+    ${imgui_external_SOURCE_DIR}/backends/imgui_impl_win32.cpp
+)
+target_include_directories(imgui PUBLIC ${imgui_external_SOURCE_DIR})
+target_include_directories(imgui PUBLIC ${imgui_external_SOURCE_DIR}/backends/)
+
+# file(GLOB IMGUI_SOURCES ${IMGUI_PATH}/*.cpp) 
+# add_library("ImGui" STATIC imgui)
+# target_include_directories("ImGui" PUBLIC ${IMGUI_PATH})
+# target_link_libraries("ImGui" PUBLIC ImGui)
+
 include_directories(
     C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/um
     C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/shared
-    ./build/windows-x64/_deps/dx_headers-src/include/
-    ./build/windows-x64/_deps/dx_math-src/Inc/
+    ${CMAKE_BINARY_DIR}/_deps/dx_headers-src/include/
+    ${CMAKE_BINARY_DIR}/_deps/dx_math-src/Inc/
     ./src/dx_sample_helper_modified/
-    ./src/tiny_obj_loader/)
+    ./src/tiny_obj_loader/
+    )
 
 link_directories(
     C:/Program Files (x86)/Windows Kits/10/Lib/10.0.26100.0/um/x64
@@ -66,7 +90,3 @@ link_libraries(
 )
 
 add_subdirectory(./src)
-
-#target_link_libraries(CmakeTestProject PRIVATE lib_name::module)
-#target_link_libraries(CmakeTestProject D3d12.dll)
-#target_link_libraries(CmakeTestProject D3d12SDKLayers.dll)
