@@ -56,14 +56,11 @@ int WindowsApplication::Run(Engine* gameEngine, HINSTANCE hInstance, int nCmdSho
         {
             if (msg.message == WM_QUIT)
                 running = false;
-            if (msg.message == WM_PAINT)
-                break;
 
             TranslateMessage(&msg);
             DispatchMessage(&msg);  // this will call the WindowProc callback
         }
-        gameEngine->OnUpdate();
-        gameEngine->OnRender();
+        
     }
 
     gameEngine->OnDestroy();
@@ -82,8 +79,6 @@ LRESULT CALLBACK WindowsApplication::WindowProc(HWND hwnd, UINT uMsg, WPARAM wPa
     if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam)) {
         return true;
     }
-
-    
 
     switch (uMsg)
     {
@@ -139,6 +134,9 @@ LRESULT CALLBACK WindowsApplication::WindowProc(HWND hwnd, UINT uMsg, WPARAM wPa
             //FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW));
 
             //EndPaint(hwnd, &ps);
+
+            gameEngine->OnUpdate();
+            gameEngine->OnRender();
         }
         return 0;
 

@@ -7,6 +7,7 @@
 #include "SceneObject.h"
 #include "ResourceManager.h"
 #include "DefaultRenderer.h"
+#include "ImGuiController.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -85,7 +86,8 @@ private:
 
     ResourceManager resourceManager;
     MappedResourceLocation lightingParamsBuffer;
-
+    
+    ImGuiController imguiController;
 
     // Constant Descriptor Table resources.
     //ComPtr<ID3D12DescriptorHeap> m_constantDescriptorTableHeaps[mc_frameBufferCount];
@@ -129,11 +131,6 @@ private:
     DirectX::XMFLOAT2 windowCenter;
     DirectX::XMFLOAT3 keyboradMovementInput;
 
-    void InitImGui();
-    void UpdateImGui();
-    void RenderImGui(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
-    void ShutdownImGui();
-
     void LoadPipeline();
     void LoadAssets();
     void LoadMaterials();
@@ -142,7 +139,6 @@ private:
     void WaitForPreviousFrame();
 
     void SetLightPosition();
-    //void MyGenerateSphere(std::vector<Vertex>& triangleVertices, std::vector<DWORD>& triangleIndices, PlanetConfiguration planetDescripton, int id, bool sun, bool asteroid);
 
     void OnEarlyUpdate();
     void GetMouseDelta();

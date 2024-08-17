@@ -10,10 +10,6 @@
 #include "BufferMemoryManager.h"
 #include "EngineHelpers.h"
 
-#include "imgui.h"
-#include "imgui_impl_dx12.h"
-#include "imgui_impl_win32.h"
-
 #include "SceneObject.h"
 #include <random>
 #include <limits>
@@ -39,7 +35,7 @@ void VoyagerEngine::OnInit(HWND windowHandle)
     LoadPipeline();
     LoadAssets();
     LoadScene();
-    InitImGui();
+    imguiController.InitImGui(windowHandle, mc_frameBufferCount, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
     std::cout << "Engine initialized." << std::endl;
 }
 
@@ -160,7 +156,9 @@ void VoyagerEngine::OnUpdate()
     ship.UpdateWVPMatrices(&m_wvpPerObject, sizeof(m_wvpPerObject), m_frameBufferIndex);
     //memcpy(m_WVPConstantBuffersGPUAddress[m_frameBufferIndex] + sizeof(m_wvpPerObject) * ship.idx, &m_wvpPerObject, sizeof(m_wvpPerObject));
 
-    UpdateImGui();
+    imguiController.UpdateImGui();
+
+    // std::cout << "Updated" << std::endl;
 }
 
 void VoyagerEngine::OnRender()
@@ -183,7 +181,7 @@ void VoyagerEngine::OnRender()
 
     //WaitForPreviousFrame();
 
-    //std::cout << "Engine rendered." << std::endl;
+    // std::cout << "Rendered" << std::endl;
 }
 
 void VoyagerEngine::OnDestroy()
@@ -193,16 +191,12 @@ void VoyagerEngine::OnDestroy()
     if (m_swapChain->GetFullscreenState(&fs, NULL))
         m_swapChain->SetFullscreenState(false, NULL);
 
-    // Wait for the GPU to be done with all frames.
-    //WaitForPreviousFrame();
-    for (int i = 0; i < mc_frameBufferCount; i++) {
-        m_frameBufferIndex = i;
-        WaitForPreviousFrame();
-    }
+    // Wait for the GPU to be done with all work.
+    m_fenceValue[m_frameBufferIndex]++;
+    m_commandQueue->Signal(m_fence[m_frameBufferIndex].Get(), m_fenceValue[m_frameBufferIndex]);
+    WaitForPreviousFrame();
 
     CloseHandle(m_fenceEvent);
-
-    ShutdownImGui();
 
     std::cout << "Engine destroyed." << std::endl;
 }
@@ -273,48 +267,6 @@ void VoyagerEngine::OnGotFocus()
 void VoyagerEngine::OnLostFocus()
 {
     hasFocus = false;
-}
-
-void VoyagerEngine::InitImGui()
-{
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    UINT imguiDescriptorId = CbvSrvDescriptorHeapManager::ReserveDescriptorInHeap();
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplWin32_Init(this->windowHandle);
-    ImGui_ImplDX12_Init(DXContext::getDevice().Get(), mc_frameBufferCount, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 
-    CbvSrvDescriptorHeapManager::GetHeap().Get(),
-    // You'll need to designate a descriptor from your descriptor heap for Dear ImGui to use internally for its font texture's SRV
-    CbvSrvDescriptorHeapManager::GetCpuDescriptorHandle(imguiDescriptorId),
-    CbvSrvDescriptorHeapManager::GetGpuDescriptorHandle(imguiDescriptorId));
-}
-
-void VoyagerEngine::UpdateImGui()
-{
-    // Start the Dear ImGui frame
-    ImGui_ImplDX12_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-    ImGui::ShowDemoWindow();
-}
-
-void VoyagerEngine::RenderImGui(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList)
-{
-    ImGui::Render();
-    ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList.Get());
-}
-
-void VoyagerEngine::ShutdownImGui()
-{
-    ImGui_ImplDX12_Shutdown();
-    ImGui_ImplWin32_Shutdown();
-    ImGui::DestroyContext();
 }
 
 void VoyagerEngine::LoadPipeline()
