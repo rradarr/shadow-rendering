@@ -2,6 +2,8 @@
 #include "WindowsApplication.h"
 
 #include "Engine.h"
+#include "imgui.h"
+#include "imgui_impl_win32.h"
 
 HWND WindowsApplication::windowHandle = nullptr;
 HCURSOR WindowsApplication::cursor = NULL;
@@ -70,9 +72,18 @@ int WindowsApplication::Run(Engine* gameEngine, HINSTANCE hInstance, int nCmdSho
     return static_cast<char>(msg.wParam);
 }
 
+// Forward declare message handler from imgui_impl_win32.cpp
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK WindowsApplication::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     Engine* gameEngine = reinterpret_cast<Engine*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+
+    if (ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam)) {
+        return true;
+    }
+
+    
 
     switch (uMsg)
     {

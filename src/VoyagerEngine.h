@@ -129,6 +129,11 @@ private:
     DirectX::XMFLOAT2 windowCenter;
     DirectX::XMFLOAT3 keyboradMovementInput;
 
+    void InitImGui();
+    void UpdateImGui();
+    void RenderImGui(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList);
+    void ShutdownImGui();
+
     void LoadPipeline();
     void LoadAssets();
     void LoadMaterials();

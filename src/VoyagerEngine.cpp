@@ -39,6 +39,7 @@ void VoyagerEngine::OnInit(HWND windowHandle)
     LoadPipeline();
     LoadAssets();
     LoadScene();
+    InitImGui();
     std::cout << "Engine initialized." << std::endl;
 }
 
@@ -158,6 +159,8 @@ void VoyagerEngine::OnUpdate()
 
     ship.UpdateWVPMatrices(&m_wvpPerObject, sizeof(m_wvpPerObject), m_frameBufferIndex);
     //memcpy(m_WVPConstantBuffersGPUAddress[m_frameBufferIndex] + sizeof(m_wvpPerObject) * ship.idx, &m_wvpPerObject, sizeof(m_wvpPerObject));
+
+    UpdateImGui();
 }
 
 void VoyagerEngine::OnRender()
@@ -198,6 +201,8 @@ void VoyagerEngine::OnDestroy()
     }
 
     CloseHandle(m_fenceEvent);
+
+    ShutdownImGui();
 
     std::cout << "Engine destroyed." << std::endl;
 }
@@ -268,6 +273,48 @@ void VoyagerEngine::OnGotFocus()
 void VoyagerEngine::OnLostFocus()
 {
     hasFocus = false;
+}
+
+void VoyagerEngine::InitImGui()
+{
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    UINT imguiDescriptorId = CbvSrvDescriptorHeapManager::ReserveDescriptorInHeap();
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplWin32_Init(this->windowHandle);
+    ImGui_ImplDX12_Init(DXContext::getDevice().Get(), mc_frameBufferCount, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 
+    CbvSrvDescriptorHeapManager::GetHeap().Get(),
+    // You'll need to designate a descriptor from your descriptor heap for Dear ImGui to use internally for its font texture's SRV
+    CbvSrvDescriptorHeapManager::GetCpuDescriptorHandle(imguiDescriptorId),
+    CbvSrvDescriptorHeapManager::GetGpuDescriptorHandle(imguiDescriptorId));
+}
+
+void VoyagerEngine::UpdateImGui()
+{
+    // Start the Dear ImGui frame
+    ImGui_ImplDX12_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+    ImGui::ShowDemoWindow();
+}
+
+void VoyagerEngine::RenderImGui(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList)
+{
+    ImGui::Render();
+    ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList.Get());
+}
+
+void VoyagerEngine::ShutdownImGui()
+{
+    ImGui_ImplDX12_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
 }
 
 void VoyagerEngine::LoadPipeline()
@@ -341,7 +388,7 @@ void VoyagerEngine::LoadPipeline()
 
     std::cout << "Pipeline loaded." << std::endl;
 
-    CbvSrvDescriptorHeapManager::CreateHeap(mc_frameBufferCount + 1);
+    CbvSrvDescriptorHeapManager::CreateHeap(mc_frameBufferCount + 2);
 }
 
 void VoyagerEngine::LoadAssets()
@@ -612,6 +659,9 @@ void VoyagerEngine::PopulateCommandList()
 
     std::vector<SceneObject> sceneObjects{ship};
     renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+
+    //TODO: refactor ImGui rendering - the issue is with the render target transition barrier. It can't be within the renderer or imgui has bo be in the renderer...
+    // RenderImGui(m_commandList);
 
     /*
     // Inside defaultRenderer:

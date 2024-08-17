@@ -58,6 +58,7 @@ add_library(imgui
 	${imgui_external_SOURCE_DIR}/imgui_draw.cpp
 	${imgui_external_SOURCE_DIR}/imgui_tables.cpp
 	${imgui_external_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_external_SOURCE_DIR}/imgui_demo.cpp
 	${imgui_external_SOURCE_DIR}/backends/imgui_impl_dx12.cpp
     ${imgui_external_SOURCE_DIR}/backends/imgui_impl_win32.cpp
 )

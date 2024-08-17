@@ -2,7 +2,8 @@
 #include "DefaultRenderer.h"
 
 #include "SceneObject.h"
-// #include "ResourceManager.h"
+#include "imgui.h"
+#include "imgui_impl_dx12.h"
 
 void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, const std::vector<SceneObject> &sceneObjects, UINT currentFrameBufferIndex)
 {
@@ -35,6 +36,9 @@ void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, cons
             sceneObject.Draw(commandList);
         }
     }
+
+    ImGui::Render();
+    ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList.Get());
 
     // Indicate that the back buffer will now be used to present.
     barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargetResource.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);

@@ -27,6 +27,29 @@ UINT CbvSrvDescriptorHeapManager::AddShaderResourceView(D3D12_SHADER_RESOURCE_VI
     return currentHeadOffset++;
 }
 
+UINT CbvSrvDescriptorHeapManager::ReserveDescriptorInHeap()
+{
+    shaderAccessHeapHeadHandle.Offset(1, shaderAccessDescriptorSize);
+
+    return currentHeadOffset++;
+}
+
+CD3DX12_CPU_DESCRIPTOR_HANDLE CbvSrvDescriptorHeapManager::GetCpuDescriptorHandle(UINT descriptorIndex)
+{
+    assert(descriptorIndex <= currentHeadOffset);
+    CD3DX12_CPU_DESCRIPTOR_HANDLE offsetHandle = shaderAccessHeapHandle;
+    offsetHandle.Offset(descriptorIndex, shaderAccessDescriptorSize);
+    return offsetHandle;
+}
+
+CD3DX12_GPU_DESCRIPTOR_HANDLE CbvSrvDescriptorHeapManager::GetGpuDescriptorHandle(UINT descriptorIndex)
+{
+    assert(descriptorIndex <= currentHeadOffset);
+    CD3DX12_GPU_DESCRIPTOR_HANDLE offsetHandle{shaderAccessHeap->GetGPUDescriptorHandleForHeapStart()};
+    offsetHandle.Offset(descriptorIndex, shaderAccessDescriptorSize);
+    return offsetHandle;
+}
+
 void CbvSrvDescriptorHeapManager::CreateHeap(UINT numberOfDeaspriptorsInHeap)
 {
     heapDescriptorCapacity = numberOfDeaspriptorsInHeap;
