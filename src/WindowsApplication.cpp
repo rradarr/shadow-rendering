@@ -60,7 +60,8 @@ int WindowsApplication::Run(Engine* gameEngine, HINSTANCE hInstance, int nCmdSho
             TranslateMessage(&msg);
             DispatchMessage(&msg);  // this will call the WindowProc callback
         }
-        
+        // TODO: determine if this lets us render at max framerate, or not...
+        InvalidateRect(windowHandle, NULL, FALSE);
     }
 
     gameEngine->OnDestroy();

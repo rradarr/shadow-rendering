@@ -177,7 +177,7 @@ void VoyagerEngine::OnRender()
     ThrowIfFailed(m_commandQueue->Signal(m_fence[m_frameBufferIndex].Get(), m_fenceValue[m_frameBufferIndex]));
 
     // Present the frame.
-    ThrowIfFailed(m_swapChain->Present(1, 0));
+    ThrowIfFailed(m_swapChain->Present(0, 0));
 
     //WaitForPreviousFrame();
 
@@ -725,12 +725,9 @@ DirectX::XMFLOAT3 VoyagerEngine:: normalize(DirectX::XMFLOAT3 vec) {
     return DirectX::XMFLOAT3(vec.x / length, vec.y / length, vec.z / length);
 }
 
-
 DirectX::XMFLOAT3 VoyagerEngine::scale(DirectX::XMFLOAT3 vec, float scale) {
     return DirectX::XMFLOAT3(vec.x * scale, vec.y * scale, vec.z * scale);
 }
-
-
 
 float randFloat() {
     return static_cast<float>(rand()) / RAND_MAX;
@@ -744,13 +741,13 @@ void VoyagerEngine::OnEarlyUpdate()
     Timer* timer = Timer::GetInstance();
     timer->Update();
 
-    // Update FPS display every half a second.
+    // Update FPS display every second.
     static double timeTillFpsDisplayUpdate = 0.0;
     timeTillFpsDisplayUpdate += timer->GetDeltaTime();
-    if (timeTillFpsDisplayUpdate > 0.5)
+    if (timeTillFpsDisplayUpdate > 1.0)
     {
+        std::cout << timer->GetRollingAvgFps() << "\r";
         timeTillFpsDisplayUpdate = 0.0;
-        std::cout << timer->GetFps() << "\r";
     }
 
     GetMouseDelta();

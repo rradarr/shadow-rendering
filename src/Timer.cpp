@@ -23,7 +23,19 @@ Timer::Timer()
     lastFrameTime = li.QuadPart;
 }
 
-Timer* Timer::GetInstance()
+void Timer::UpdateRollingAvgFps()
+{
+    fpsTotal += fps;
+    fpsSamples++;
+
+    if(fpsSamples >= rollingAvgFpsWindow) {
+        rollingAvgFps = fpsTotal / fpsSamples;
+        fpsTotal = 0.0;
+        fpsSamples = 0;
+    }
+}
+
+Timer *Timer::GetInstance()
 {
     std::lock_guard<std::mutex> lock(mutex);
     if (instance == nullptr)
@@ -45,4 +57,6 @@ void Timer::Update()
     }
 
     lastFrameTime = li.QuadPart;
+
+    UpdateRollingAvgFps();
 }
