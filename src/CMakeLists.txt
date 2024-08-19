@@ -17,6 +17,7 @@ DXContext.cpp
 Engine.cpp
 EngineHelpers.cpp
 ImGuiController.cpp
+ImGuiPerformanceWindow.cpp
 SceneObject.cpp
 LitMaterial.cpp
 Material.cpp

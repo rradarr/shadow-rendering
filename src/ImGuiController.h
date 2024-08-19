@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ImGuiPerformanceWindow.h"
+
 class ImGuiController {
 public:
     ImGuiController();
@@ -12,4 +14,6 @@ public:
 
 private:
     bool initialized = false;
+
+    ImGuiPerformanceWindow perfWindow;
 };

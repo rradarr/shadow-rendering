@@ -24,8 +24,8 @@ public:
     virtual void OnKeyDown(UINT8 keyCode);
     virtual void OnKeyUp(UINT8 keyCode);
     virtual void OnMouseMove(int mouseX, int mouseY);
-    virtual void OnGotFocus();
-    virtual void OnLostFocus();
+    virtual void OnGotFocus() {};
+    virtual void OnLostFocus() {};
 
 private:
     static const UINT mc_frameBufferCount = 3;
@@ -125,11 +125,14 @@ private:
     UINT64 m_fenceValue[mc_frameBufferCount];
 
     // Input related objects
-    bool hasFocus;
+    bool isFlying;
     DirectX::XMFLOAT2 mousePos;
     DirectX::XMVECTOR mouseDelta;
     DirectX::XMFLOAT2 windowCenter;
     DirectX::XMFLOAT3 keyboradMovementInput;
+    struct KeyboradInput {
+        bool keyDownCTRL;
+    } keyboardInput;
 
     void LoadPipeline();
     void LoadAssets();

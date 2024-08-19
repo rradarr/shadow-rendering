@@ -22,7 +22,7 @@ VoyagerEngine::VoyagerEngine(UINT windowWidth, UINT windowHeight, std::string wi
     m_viewport = CD3DX12_VIEWPORT{ 0.0f, 0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
     m_scissorRect = CD3DX12_RECT{ 0, 0, static_cast<LONG>(windowWidth), static_cast<LONG>(windowHeight) };
     m_rtvDescriptorSize = 0;
-    hasFocus = true;
+    isFlying = false;
     windowCenter = { static_cast<float>(windowWidth) / 2.f, static_cast<float>(windowHeight) / 2.f };
     keyboradMovementInput = { 0, 0, 0 };
     mouseDelta = { 0, 0 };
@@ -203,70 +203,98 @@ void VoyagerEngine::OnDestroy()
 
 void VoyagerEngine::OnKeyDown(UINT8 keyCode)
 {
-    switch (keyCode) {
-    case 0x57: // W
-        keyboradMovementInput.z = 1;
-        break;
-    case 0x53: // S
-        keyboradMovementInput.z = -1;
-        break;
-    case 0x44: // D
-        keyboradMovementInput.x = 1;
-        break;
-    case 0x41: // A
-        keyboradMovementInput.x = -1;
-        break;
-    case 0x20: // SPACE
-        keyboradMovementInput.y = 1;
-        break;
-    case 0x11: // CTRL
-        keyboradMovementInput.y = -1;
-        break;
-    };
+    if(isFlying){
+        switch (keyCode) {
+        case 0x57: // W
+            keyboradMovementInput.z = 1;
+            break;
+        case 0x53: // S
+            keyboradMovementInput.z = -1;
+            break;
+        case 0x44: // D
+            keyboradMovementInput.x = 1;
+            break;
+        case 0x41: // A
+            keyboradMovementInput.x = -1;
+            break;
+        case 0x20: // SPACE
+            keyboradMovementInput.y = 1;
+            break;
+        case 0x11: // CTRL
+            keyboradMovementInput.y = -1;
+            break;
+        };
+    }
+    else {
+        switch (keyCode) {
+        case 0x11: // CTRL
+            keyboardInput.keyDownCTRL = true;
+            break;
+        };
+    }
+    
 }
 
 void VoyagerEngine::OnKeyUp(UINT8 keyCode)
 {
-    switch (keyCode) {
-    case 0x57: // W
-        keyboradMovementInput.z = keyboradMovementInput.z == 1? 0 : keyboradMovementInput.z;
-        break;
-    case 0x53: // S
-        keyboradMovementInput.z = keyboradMovementInput.z == -1? 0 : keyboradMovementInput.z;
-        break;
-    case 0x44: // D
-        keyboradMovementInput.x = keyboradMovementInput.x == 1 ? 0 : keyboradMovementInput.x;
-        break;
-    case 0x41: // A
-        keyboradMovementInput.x = keyboradMovementInput.x == -1 ? 0 : keyboradMovementInput.x;
-        break;
-    case 0x20: // SPACE
-        keyboradMovementInput.y = keyboradMovementInput.y == 1 ? 0 : keyboradMovementInput.y;
-        break;
-    case 0x11: // CTRL
-        keyboradMovementInput.y = keyboradMovementInput.y == -1 ? 0 : keyboradMovementInput.y;
-        break;
-    case 0x58: // X
-        useWireframe = !useWireframe;
-    };
+    if(isFlying) {
+        switch (keyCode) {
+        case 0x57: // W
+            keyboradMovementInput.z = keyboradMovementInput.z == 1? 0 : keyboradMovementInput.z;
+            break;
+        case 0x53: // S
+            keyboradMovementInput.z = keyboradMovementInput.z == -1? 0 : keyboradMovementInput.z;
+            break;
+        case 0x44: // D
+            keyboradMovementInput.x = keyboradMovementInput.x == 1 ? 0 : keyboradMovementInput.x;
+            break;
+        case 0x41: // A
+            keyboradMovementInput.x = keyboradMovementInput.x == -1 ? 0 : keyboradMovementInput.x;
+            break;
+        case 0x20: // SPACE
+            keyboradMovementInput.y = keyboradMovementInput.y == 1 ? 0 : keyboradMovementInput.y;
+            break;
+        case 0x11: // CTRL
+            keyboradMovementInput.y = keyboradMovementInput.y == -1 ? 0 : keyboradMovementInput.y;
+            break;
+        case 0x1B: // ESC
+            keyboradMovementInput.x = 0;
+            keyboradMovementInput.y = 0;
+            keyboradMovementInput.z = 0;
+            isFlying = false;
+            ShowCursor(TRUE);
+            break;
+        };
+    }
+    else {
+        switch(keyCode){
+        case 0x58: // X
+            useWireframe = !useWireframe;
+            break;
+        case 0x46: // F
+            if(keyboardInput.keyDownCTRL){
+                isFlying = true;
+                // TODO refactor this with some input handler & general app state...
+                ShowCursor(FALSE);
+            }
+            break;
+        case 0x11: // CTRL
+            keyboardInput.keyDownCTRL = false;
+            break;
+        }
+    }
+    
 }
 
 void VoyagerEngine::OnMouseMove(int mouseX, int mouseY)
 {
-    if (hasFocus)
+    if (isFlying)
     {
         mousePos = { static_cast<float>(mouseX), static_cast<float>(mouseY) };
     }
-}
-
-void VoyagerEngine::OnGotFocus()
-{
-    hasFocus = true;
-}
-
-void VoyagerEngine::OnLostFocus()
-{
-    hasFocus = false;
+    else {
+        mousePos = windowCenter;
+    }
 }
 
 void VoyagerEngine::LoadPipeline()
@@ -482,7 +510,6 @@ void VoyagerEngine::LoadAssets()
         shipMesh.CreateFromFile("ship_v1_normals_test.obj");
         ship = SceneObject(int(sceneObjects.size()), &shipMesh);
         
-        // TODO new code
         CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHandle = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
         descriptorHandle = descriptorHandle.Offset(sampleTexture.GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize());
         ship.SetAlbedoTexture(descriptorHandle);
@@ -494,7 +521,6 @@ void VoyagerEngine::LoadAssets()
             WVPResources.push_back(resource);
         }
         ship.SetWVPPerFrameBufferLocations(WVPResources);
-        // /TODO new code
 
         //SceneObject sceneObject = SceneObject(sceneObjects.size(), shipMesh);
         ship.position = DirectX::XMFLOAT4(2.f, 0.0f, 0.0f, 0.0f);
@@ -746,14 +772,16 @@ void VoyagerEngine::OnEarlyUpdate()
 
 void VoyagerEngine::GetMouseDelta()
 {
-    mouseDelta = DirectX::XMVectorSubtract(DirectX::XMLoadFloat2(&mousePos), DirectX::XMLoadFloat2(&windowCenter));
-    DirectX::XMFLOAT2 delta;
-    DirectX::XMStoreFloat2(&delta, mouseDelta);
-
-    if (hasFocus)
+    if (isFlying)
     {
+        mouseDelta = DirectX::XMVectorSubtract(DirectX::XMLoadFloat2(&mousePos), DirectX::XMLoadFloat2(&windowCenter));
+
         POINT center = { LONG(windowCenter.x), LONG(windowCenter.y) };
         ClientToScreen(windowHandle, &center);
         SetCursorPos(center.x, center.y);
+    }
+    else {
+        // Keep mouse delta of 0 when not flying
+        mouseDelta = {0.f, 0.f};
     }
 }

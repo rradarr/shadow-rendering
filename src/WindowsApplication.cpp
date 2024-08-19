@@ -107,21 +107,6 @@ LRESULT CALLBACK WindowsApplication::WindowProc(HWND hwnd, UINT uMsg, WPARAM wPa
         }
         return 0;
 
-    case WM_SETFOCUS:
-        {
-            gameEngine->OnGotFocus();
-            cursor = GetCursor();
-            SetCursor(NULL);
-        }
-        return 0;
-
-    case WM_KILLFOCUS:
-        {
-            gameEngine->OnLostFocus();
-            SetCursor(cursor);
-        }
-        return 0;
-
     case WM_PAINT:
         {
             // update and render the game

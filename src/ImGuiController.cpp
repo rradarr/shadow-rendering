@@ -6,7 +6,6 @@
 #include "imgui_impl_win32.h"
 #include "DXContext.h"
 #include "CbvSrvDescriptorHeapManager.h"
-#include "Timer.h"
 
 ImGuiController::ImGuiController()
 {
@@ -51,25 +50,17 @@ void ImGuiController::UpdateImGui()
     ImGui::NewFrame();
     // ImGui::ShowDemoWindow();
 
-    ImGuiIO& io = ImGui::GetIO();
-    float framerate = io.Framerate;
-
-    Timer* timer = Timer::GetInstance();
-
     {
-        static float f = 0.0f;
-        static int counter = 0;
+        ImGui::Begin("App settings");
 
-        ImGui::Begin("Framerate");                              // Create a window called "Framerate" and append into it.
+        bool perfVisible = perfWindow.GetVisibility();
+        ImGui::Checkbox("Performance info window", &perfVisible);
+        perfWindow.SetVisibility(perfVisible);
 
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter); // TODO make this into a nice lil graph.
-
-        ImGui::Text("ImGui-measured average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        ImGui::Text("Application-measured average %.3f ms/frame (%.1f FPS)", timer->GetRollingAvgDeltaTime() * 1000.0, timer->GetRollingAvgFps());
         ImGui::End();
     }
+
+    perfWindow.Display();
 }
 
 void ImGuiController::RenderImGui(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList)
