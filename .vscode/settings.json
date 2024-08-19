@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.hlsl": "hlsl",
         "vector": "cpp",
         "array": "cpp",
         "forward_list": "cpp",
@@ -76,7 +77,11 @@
         "xlocnum": "cpp",
         "xloctime": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "deque": "cpp",
+        "queue": "cpp",
+        "ranges": "cpp",
+        "span": "cpp"
     },
     "C_Cpp.default.compilerPath": "cl.exe"
 }

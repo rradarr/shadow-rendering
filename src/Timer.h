@@ -2,6 +2,8 @@
 
 #include <mutex>
 
+#include "RollingAverageUtil.h"
+
 class Timer
 {
 private:
@@ -14,14 +16,11 @@ protected:
 
     double timerFrequency = 0.0;
     long long lastFrameTime = 0;
-    double frameDelta = 0.0;
+    double deltaTime = 0.0;
     double fps = 0.0;
-    
-    double rollingAvgFps = 0.0;
-    double fpsTotal = 0.0;
-    unsigned int fpsSamples = 0;
-    unsigned int rollingAvgFpsWindow = 60;
-    void UpdateRollingAvgFps();
+
+    RollingAverageUtil<double> fpsRollingAvg;
+    RollingAverageUtil<double> deltaTimeRollingAvg;
 
 public:
     Timer(Timer& other) = delete;
@@ -32,10 +31,9 @@ public:
     // Call this once per frame
     void Update();
 
-    void SetRollingAvgFpsWindow(unsigned int windowInFrames) { rollingAvgFpsWindow = windowInFrames; }
-
     double GetFps() { return fps; }
-    double GetRollingAvgFps() { return rollingAvgFps; }
-    double GetDeltaTime() { return frameDelta; }
+    double GetRollingAvgFps() { return fpsRollingAvg.GetAverage(); }
+    double GetDeltaTime() { return deltaTime; }
+    double GetRollingAvgDeltaTime() { return deltaTimeRollingAvg.GetAverage(); }
 };
 

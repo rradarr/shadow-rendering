@@ -67,7 +67,7 @@ void ImGuiController::UpdateImGui()
         ImGui::Text("counter = %d", counter); // TODO make this into a nice lil graph.
 
         ImGui::Text("ImGui-measured average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        ImGui::Text("Application-measured average %.3f ms/frame (%.1f FPS)", timer->GetDeltaTime() * 1000.0, timer->GetRollingAvgFps());
+        ImGui::Text("Application-measured average %.3f ms/frame (%.1f FPS)", timer->GetRollingAvgDeltaTime() * 1000.0, timer->GetRollingAvgFps());
         ImGui::End();
     }
 }

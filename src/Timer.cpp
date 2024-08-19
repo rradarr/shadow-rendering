@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Timer.h"
 
-
 Timer* Timer::instance{ nullptr };
 std::mutex Timer::mutex;
 
@@ -21,18 +20,9 @@ Timer::Timer()
 
     QueryPerformanceCounter(&li);
     lastFrameTime = li.QuadPart;
-}
 
-void Timer::UpdateRollingAvgFps()
-{
-    fpsTotal += fps;
-    fpsSamples++;
-
-    if(fpsSamples >= rollingAvgFpsWindow) {
-        rollingAvgFps = fpsTotal / fpsSamples;
-        fpsTotal = 0.0;
-        fpsSamples = 0;
-    }
+    fpsRollingAvg.SetRollingWindowSize(60);
+    deltaTimeRollingAvg.SetRollingWindowSize(60);
 }
 
 Timer *Timer::GetInstance()
@@ -50,13 +40,15 @@ void Timer::Update()
     LARGE_INTEGER li;
     QueryPerformanceCounter(&li);
 
-    frameDelta = double(li.QuadPart - lastFrameTime) / timerFrequency;
+    deltaTime = double(li.QuadPart - lastFrameTime) / timerFrequency;
 
-    if (frameDelta > 0) {
-        fps = 1.0 / frameDelta;
+    if (deltaTime > 0) {
+        fps = 1.0 / deltaTime;
     }
 
     lastFrameTime = li.QuadPart;
 
-    UpdateRollingAvgFps();
+    // Update rolling averages.
+    fpsRollingAvg.AddObservation(fps);
+    deltaTimeRollingAvg.AddObservation(deltaTime);
 }

@@ -177,7 +177,7 @@ void VoyagerEngine::OnRender()
     ThrowIfFailed(m_commandQueue->Signal(m_fence[m_frameBufferIndex].Get(), m_fenceValue[m_frameBufferIndex]));
 
     // Present the frame.
-    ThrowIfFailed(m_swapChain->Present(0, 0));
+    ThrowIfFailed(m_swapChain->Present(1, 0));
 
     //WaitForPreviousFrame();
 
@@ -740,15 +740,6 @@ void VoyagerEngine::OnEarlyUpdate()
     // Update the timer values (deltaTime, FPS).
     Timer* timer = Timer::GetInstance();
     timer->Update();
-
-    // Update FPS display every second.
-    static double timeTillFpsDisplayUpdate = 0.0;
-    timeTillFpsDisplayUpdate += timer->GetDeltaTime();
-    if (timeTillFpsDisplayUpdate > 1.0)
-    {
-        std::cout << timer->GetRollingAvgFps() << "\r";
-        timeTillFpsDisplayUpdate = 0.0;
-    }
 
     GetMouseDelta();
 }

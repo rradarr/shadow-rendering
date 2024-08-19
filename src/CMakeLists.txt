@@ -24,6 +24,7 @@ Mesh.cpp
 NormalsDebugMaterial.cpp
 Renderer.cpp
 ResourceManager.cpp
+RollingAverageUtil.cpp
 StandardMaterial.cpp
 Texture.cpp
 TextureLoader.cpp
