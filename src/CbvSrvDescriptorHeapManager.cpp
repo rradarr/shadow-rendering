@@ -1,7 +1,7 @@
-#include "stdafx.h"
-#include "CbvSrvDescriptorHeapManager.h"
+#include "stdafx.hpp"
+#include "CbvSrvDescriptorHeapManager.hpp"
 
-#include "DXContext.h"
+#include "DXContext.hpp"
 #include "DXSampleHelper.h"
 
 ComPtr<ID3D12DescriptorHeap> CbvSrvDescriptorHeapManager::shaderAccessHeap; // Main descriptor heap for all SRV/CBV/UAV resource descriptors

@@ -2,7 +2,7 @@
 
 #include <mutex>
 
-#include "RollingAverageUtil.h"
+#include "RollingAverageUtil.hpp"
 
 class Timer
 {

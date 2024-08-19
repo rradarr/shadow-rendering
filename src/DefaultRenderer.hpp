@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Renderer.h"
-#include "ResourceManager.h"
+#include "Renderer.hpp"
+#include "ResourceManager.hpp"
 
 /* A default renderer that does not override the SceneObject materials. */
 class DefaultRenderer : public Renderer

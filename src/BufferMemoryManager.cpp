@@ -1,8 +1,8 @@
-#include "stdafx.h"
-#include "BufferMemoryManager.h"
+#include "stdafx.hpp"
+#include "BufferMemoryManager.hpp"
 
 #include "DXSampleHelper.h"
-#include "DXContext.h"
+#include "DXContext.hpp"
 
 bool BufferMemoryManager::initialized = false;
 ComPtr<ID3D12CommandAllocator> BufferMemoryManager::commandAllocator;

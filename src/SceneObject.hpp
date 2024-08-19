@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Mesh.h"
-#include "StandardMaterial.h"
-#include "ResourceManager.h"
+#include "Mesh.hpp"
+#include "StandardMaterial.hpp"
+#include "ResourceManager.hpp"
 
 class SceneObject
 {

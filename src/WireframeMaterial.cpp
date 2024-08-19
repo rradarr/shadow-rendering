@@ -1,6 +1,6 @@
-#include "stdafx.h"
-#include "Material.h"
-#include "WireframeMaterial.h"
+#include "stdafx.hpp"
+#include "Material.hpp"
+#include "WireframeMaterial.hpp"
 
 std::vector<D3D12_ROOT_PARAMETER> WireframeMaterial::CreateRootParameters()
 {

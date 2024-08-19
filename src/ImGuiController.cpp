@@ -1,11 +1,11 @@
-#include "stdafx.h"
-#include "ImGuiController.h"
+#include "stdafx.hpp"
+#include "ImGuiController.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
-#include "DXContext.h"
-#include "CbvSrvDescriptorHeapManager.h"
+#include "DXContext.hpp"
+#include "CbvSrvDescriptorHeapManager.hpp"
 
 ImGuiController::ImGuiController()
 {

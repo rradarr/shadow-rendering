@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ImGuiPerformanceWindow.h"
+#include "ImGuiPerformanceWindow.hpp"
 
 class ImGuiController {
 public:

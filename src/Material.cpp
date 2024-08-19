@@ -1,9 +1,9 @@
-#include "stdafx.h"
-#include "Material.h"
+#include "stdafx.hpp"
+#include "Material.hpp"
 
 #include "DXSampleHelper.h"
-#include "DXContext.h"
-#include "EngineHelpers.h"
+#include "DXContext.hpp"
+#include "EngineHelpers.hpp"
 
 Material::Material(const std::string vertexShaderFileName, const std::string pixelShaderFileName)
 {

@@ -1,9 +1,9 @@
-#include "stdafx.h"
-#include "Renderer.h"
+#include "stdafx.hpp"
+#include "Renderer.hpp"
 
 #include <vector>
 
-#include "SceneObject.h"
+#include "SceneObject.hpp"
 
 Renderer::~Renderer()
 {

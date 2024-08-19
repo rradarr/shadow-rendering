@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "DefaultTexturedMaterial.h"
+#include "stdafx.hpp"
+#include "DefaultTexturedMaterial.hpp"
 
 DefaultTexturedMaterial::DefaultTexturedMaterial(const std::string vertexShaderFileName, const std::string pixelShaderFileName)
 {

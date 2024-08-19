@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "TextureLoader.h"
+#include "stdafx.hpp"
+#include "TextureLoader.hpp"
 
 
 #include "DXSampleHelper.h"

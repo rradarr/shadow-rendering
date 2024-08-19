@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "EngineHelpers.h"
+#include "stdafx.hpp"
+#include "EngineHelpers.hpp"
 
 #include "DXSampleHelper.h"
 

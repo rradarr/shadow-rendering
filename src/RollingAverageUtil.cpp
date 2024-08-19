@@ -1,4 +1,4 @@
-#include "RollingAverageUtil.h"
+#include "RollingAverageUtil.hpp"
 
 #include <numeric>
 

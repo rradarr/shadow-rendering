@@ -1,9 +1,9 @@
-#include "stdafx.h"
-#include "ImGuiPerformanceWindow.h"
+#include "stdafx.hpp"
+#include "ImGuiPerformanceWindow.hpp"
 
 #include "imgui.h"
 
-#include "Timer.h"
+#include "Timer.hpp"
 
 void ImGuiPerformanceWindow::Display()
 {

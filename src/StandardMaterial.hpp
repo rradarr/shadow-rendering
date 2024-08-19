@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Material.h"
+#include "Material.hpp"
 
 /* This class should be used as a base for all non-overwriting
 standard scene object materials. The root parameters should not be changed

@@ -1,11 +1,11 @@
-#include "stdafx.h"
-#include "Texture.h"
+#include "stdafx.hpp"
+#include "Texture.hpp"
 
-#include "DXContext.h"
-#include "EngineHelpers.h"
-#include "BufferMemoryManager.h"
-#include "TextureLoader.h"
-#include "CbvSrvDescriptorHeapManager.h"
+#include "DXContext.hpp"
+#include "EngineHelpers.hpp"
+#include "BufferMemoryManager.hpp"
+#include "TextureLoader.hpp"
+#include "CbvSrvDescriptorHeapManager.hpp"
 
 Texture::Texture(const std::string fileName)
 {

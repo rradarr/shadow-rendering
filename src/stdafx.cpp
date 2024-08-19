@@ -2,4 +2,4 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #endif
 
-#include "stdafx.h"
+#include "stdafx.hpp"

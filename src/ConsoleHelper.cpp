@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "ConsoleHelper.h"
+#include "stdafx.hpp"
+#include "ConsoleHelper.hpp"
 
 
 bool RedirectConsoleIO()

@@ -1,16 +1,16 @@
-#include "stdafx.h"
-#include "VoyagerEngine.h"
+#include "stdafx.hpp"
+#include "VoyagerEngine.hpp"
 
 #include "DXSampleHelper.h"
-#include "CbvSrvDescriptorHeapManager.h"
-#include "TextureLoader.h"
-#include "WindowsApplication.h"
-#include "Timer.h"
-#include "DXContext.h"
-#include "BufferMemoryManager.h"
-#include "EngineHelpers.h"
+#include "CbvSrvDescriptorHeapManager.hpp"
+#include "TextureLoader.hpp"
+#include "WindowsApplication.hpp"
+#include "Timer.hpp"
+#include "DXContext.hpp"
+#include "BufferMemoryManager.hpp"
+#include "EngineHelpers.hpp"
 
-#include "SceneObject.h"
+#include "SceneObject.hpp"
 #include <random>
 #include <limits>
 

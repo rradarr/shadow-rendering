@@ -1,5 +1,5 @@
 #pragma once
-#include "StandardMaterial.h"
+#include "StandardMaterial.hpp"
 
 class LitMaterial : public StandardMaterial
 {

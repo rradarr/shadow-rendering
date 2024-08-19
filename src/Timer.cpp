@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "Timer.h"
+#include "stdafx.hpp"
+#include "Timer.hpp"
 
 Timer* Timer::instance{ nullptr };
 std::mutex Timer::mutex;

@@ -1,7 +1,7 @@
-#include "stdafx.h"
-#include "DefaultRenderer.h"
+#include "stdafx.hpp"
+#include "DefaultRenderer.hpp"
 
-#include "SceneObject.h"
+#include "SceneObject.hpp"
 #include "imgui.h"
 #include "imgui_impl_dx12.h"
 

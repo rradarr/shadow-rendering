@@ -1,6 +1,6 @@
-#include "stdafx.h"
+#include "stdafx.hpp"
 
-#include "SceneObject.h"
+#include "SceneObject.hpp"
 
 
 SceneObject::SceneObject(int index, Mesh* mesh) : mesh(mesh) {

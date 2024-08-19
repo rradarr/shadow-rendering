@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "Camera.h"
+#include "stdafx.hpp"
+#include "Camera.hpp"
 
 
 void Camera::InitCamera(DirectX::XMFLOAT4 cameraPosition, DirectX::XMFLOAT4 cameraTarget, float frameAspectRatio)

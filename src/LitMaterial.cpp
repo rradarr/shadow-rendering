@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "LitMaterial.h"
+#include "stdafx.hpp"
+#include "LitMaterial.hpp"
 
 LitMaterial::LitMaterial(const std::string vertexShaderFileName, const std::string pixelShaderFileName)
 {

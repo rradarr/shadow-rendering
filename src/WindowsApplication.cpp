@@ -1,7 +1,7 @@
-#include "stdafx.h"
-#include "WindowsApplication.h"
+#include "stdafx.hpp"
+#include "WindowsApplication.hpp"
 
-#include "Engine.h"
+#include "Engine.hpp"
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 

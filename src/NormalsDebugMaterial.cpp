@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "NormalsDebugMaterial.h"
+#include "stdafx.hpp"
+#include "NormalsDebugMaterial.hpp"
 
 std::vector<D3D12_ROOT_PARAMETER> NormalsDebugMaterial::CreateRootParameters()
 {

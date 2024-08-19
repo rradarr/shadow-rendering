@@ -1,6 +1,6 @@
-#include "stdafx.h"
+#include "stdafx.hpp"
 
-#include "StandardMaterial.h"
+#include "StandardMaterial.hpp"
 
 #include <iostream>
 

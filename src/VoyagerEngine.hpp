@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Engine.h"
-#include "Camera.h"
-#include "Mesh.h"
-#include "RenderingComponents.h"
-#include "SceneObject.h"
-#include "ResourceManager.h"
-#include "DefaultRenderer.h"
-#include "ImGuiController.h"
+#include "Engine.hpp"
+#include "Camera.hpp"
+#include "Mesh.hpp"
+#include "RenderingComponents.hpp"
+#include "SceneObject.hpp"
+#include "ResourceManager.hpp"
+#include "DefaultRenderer.hpp"
+#include "ImGuiController.hpp"
 
 using Microsoft::WRL::ComPtr;
 

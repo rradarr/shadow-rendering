@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "DXContext.h"
+#include "stdafx.hpp"
+#include "DXContext.hpp"
 
 #include "DXSampleHelper.h"
 

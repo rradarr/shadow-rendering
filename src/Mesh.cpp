@@ -1,11 +1,11 @@
-#include "stdafx.h"
-#include "Mesh.h"
+#include "stdafx.hpp"
+#include "Mesh.hpp"
 
 //#include "tiny_obj_loader.h"
 
 #include "DXSampleHelper.h"
-#include "EngineHelpers.h"
-#include "BufferMemoryManager.h"
+#include "EngineHelpers.hpp"
+#include "BufferMemoryManager.hpp"
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<DWORD> indices)
 {

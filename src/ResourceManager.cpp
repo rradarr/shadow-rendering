@@ -1,9 +1,9 @@
-#include "stdafx.h"
-#include "ResourceManager.h"
+#include "stdafx.hpp"
+#include "ResourceManager.hpp"
 
 #include <sstream>
 
-#include "BufferMemoryManager.h"
+#include "BufferMemoryManager.hpp"
 
 UINT8 *MappedResourceLocation::GetMappedResourceAddress() const
 {

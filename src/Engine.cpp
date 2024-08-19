@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "Engine.h"
+#include "stdafx.hpp"
+#include "Engine.hpp"
 
 Engine::Engine(UINT windowWidth, UINT windowHeight, std::string windowName) :
     windowWidth(windowWidth), windowHeight(windowHeight), windowName(windowName)

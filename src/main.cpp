@@ -1,8 +1,8 @@
-#include "stdafx.h"
+#include "stdafx.hpp"
 
-#include "ConsoleHelper.h"
-#include "VoyagerEngine.h"
-#include "WindowsApplication.h"
+#include "ConsoleHelper.hpp"
+#include "VoyagerEngine.hpp"
+#include "WindowsApplication.hpp"
 
 _Use_decl_annotations_
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow) {
