@@ -421,7 +421,6 @@ void VoyagerEngine::LoadAssets()
             cbvDesc.BufferLocation = m_constantDescriptorTableBuffers[i]->GetGPUVirtualAddress();
             cbvDesc.SizeInBytes = m_cbvPerFrameSize;    // CB size is required to be 256-byte aligned.
             CbvSrvDescriptorHeapManager::AddConstantBufferView(cbvDesc);
-            std::cout << CbvSrvDescriptorHeapManager::GetCurrentHeadOffset() << std::endl;
 
             /*DXContext::getDevice().Get()->CreateConstantBufferView(&cbvDesc, m_shaderAccessHeapHeadHandle);
             m_shaderAccessHeapHeadHandle.Offset(1, m_shaderAccessDescriptorSize);
@@ -616,30 +615,30 @@ void VoyagerEngine::PopulateCommandList()
     // re-recording.
     ThrowIfFailed(m_commandList->Reset(m_commandAllocator[m_frameBufferIndex].Get(), materialLit.GetPSO().Get()));
 
+    // Indicate that the back buffer will be used as a render target.
+    auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+    m_commandList->ResourceBarrier(1, &barrier);
+
     ID3D12DescriptorHeap* descriptorHeaps[] = { CbvSrvDescriptorHeapManager::GetHeap().Get() };
     m_commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
+    // Render scene objects with the default renderer.
     DefaultRenderer renderer;
-
-    // CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapStartHandle{CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart()};
-    // renderer.SetDescriptorHeapStartHandle(descriptorHeapStartHandle);
-    
-    renderer.SetRenderTargetResource(m_renderTargets[m_frameBufferIndex].Get());
-
     renderer.SetLightingParametersBuffer(lightingParamsBuffer);
-    
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVHeap->GetCPUDescriptorHandleForHeapStart(), m_frameBufferIndex, m_rtvDescriptorSize);
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsHeap->GetCPUDescriptorHandleForHeapStart());
     renderer.SetRTV(rtvHandle);
     renderer.SetDSV(dsvHandle);
-    
     renderer.SetViewport(m_viewport);
-
     std::vector<SceneObject> sceneObjects{ship};
     renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
 
-    //TODO: refactor ImGui rendering - the issue is with the render target transition barrier. It can't be within the renderer or imgui has bo be in the renderer...
-    // RenderImGui(m_commandList);
+    // ImGui doesn't have its own renderer as rendering ImGui is very simple.
+    imguiController.RenderImGui(m_commandList);
+
+    // Indicate that the back buffer will now be used to present.
+    barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+    m_commandList->ResourceBarrier(1, &barrier);
 
     /*
     // Inside defaultRenderer:

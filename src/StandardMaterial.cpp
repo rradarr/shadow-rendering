@@ -10,9 +10,7 @@ StandardMaterial::StandardMaterial(const std::string vertexShaderFileName, const
 }
 
 std::vector<D3D12_ROOT_PARAMETER> StandardMaterial::CreateRootParameters()
-{
-    std::cout<< "StandardMaterial CreateRootParameters called." << std::endl;
-    
+{    
     // // create a descriptor range (descriptor table) and fill it out
     // // this is a range of descriptors inside a descriptor heap
     // descriptorTableVertexRanges.resize(1); // only one range right now

@@ -2,16 +2,10 @@
 #include "DefaultRenderer.hpp"
 
 #include "SceneObject.hpp"
-#include "imgui.h"
-#include "imgui_impl_dx12.h"
 
 void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, const std::vector<SceneObject> &sceneObjects, UINT currentFrameBufferIndex)
 {
-    // Indicate that the back buffer will be used as a render target.
-    auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargetResource.Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    commandList->ResourceBarrier(1, &barrier);
-
-    // Set the render target for the output merger stage (the output of the pipeline).
+        // Set the render target for the output merger stage (the output of the pipeline).
     commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 
     commandList->RSSetViewports(1, &viewport);
@@ -36,18 +30,6 @@ void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, cons
             sceneObject.Draw(commandList);
         }
     }
-
-    ImGui::Render();
-    ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList.Get());
-
-    // Indicate that the back buffer will now be used to present.
-    barrier = CD3DX12_RESOURCE_BARRIER::Transition(renderTargetResource.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-    commandList->ResourceBarrier(1, &barrier);
-}
-
-void DefaultRenderer::SetRenderTargetResource(ComPtr<ID3D12Resource> renderTargetResource)
-{
-    this->renderTargetResource = renderTargetResource;
 }
 
 void DefaultRenderer::SetRTV(CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle)
@@ -65,11 +47,6 @@ void DefaultRenderer::SetViewport(CD3DX12_VIEWPORT viewport)
     this->viewport = viewport;
     this->scissor = CreateScissor(viewport);
 }
-
-// void DefaultRenderer::SetDescriptorHeapStartHandle(CD3DX12_GPU_DESCRIPTOR_HANDLE descriptorHeapHandle)
-// {
-//     this->descriptorHeapHandle;
-// }
 
 void DefaultRenderer::SetLightingParametersBuffer(MappedResourceLocation lightingParameters)
 {
