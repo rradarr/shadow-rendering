@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Material.hpp"
+
 class WireframeMaterial : public Material
 {
 public:
@@ -8,10 +10,10 @@ public:
         Material(vertexShaderFileName, pixelShaderFileName);
     };
 
-    enum class RootSignatureParameters {
+    enum RootSignatureParameters {
         CBV_WVP = 0,
         PARAM_COUNT
-    } rootSigParams;
+    };
 
 private:
     std::vector<D3D12_ROOT_PARAMETER> rootParameters;

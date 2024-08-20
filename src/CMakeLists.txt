@@ -32,6 +32,7 @@ TextureLoader.cpp
 Timer.cpp
 VoyagerEngine.cpp
 WindowsApplication.cpp
-WireframeMaterial.cpp)
+WireframeMaterial.cpp
+WireframeRenderer.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE imgui)

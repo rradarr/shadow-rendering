@@ -6,8 +6,8 @@
 #include "RenderingComponents.hpp"
 #include "SceneObject.hpp"
 #include "ResourceManager.hpp"
-#include "DefaultRenderer.hpp"
 #include "ImGuiController.hpp"
+#include "WireframeRenderer.hpp"
 
 using Microsoft::WRL::ComPtr;
 
@@ -74,6 +74,8 @@ private:
     WireframeMaterial materialWireframe;
     NormalsDebugMaterial materialNormalsDebug;
     LitMaterial materialLit;
+
+    WireframeRenderer wireframeRenderer;
 
     bool useWireframe = false;
 

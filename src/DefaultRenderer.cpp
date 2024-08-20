@@ -5,7 +5,7 @@
 
 void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, const std::vector<SceneObject> &sceneObjects, UINT currentFrameBufferIndex)
 {
-        // Set the render target for the output merger stage (the output of the pipeline).
+    // Set the render target for the output merger stage (the output of the pipeline).
     commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 
     commandList->RSSetViewports(1, &viewport);
@@ -32,28 +32,7 @@ void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, cons
     }
 }
 
-void DefaultRenderer::SetRTV(CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle)
-{
-    this->rtvHandle = rtvHandle;
-}
-
-void DefaultRenderer::SetDSV(CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle)
-{
-    this->dsvHandle = dsvHandle;
-}
-
-void DefaultRenderer::SetViewport(CD3DX12_VIEWPORT viewport)
-{
-    this->viewport = viewport;
-    this->scissor = CreateScissor(viewport);
-}
-
 void DefaultRenderer::SetLightingParametersBuffer(MappedResourceLocation lightingParameters)
 {
     lightingParametersBuffer = lightingParameters;
-}
-
-CD3DX12_RECT DefaultRenderer::CreateScissor(CD3DX12_VIEWPORT viewport)
-{
-    return CD3DX12_RECT{ 0, 0, static_cast<LONG>(viewport.Width), static_cast<LONG>(viewport.Height) };
 }

@@ -9,6 +9,7 @@
 #include "DXContext.hpp"
 #include "BufferMemoryManager.hpp"
 #include "EngineHelpers.hpp"
+#include "DefaultRenderer.hpp"
 
 #include "SceneObject.hpp"
 #include <random>
@@ -577,8 +578,9 @@ void VoyagerEngine::LoadMaterials()
     // materialNoTex.SetShaders("VertexShader_noTex.hlsl", "PixelShader_noTex.hlsl");
     // materialNoTex.CreateMaterial();
 
-    // materialWireframe.SetShaders("VertexShader_wireframe.hlsl", "PixelShader_wireframe.hlsl");
-    // materialWireframe.CreateMaterial();
+    materialWireframe.SetShaders("VertexShader_wireframe.hlsl", "PixelShader_wireframe.hlsl");
+    materialWireframe.CreateMaterial();
+    wireframeRenderer.SetMaterial(&materialWireframe);
 
     // materialNormalsDebug.SetShaders("VertexShader_normalsDebug.hlsl", "PixelShader_normalsDebug.hlsl");
     // materialNormalsDebug.CreateMaterial();
@@ -622,16 +624,24 @@ void VoyagerEngine::PopulateCommandList()
     ID3D12DescriptorHeap* descriptorHeaps[] = { CbvSrvDescriptorHeapManager::GetHeap().Get() };
     m_commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
-    // Render scene objects with the default renderer.
-    DefaultRenderer renderer;
-    renderer.SetLightingParametersBuffer(lightingParamsBuffer);
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVHeap->GetCPUDescriptorHandleForHeapStart(), m_frameBufferIndex, m_rtvDescriptorSize);
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsHeap->GetCPUDescriptorHandleForHeapStart());
-    renderer.SetRTV(rtvHandle);
-    renderer.SetDSV(dsvHandle);
-    renderer.SetViewport(m_viewport);
     std::vector<SceneObject> sceneObjects{ship};
-    renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+    if(!useWireframe) {
+        // Render scene objects with the default renderer.
+        DefaultRenderer renderer;
+        renderer.SetLightingParametersBuffer(lightingParamsBuffer);
+        renderer.SetRTV(rtvHandle);
+        renderer.SetDSV(dsvHandle);
+        renderer.SetViewport(m_viewport);
+        renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+    }
+    else {
+        wireframeRenderer.SetRTV(rtvHandle);
+        wireframeRenderer.SetDSV(dsvHandle);
+        wireframeRenderer.SetViewport(m_viewport);
+        wireframeRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+    }
 
     // ImGui doesn't have its own renderer as rendering ImGui is very simple.
     imguiController.RenderImGui(m_commandList);
