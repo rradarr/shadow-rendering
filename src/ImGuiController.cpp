@@ -50,15 +50,36 @@ void ImGuiController::UpdateImGui()
     ImGui::NewFrame();
     // ImGui::ShowDemoWindow();
 
+    ImGui::Begin("App settings");
+    if (ImGui::BeginTabBar("##TabBar"))
     {
-        ImGui::Begin("App settings");
+        if (ImGui::BeginTabItem("Rendering"))
+        {
+            renderingOptions.Display();
 
-        bool perfVisible = perfWindow.GetVisibility();
-        ImGui::Checkbox("Performance info window", &perfVisible);
-        perfWindow.SetVisibility(perfVisible);
-
-        ImGui::End();
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Tools"))
+        {
+            perfWindow.DisplayEnablingCheckbox();
+            
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Controls"))
+        {
+            ImGui::SeparatorText("GENERAL CONTROLS:");
+            ImGui::BulletText("X - toggle wireframe rendering mode");
+            ImGui::BulletText("CTRL + F - enable flying controls mode");
+            ImGui::SeparatorText("FLYING MODE CONTROLS:");
+            ImGui::BulletText("WASD - movement forward, left, back, right");
+            ImGui::BulletText("CTRL, SPACE - movement down, up");
+            ImGui::BulletText("Mouse - look controls");
+            ImGui::BulletText("ESC - exit flying mode");       
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
     }
+    ImGui::End();
 
     perfWindow.Display();
 }

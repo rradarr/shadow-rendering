@@ -10,6 +10,7 @@
 #include "BufferMemoryManager.hpp"
 #include "EngineHelpers.hpp"
 #include "DefaultRenderer.hpp"
+#include "GlobalEngineState.hpp"
 
 #include "SceneObject.hpp"
 #include <random>
@@ -271,6 +272,9 @@ void VoyagerEngine::OnKeyUp(UINT8 keyCode)
         switch(keyCode){
         case 0x58: // X
             useWireframe = !useWireframe;
+            // TODO manage this state properly... maybe store last mode in chosenRenderingMode and use a method to toggle.
+            GlobalEngineState::GetInstance()->GetRenderingState().chosenRenderingMode =
+                useWireframe == true? 1 : 0;
             break;
         case 0x46: // F
             if(keyboardInput.keyDownCTRL){
@@ -627,7 +631,7 @@ void VoyagerEngine::PopulateCommandList()
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVHeap->GetCPUDescriptorHandleForHeapStart(), m_frameBufferIndex, m_rtvDescriptorSize);
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsHeap->GetCPUDescriptorHandleForHeapStart());
     std::vector<SceneObject> sceneObjects{ship};
-    if(!useWireframe) {
+    if(GlobalEngineState::GetInstance()->GetRenderingState().chosenRenderingMode == 0) {
         // Render scene objects with the default renderer.
         DefaultRenderer renderer;
         renderer.SetLightingParametersBuffer(lightingParamsBuffer);

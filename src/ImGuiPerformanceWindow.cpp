@@ -5,6 +5,11 @@
 
 #include "Timer.hpp"
 
+void ImGuiPerformanceWindow::DisplayEnablingCheckbox()
+{
+    ImGui::Checkbox("Performance info window", &isVisible);
+}
+
 void ImGuiPerformanceWindow::Display()
 {
     if(!isVisible)
@@ -34,7 +39,7 @@ void ImGuiPerformanceWindow::Display()
     ImGui::Text("%.1f FPS", fps);
 
     if(ImGui::Button("Close")) {
-        SetVisibility(false);
+        isVisible = false;
     }
     
     ImGui::End();
