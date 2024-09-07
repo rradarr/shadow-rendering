@@ -77,8 +77,6 @@ private:
 
     WireframeRenderer wireframeRenderer;
 
-    bool useWireframe = false;
-
     Mesh shipMesh;
     SceneObject ship;
 
@@ -125,16 +123,6 @@ private:
     HANDLE m_fenceEvent;
     ComPtr<ID3D12Fence> m_fence[mc_frameBufferCount];
     UINT64 m_fenceValue[mc_frameBufferCount];
-
-    // Input related objects
-    bool isFlying;
-    DirectX::XMFLOAT2 mousePos;
-    DirectX::XMVECTOR mouseDelta;
-    DirectX::XMFLOAT2 windowCenter;
-    DirectX::XMFLOAT3 keyboradMovementInput;
-    struct KeyboradInput {
-        bool keyDownCTRL;
-    } keyboardInput;
 
     void LoadPipeline();
     void LoadAssets();

@@ -16,12 +16,13 @@ DefaultTexturedMaterial.cpp
 DXContext.cpp
 Engine.cpp
 EngineHelpers.cpp
-GlobalEngineState.cpp
+EngineStateModel.cpp
 ImGuiController.cpp
 ImGuiPerformanceWindow.cpp
 ImGuiRenderingOptions.cpp
 SceneObject.cpp
 LitMaterial.cpp
+MainInputController.cpp
 Material.cpp
 Mesh.cpp
 NormalsDebugMaterial.cpp

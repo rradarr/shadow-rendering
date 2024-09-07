@@ -10,7 +10,8 @@
 #include "BufferMemoryManager.hpp"
 #include "EngineHelpers.hpp"
 #include "DefaultRenderer.hpp"
-#include "GlobalEngineState.hpp"
+#include "EngineStateModel.hpp"
+#include "MainInputController.hpp"
 
 #include "SceneObject.hpp"
 #include <random>
@@ -24,10 +25,10 @@ VoyagerEngine::VoyagerEngine(UINT windowWidth, UINT windowHeight, std::string wi
     m_viewport = CD3DX12_VIEWPORT{ 0.0f, 0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
     m_scissorRect = CD3DX12_RECT{ 0, 0, static_cast<LONG>(windowWidth), static_cast<LONG>(windowHeight) };
     m_rtvDescriptorSize = 0;
-    isFlying = false;
-    windowCenter = { static_cast<float>(windowWidth) / 2.f, static_cast<float>(windowHeight) / 2.f };
-    keyboradMovementInput = { 0, 0, 0 };
-    mouseDelta = { 0, 0 };
+
+    EngineStateModel* state = EngineStateModel::GetInstance();
+    state->GetWindowState().windowCenter = 
+        { static_cast<float>(windowWidth) / 2.f, static_cast<float>(windowHeight) / 2.f };
 }
 
 void VoyagerEngine::OnInit(HWND windowHandle)
@@ -37,6 +38,10 @@ void VoyagerEngine::OnInit(HWND windowHandle)
     LoadPipeline();
     LoadAssets();
     LoadScene();
+
+    // create an instance of the input handler.
+    MainInputController::GetInstance();
+
     imguiController.InitImGui(windowHandle, mc_frameBufferCount, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
     std::cout << "Engine initialized." << std::endl;
 }
@@ -49,8 +54,8 @@ void VoyagerEngine::OnUpdate()
     OnEarlyUpdate();
 
     DirectX::XMFLOAT2 delta;
-    DirectX::XMStoreFloat2(&delta, mouseDelta);
-    m_mainCamera.UpdateCamera(delta, keyboradMovementInput);
+    DirectX::XMStoreFloat2(&delta, EngineStateModel::GetInstance()->GetInputState().mouseDelta);
+    m_mainCamera.UpdateCamera(delta, EngineStateModel::GetInstance()->GetInputState().keyboradMovementInput);
     //keyboradMovementInput = { 0, 0, 0 };
 
     Timer* timer = Timer::GetInstance();
@@ -205,101 +210,17 @@ void VoyagerEngine::OnDestroy()
 
 void VoyagerEngine::OnKeyDown(UINT8 keyCode)
 {
-    if(isFlying){
-        switch (keyCode) {
-        case 0x57: // W
-            keyboradMovementInput.z = 1;
-            break;
-        case 0x53: // S
-            keyboradMovementInput.z = -1;
-            break;
-        case 0x44: // D
-            keyboradMovementInput.x = 1;
-            break;
-        case 0x41: // A
-            keyboradMovementInput.x = -1;
-            break;
-        case 0x20: // SPACE
-            keyboradMovementInput.y = 1;
-            break;
-        case 0x11: // CTRL
-            keyboradMovementInput.y = -1;
-            break;
-        };
-    }
-    else {
-        switch (keyCode) {
-        case 0x11: // CTRL
-            keyboardInput.keyDownCTRL = true;
-            break;
-        };
-    }
-    
+    MainInputController::GetInstance()->HandleKeyDown(keyCode);    
 }
 
 void VoyagerEngine::OnKeyUp(UINT8 keyCode)
 {
-    if(isFlying) {
-        switch (keyCode) {
-        case 0x57: // W
-            keyboradMovementInput.z = keyboradMovementInput.z == 1? 0 : keyboradMovementInput.z;
-            break;
-        case 0x53: // S
-            keyboradMovementInput.z = keyboradMovementInput.z == -1? 0 : keyboradMovementInput.z;
-            break;
-        case 0x44: // D
-            keyboradMovementInput.x = keyboradMovementInput.x == 1 ? 0 : keyboradMovementInput.x;
-            break;
-        case 0x41: // A
-            keyboradMovementInput.x = keyboradMovementInput.x == -1 ? 0 : keyboradMovementInput.x;
-            break;
-        case 0x20: // SPACE
-            keyboradMovementInput.y = keyboradMovementInput.y == 1 ? 0 : keyboradMovementInput.y;
-            break;
-        case 0x11: // CTRL
-            keyboradMovementInput.y = keyboradMovementInput.y == -1 ? 0 : keyboradMovementInput.y;
-            break;
-        case 0x1B: // ESC
-            keyboradMovementInput.x = 0;
-            keyboradMovementInput.y = 0;
-            keyboradMovementInput.z = 0;
-            isFlying = false;
-            ShowCursor(TRUE);
-            break;
-        };
-    }
-    else {
-        switch(keyCode){
-        case 0x58: // X
-            useWireframe = !useWireframe;
-            // TODO manage this state properly... maybe store last mode in chosenRenderingMode and use a method to toggle.
-            GlobalEngineState::GetInstance()->GetRenderingState().chosenRenderingMode =
-                useWireframe == true? 1 : 0;
-            break;
-        case 0x46: // F
-            if(keyboardInput.keyDownCTRL){
-                isFlying = true;
-                // TODO refactor this with some input handler & general app state...
-                ShowCursor(FALSE);
-            }
-            break;
-        case 0x11: // CTRL
-            keyboardInput.keyDownCTRL = false;
-            break;
-        }
-    }
-    
+    MainInputController::GetInstance()->HandleKeyUp(keyCode);
 }
 
 void VoyagerEngine::OnMouseMove(int mouseX, int mouseY)
 {
-    if (isFlying)
-    {
-        mousePos = { static_cast<float>(mouseX), static_cast<float>(mouseY) };
-    }
-    else {
-        mousePos = windowCenter;
-    }
+    MainInputController::GetInstance()->HandleMouseMove(mouseX, mouseY);
 }
 
 void VoyagerEngine::LoadPipeline()
@@ -631,7 +552,14 @@ void VoyagerEngine::PopulateCommandList()
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVHeap->GetCPUDescriptorHandleForHeapStart(), m_frameBufferIndex, m_rtvDescriptorSize);
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsHeap->GetCPUDescriptorHandleForHeapStart());
     std::vector<SceneObject> sceneObjects{ship};
-    if(GlobalEngineState::GetInstance()->GetRenderingState().chosenRenderingMode == 0) {
+    RenderingState::RenderingMode chosenRenderingMode = EngineStateModel::GetInstance()->GetRenderingState().chosenRenderingMode;
+    if (chosenRenderingMode == RenderingState::RenderingMode::WIREFRAME) {
+        wireframeRenderer.SetRTV(rtvHandle);
+        wireframeRenderer.SetDSV(dsvHandle);
+        wireframeRenderer.SetViewport(m_viewport);
+        wireframeRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+    }
+    else {
         // Render scene objects with the default renderer.
         DefaultRenderer renderer;
         renderer.SetLightingParametersBuffer(lightingParamsBuffer);
@@ -639,12 +567,6 @@ void VoyagerEngine::PopulateCommandList()
         renderer.SetDSV(dsvHandle);
         renderer.SetViewport(m_viewport);
         renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
-    }
-    else {
-        wireframeRenderer.SetRTV(rtvHandle);
-        wireframeRenderer.SetDSV(dsvHandle);
-        wireframeRenderer.SetViewport(m_viewport);
-        wireframeRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
     }
 
     // ImGui doesn't have its own renderer as rendering ImGui is very simple.
@@ -780,21 +702,6 @@ void VoyagerEngine::OnEarlyUpdate()
     Timer* timer = Timer::GetInstance();
     timer->Update();
 
-    GetMouseDelta();
-}
-
-void VoyagerEngine::GetMouseDelta()
-{
-    if (isFlying)
-    {
-        mouseDelta = DirectX::XMVectorSubtract(DirectX::XMLoadFloat2(&mousePos), DirectX::XMLoadFloat2(&windowCenter));
-
-        POINT center = { LONG(windowCenter.x), LONG(windowCenter.y) };
-        ClientToScreen(windowHandle, &center);
-        SetCursorPos(center.x, center.y);
-    }
-    else {
-        // Keep mouse delta of 0 when not flying
-        mouseDelta = {0.f, 0.f};
-    }
+    // Update the input states.
+    MainInputController::GetInstance()->EarlyUpdate(windowHandle);
 }
