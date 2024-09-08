@@ -8,12 +8,12 @@ struct RenderingState {
         WIREFRAME = 1,
         NORMALS_DEBUG = 2,
     };
-
+    RenderingMode chosenRenderingMode = RenderingMode::DEFAULT;
     static const char* renderingModeNames[3];
 
-    RenderingMode chosenRenderingMode = RenderingMode::DEFAULT;
-
     unsigned int selectedSceneID = 0;
+
+    bool renderGUI = true;
 };
 
 struct InputState {

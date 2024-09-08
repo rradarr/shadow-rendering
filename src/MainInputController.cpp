@@ -39,6 +39,13 @@ void MainInputController::HandleKeyDown(UINT8 keyCode)
 
 void MainInputController::HandleKeyUp(UINT8 keyCode)
 {
+    switch (keyCode) {
+        case 0x48: // H
+        stateModel->GetRenderingState().renderGUI = 
+            !stateModel->GetRenderingState().renderGUI;
+        break;
+    };
+
     if(modelInputState.isFlying) {
         switch (keyCode) {
         case 0x57: // W

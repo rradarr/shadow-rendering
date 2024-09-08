@@ -42,6 +42,8 @@ void ImGuiController::InitImGui(HWND windowHwnd, UINT framesInFlight, DXGI_FORMA
 
 void ImGuiController::UpdateImGui()
 {
+    if(!EngineStateModel::GetInstance()->GetRenderingState().renderGUI)
+        return;
     assert(initialized);
 
     // Start the Dear ImGui frame
@@ -69,6 +71,7 @@ void ImGuiController::UpdateImGui()
         {
             ImGui::SeparatorText("GENERAL CONTROLS:");
             ImGui::BulletText("X - toggle wireframe rendering mode");
+            ImGui::BulletText("H - toggle the GUI");
             ImGui::BulletText("CTRL + F - enable flying controls mode");
             ImGui::SeparatorText("FLYING MODE CONTROLS:");
             ImGui::BulletText("WASD - movement forward, left, back, right");
@@ -86,6 +89,8 @@ void ImGuiController::UpdateImGui()
 
 void ImGuiController::RenderImGui(Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList)
 {
+    if(!EngineStateModel::GetInstance()->GetRenderingState().renderGUI)
+        return;
     assert(initialized);
 
     ImGui::Render();
