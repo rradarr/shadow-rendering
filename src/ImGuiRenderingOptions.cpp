@@ -33,4 +33,9 @@ void ImGuiRenderingOptions::Display()
         "of the object in the scene using wireframe rendering.\n"
         "TIP: this mode can be toggled with X when not flying.");
     }
+    else if(renderingModeId == 2) {
+        ImGui::TextWrapped("This rendering mode visualizes normals "
+        "of the object meshes in the scene by coloring the mesh with "
+        "RGB values that represent normal vector XYZ components.");
+    }
 }

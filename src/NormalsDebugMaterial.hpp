@@ -1,5 +1,6 @@
 #pragma once
 #include "Material.hpp"
+
 class NormalsDebugMaterial : public Material
 {
 public:

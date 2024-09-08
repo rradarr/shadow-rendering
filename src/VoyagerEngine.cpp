@@ -163,6 +163,18 @@ void VoyagerEngine::OnUpdate()
     ship.UpdateWVPMatrices(&m_wvpPerObject, sizeof(m_wvpPerObject), m_frameBufferIndex);
     //memcpy(m_WVPConstantBuffersGPUAddress[m_frameBufferIndex] + sizeof(m_wvpPerObject) * ship.idx, &m_wvpPerObject, sizeof(m_wvpPerObject));
 
+    // Position suzanne
+    {
+        DirectX::XMMATRIX rotMat = DirectX::XMLoadFloat4x4(&suzanne.rotation);
+        DirectX::XMMATRIX scaleMat = DirectX::XMMatrixScaling(0.3f, 0.3f, 0.3f);
+        DirectX::XMMATRIX worldMat = scaleMat * rotMat;
+        DirectX::XMStoreFloat4x4(&m_wvpPerObject.worldMat, DirectX::XMMatrixTranspose(worldMat));
+
+        DirectX::XMMATRIX transposed = DirectX::XMMatrixTranspose(worldMat * viewMat * projMat); // must transpose wvp matrix for the gpu
+        DirectX::XMStoreFloat4x4(&m_wvpPerObject.wvpMat, transposed); // store transposed wvp matrix in constant buffer
+        suzanne.UpdateWVPMatrices(&m_wvpPerObject, sizeof(m_wvpPerObject), m_frameBufferIndex);
+    }
+
     imguiController.UpdateImGui();
 
     // std::cout << "Updated" << std::endl;
@@ -453,11 +465,29 @@ void VoyagerEngine::LoadAssets()
         ship.delta_rotYMat = DirectX::XMMatrixRotationY(0.01f);
         ship.delta_rotZMat = DirectX::XMMatrixRotationZ(0.0f);
 
-
         DirectX::XMVECTOR posVec = DirectX::XMLoadFloat4(&ship.position);
         DirectX::XMMATRIX tmpMat = DirectX::XMMatrixTranslationFromVector(posVec);
         DirectX::XMStoreFloat4x4(&ship.worldMat, tmpMat);
         DirectX::XMStoreFloat4x4(&ship.rotation, DirectX::XMMatrixIdentity());
+
+        // Load suzanne
+        {
+            suzanneMesh.CreateFromFile("suzanne.obj");
+            suzanne = SceneObject(1, &suzanneMesh);
+
+            suzanne.SetAlbedoTexture(descriptorHandle);
+            suzanne.SetMaterial(&materialLit);
+
+            std::vector<MappedResourceLocation> WVPResources;
+            for(int i = 0; i < mc_frameBufferCount; i++){
+                ZeroMemory(&m_wvpPerObject, sizeof(m_wvpPerObject));
+                MappedResourceLocation resource = resourceManager.AddMappedUploadResource(&m_wvpPerObject, sizeof(m_wvpPerObject));
+                WVPResources.push_back(resource);
+            }
+            suzanne.SetWVPPerFrameBufferLocations(WVPResources);
+            suzanne.position = DirectX::XMFLOAT4(0.f, 0.0f, 0.0f, 0.0f);
+            DirectX::XMStoreFloat4x4(&suzanne.rotation, DirectX::XMMatrixIdentity());
+        }
 
         // Create the depth/stencil heap and buffer.
         {
@@ -507,8 +537,9 @@ void VoyagerEngine::LoadMaterials()
     materialWireframe.CreateMaterial();
     wireframeRenderer.SetMaterial(&materialWireframe);
 
-    // materialNormalsDebug.SetShaders("VertexShader_normalsDebug.hlsl", "PixelShader_normalsDebug.hlsl");
-    // materialNormalsDebug.CreateMaterial();
+    materialNormalsDebug.SetShaders("VertexShader_normalsDebug.hlsl", "PixelShader_normalsDebug.hlsl");
+    materialNormalsDebug.CreateMaterial();
+    normalsDebugRenderer.SetMaterial(&materialNormalsDebug);
 
     materialLit.SetShaders("VertexShader_lit.hlsl", "PixelShader_lit.hlsl");
     materialLit.CreateMaterial();
@@ -551,13 +582,19 @@ void VoyagerEngine::PopulateCommandList()
 
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVHeap->GetCPUDescriptorHandleForHeapStart(), m_frameBufferIndex, m_rtvDescriptorSize);
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsHeap->GetCPUDescriptorHandleForHeapStart());
-    std::vector<SceneObject> sceneObjects{ship};
+    std::vector<SceneObject> sceneObjects{ship, suzanne};
     RenderingState::RenderingMode chosenRenderingMode = EngineStateModel::GetInstance()->GetRenderingState().chosenRenderingMode;
     if (chosenRenderingMode == RenderingState::RenderingMode::WIREFRAME) {
         wireframeRenderer.SetRTV(rtvHandle);
         wireframeRenderer.SetDSV(dsvHandle);
         wireframeRenderer.SetViewport(m_viewport);
         wireframeRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+    }
+    else if (chosenRenderingMode == RenderingState::RenderingMode::NORMALS_DEBUG) {
+        normalsDebugRenderer.SetRTV(rtvHandle);
+        normalsDebugRenderer.SetDSV(dsvHandle);
+        normalsDebugRenderer.SetViewport(m_viewport);
+        normalsDebugRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
     }
     else {
         // Render scene objects with the default renderer.

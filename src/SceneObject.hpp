@@ -12,9 +12,7 @@ public:
 
 	void SetMaterial(StandardMaterial* material);
 	void SetAlbedoTexture(D3D12_GPU_DESCRIPTOR_HANDLE descriptorHandle);
-	/* This method expects to receive a memory address mapped to the buffer resource.
-	The first resource if the offset into this memory, where the contigous range of 3
-	allocations each of size offsetIncrementSize begins. */
+
 	void SetWVPPerFrameBufferLocations(std::vector<MappedResourceLocation> WVPResourceLocations);
 
 	void UpdateWVPMatrices(void* data, size_t dataSize, UINT resourceFramebufferIndex);

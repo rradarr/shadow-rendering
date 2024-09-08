@@ -26,6 +26,7 @@ MainInputController.cpp
 Material.cpp
 Mesh.cpp
 NormalsDebugMaterial.cpp
+NormalsDebugRenderer.cpp
 Renderer.cpp
 ResourceManager.cpp
 RollingAverageUtil.cpp

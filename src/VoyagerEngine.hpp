@@ -8,6 +8,7 @@
 #include "ResourceManager.hpp"
 #include "ImGuiController.hpp"
 #include "WireframeRenderer.hpp"
+#include "NormalsDebugRenderer.hpp"
 
 using Microsoft::WRL::ComPtr;
 
@@ -76,9 +77,12 @@ private:
     LitMaterial materialLit;
 
     WireframeRenderer wireframeRenderer;
+    NormalsDebugRenderer normalsDebugRenderer;
 
     Mesh shipMesh;
     SceneObject ship;
+    Mesh suzanneMesh;
+    SceneObject suzanne;
 
     Texture sampleTexture;
 
