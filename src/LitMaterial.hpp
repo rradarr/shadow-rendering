@@ -7,6 +7,7 @@ public:
     LitMaterial() = default;
     LitMaterial(const std::string vertexShaderFileName, const std::string pixelShaderFileName);
 
+// TODO: Clean this up.
 /*
 private:
     std::vector<D3D12_DESCRIPTOR_RANGE> descriptorTablePixelRanges;

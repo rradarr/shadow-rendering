@@ -49,13 +49,16 @@ int WindowsApplication::Run(Engine* gameEngine, HINSTANCE hInstance, int nCmdSho
 
     // run the message loop
     MSG msg = { };
+    MSG quitMsg = { }; // We store the quit message to get its exit code.
     bool running = true;
     while (running)
     {
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
-            if (msg.message == WM_QUIT)
+            if (msg.message == WM_QUIT) {
+                quitMsg = msg;
                 running = false;
+            }
 
             TranslateMessage(&msg);
             DispatchMessage(&msg);  // this will call the WindowProc callback
@@ -67,7 +70,7 @@ int WindowsApplication::Run(Engine* gameEngine, HINSTANCE hInstance, int nCmdSho
     gameEngine->OnDestroy();
 
     // Return this part of the WM_QUIT message to Windows.
-    return static_cast<char>(msg.wParam);
+    return static_cast<char>(quitMsg.wParam);
 }
 
 // Forward declare message handler from imgui_impl_win32.cpp

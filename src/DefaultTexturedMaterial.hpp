@@ -6,6 +6,7 @@ public:
     DefaultTexturedMaterial() = default;
     DefaultTexturedMaterial(const std::string vertexShaderFileName, const std::string pixelShaderFileName);
 
+// TODO: Clean this up.
 /*
     enum RootSignatureParameters {
         TABLE_LIGHT_PARAMS = 0,

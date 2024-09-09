@@ -24,7 +24,7 @@ public:
 protected:
     UINT            windowWidth, windowHeight;
     float           aspectRatio;
-    std::string    windowName;
+    std::string     windowName;
     HWND            windowHandle;
 };
 

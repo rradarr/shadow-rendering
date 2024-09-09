@@ -28,6 +28,7 @@ public:
 
 private:
     bool LoadModelFromFile(const std::string fileName, std::vector<Vertex>& meshVertices, std::vector<DWORD>& meshIndices);
+    void CreateMeshVertexAndIndexBuffers(std::vector<Vertex>& meshVertices, std::vector<DWORD>& meshIndices);
     ComPtr<ID3D12Resource> vertexBuffer;
     D3D12_VERTEX_BUFFER_VIEW vertexBufferView; // Contains a pointer to the vertex buffer, size of buffer and size of each element.
     ComPtr<ID3D12Resource> indexBuffer;

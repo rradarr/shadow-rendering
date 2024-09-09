@@ -2,12 +2,10 @@
 
 #include "SceneObject.hpp"
 
-
-SceneObject::SceneObject(int index, Mesh* mesh) : mesh(mesh) {
-	this->idx = index;
-	this->delta_rotXMat = DirectX::XMMatrixRotationX(0.f);
-	this->delta_rotYMat = DirectX::XMMatrixRotationX(0.f);
-	this->delta_rotZMat = DirectX::XMMatrixRotationX(0.f);
+SceneObject::SceneObject(Mesh* mesh) : mesh(mesh) {
+	position = DirectX::XMFLOAT4{0.f, 0.f, 0.f, 0.f};
+	scale = DirectX::XMFLOAT3{1.f, 1.f, 1.f};
+	DirectX::XMStoreFloat4x4(&rotation, DirectX::XMMatrixIdentity());
 }
 
 void SceneObject::SetMaterial(StandardMaterial *material)
@@ -48,8 +46,6 @@ D3D12_GPU_VIRTUAL_ADDRESS SceneObject::GetWVPBufferAddress(UINT frameBufferIndex
 
 void SceneObject::Draw(ComPtr<ID3D12GraphicsCommandList> commandList) const
 {
-	// TODO(rrzeczko): Bind per-object data here?
-	// But how? All we will have is a pointer to base class Material...
 	mesh->InsertBufferBind(commandList);
 	mesh->InsertDrawIndexed(commandList);
 }

@@ -10,7 +10,7 @@ void DefaultRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, cons
 
     commandList->RSSetViewports(1, &viewport);
     commandList->RSSetScissorRects(1, &scissor);
-    const float clearColor[] = { 0.005f, 0.005f, 0.005f, 1.0f };
+    const float clearColor[] = { 0.01f, 0.01f, 0.015f, 1.0f };
     commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
     commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 

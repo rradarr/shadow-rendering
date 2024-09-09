@@ -1,5 +1,7 @@
 #pragma once
 
+
+// TODO: Clean up, change behaviour to not allow 360 rotations (lock up and down).
 class Camera
 {
 public:

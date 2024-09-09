@@ -9,88 +9,18 @@
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<DWORD> indices)
 {
-    BufferMemoryManager buffMng;
-
-    indexCount = static_cast<UINT>(indices.size());
-
-    UINT vertexBufferSize = static_cast<UINT>(vertices.size() * sizeof(Vertex));
-    ComPtr<ID3D12Resource> vertexUploadBuffer;
-    buffMng.AllocateBuffer(vertexUploadBuffer, vertexBufferSize, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_HEAP_TYPE_UPLOAD);
-    buffMng.AllocateBuffer(vertexBuffer, vertexBufferSize, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_HEAP_TYPE_DEFAULT);
-
-    D3D12_SUBRESOURCE_DATA vertexData = {};
-    vertexData.pData = reinterpret_cast<BYTE*>(vertices.data());
-    vertexData.RowPitch = vertexBufferSize;
-    vertexData.SlicePitch = vertexBufferSize;
-
-    buffMng.FillBuffer(vertexBuffer, vertexData, vertexUploadBuffer, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-
-    // Initialize the vertex buffer view.
-    vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
-    vertexBufferView.StrideInBytes = sizeof(Vertex);
-    vertexBufferView.SizeInBytes = vertexBufferSize;
-
-    UINT indexBufferSize = static_cast<UINT>(indices.size() * sizeof(DWORD));
-    ComPtr<ID3D12Resource> indexUploadBuffer;
-    buffMng.AllocateBuffer(indexUploadBuffer, indexBufferSize, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_HEAP_TYPE_UPLOAD);
-    buffMng.AllocateBuffer(indexBuffer, indexBufferSize, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_HEAP_TYPE_DEFAULT);
-
-    D3D12_SUBRESOURCE_DATA indexData = {};
-    indexData.pData = reinterpret_cast<BYTE*>(indices.data());
-    indexData.RowPitch = indexBufferSize;
-    indexData.SlicePitch = indexBufferSize;
-
-    buffMng.FillBuffer(indexBuffer, indexData, indexUploadBuffer, D3D12_RESOURCE_STATE_INDEX_BUFFER);
-
-    // Initialize the index buffer view.
-    indexBufferView.BufferLocation = indexBuffer->GetGPUVirtualAddress();
-    indexBufferView.Format = DXGI_FORMAT_R32_UINT;
-    indexBufferView.SizeInBytes = indexBufferSize;
+    CreateMeshVertexAndIndexBuffers(vertices, indices);
 }
 
 void Mesh::CreateFromFile(const std::string fileName)
 {
-    BufferMemoryManager buffMng;
-
     std::vector<Vertex> triangleVertices;
     std::vector<DWORD> triangleIndices;
-    LoadModelFromFile(fileName, triangleVertices, triangleIndices);
-    indexCount = static_cast<UINT>(triangleIndices.size());
-
-    UINT vertexBufferSize = static_cast<UINT>(triangleVertices.size() * sizeof(Vertex));
-    ComPtr<ID3D12Resource> vertexUploadBuffer;
-    buffMng.AllocateBuffer(vertexUploadBuffer, vertexBufferSize, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_HEAP_TYPE_UPLOAD);
-    buffMng.AllocateBuffer(vertexBuffer, vertexBufferSize, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_HEAP_TYPE_DEFAULT);
-
-    D3D12_SUBRESOURCE_DATA vertexData = {};
-    vertexData.pData = reinterpret_cast<BYTE*>(triangleVertices.data());
-    vertexData.RowPitch = vertexBufferSize;
-    vertexData.SlicePitch = vertexBufferSize;
-
-    // We don't close the commandList and wait for it to finish as we have more commands to upload.
-    buffMng.FillBuffer(vertexBuffer, vertexData, vertexUploadBuffer, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
-
-    // Initialize the vertex buffer view.
-    vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
-    vertexBufferView.StrideInBytes = sizeof(Vertex);
-    vertexBufferView.SizeInBytes = vertexBufferSize;
-
-    UINT indexBufferSize = static_cast<UINT>(triangleIndices.size() * sizeof(DWORD));
-    ComPtr<ID3D12Resource> indexUploadBuffer;
-    buffMng.AllocateBuffer(indexUploadBuffer, indexBufferSize, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_HEAP_TYPE_UPLOAD);
-    buffMng.AllocateBuffer(indexBuffer, indexBufferSize, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_HEAP_TYPE_DEFAULT);
-
-    D3D12_SUBRESOURCE_DATA indexData = {};
-    indexData.pData = reinterpret_cast<BYTE*>(triangleIndices.data());
-    indexData.RowPitch = indexBufferSize;
-    indexData.SlicePitch = indexBufferSize;
-
-    buffMng.FillBuffer(indexBuffer, indexData, indexUploadBuffer, D3D12_RESOURCE_STATE_INDEX_BUFFER);
-
-    // Initialize the index buffer view.
-    indexBufferView.BufferLocation = indexBuffer->GetGPUVirtualAddress();
-    indexBufferView.Format = DXGI_FORMAT_R32_UINT;
-    indexBufferView.SizeInBytes = indexBufferSize;
+    
+    // TODO: handle a bad return.
+    bool ret = LoadModelFromFile(fileName, triangleVertices, triangleIndices);
+    
+    CreateMeshVertexAndIndexBuffers(triangleVertices, triangleIndices);
 }
 
 void Mesh::CreateCube(std::vector<Vertex>& vertices, std::vector<DWORD>& indices, const int resolution)
@@ -288,8 +218,6 @@ void Mesh::CreateSphere(std::vector<Vertex>& vertices, std::vector<DWORD>& indic
 
 void Mesh::InsertDrawIndexed(ComPtr<ID3D12GraphicsCommandList> commandList)
 {
-    // Should the root descriptor he here too? -> possibly should be level up, in some DrawableObject class
-    //commandList->SetGraphicsRootConstantBufferView(1, m_WVPConstantBuffers[m_frameBufferIndex]->GetGPUVirtualAddress());
     commandList->DrawIndexedInstanced(indexCount, 1, 0, 0, 0);
 }
 
@@ -371,4 +299,46 @@ bool Mesh::LoadModelFromFile(const std::string fileName, std::vector<Vertex>& me
     }
 
     return true;
+}
+
+void Mesh::CreateMeshVertexAndIndexBuffers(std::vector<Vertex> &meshVertices, std::vector<DWORD> &meshIndices)
+{
+    BufferMemoryManager buffMng;
+
+    indexCount = static_cast<UINT>(meshIndices.size());
+
+    UINT vertexBufferSize = static_cast<UINT>(meshVertices.size() * sizeof(Vertex));
+    ComPtr<ID3D12Resource> vertexUploadBuffer;
+    buffMng.AllocateBuffer(vertexUploadBuffer, vertexBufferSize, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_HEAP_TYPE_UPLOAD);
+    buffMng.AllocateBuffer(vertexBuffer, vertexBufferSize, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_HEAP_TYPE_DEFAULT);
+
+    D3D12_SUBRESOURCE_DATA vertexData = {};
+    vertexData.pData = reinterpret_cast<BYTE*>(meshVertices.data());
+    vertexData.RowPitch = vertexBufferSize;
+    vertexData.SlicePitch = vertexBufferSize;
+
+    // We don't close the commandList and wait for it to finish as we have more commands to upload.
+    buffMng.FillBuffer(vertexBuffer, vertexData, vertexUploadBuffer, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+
+    // Initialize the vertex buffer view.
+    vertexBufferView.BufferLocation = vertexBuffer->GetGPUVirtualAddress();
+    vertexBufferView.StrideInBytes = sizeof(Vertex);
+    vertexBufferView.SizeInBytes = vertexBufferSize;
+
+    UINT indexBufferSize = static_cast<UINT>(meshIndices.size() * sizeof(DWORD));
+    ComPtr<ID3D12Resource> indexUploadBuffer;
+    buffMng.AllocateBuffer(indexUploadBuffer, indexBufferSize, D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_HEAP_TYPE_UPLOAD);
+    buffMng.AllocateBuffer(indexBuffer, indexBufferSize, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_HEAP_TYPE_DEFAULT);
+
+    D3D12_SUBRESOURCE_DATA indexData = {};
+    indexData.pData = reinterpret_cast<BYTE*>(meshIndices.data());
+    indexData.RowPitch = indexBufferSize;
+    indexData.SlicePitch = indexBufferSize;
+
+    buffMng.FillBuffer(indexBuffer, indexData, indexUploadBuffer, D3D12_RESOURCE_STATE_INDEX_BUFFER);
+
+    // Initialize the index buffer view.
+    indexBufferView.BufferLocation = indexBuffer->GetGPUVirtualAddress();
+    indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+    indexBufferView.SizeInBytes = indexBufferSize;
 }

@@ -3,6 +3,7 @@
 
 #include <sstream>
 
+#include "DXSampleHelper.h"
 #include "BufferMemoryManager.hpp"
 
 UINT8 *MappedResourceLocation::GetMappedResourceAddress() const
@@ -73,6 +74,6 @@ void ResourceManager::CreateMappedUploadBuffer()
 
     // Map the memory of the new buffer.
     mappedMemory.push_back(nullptr);
-    CD3DX12_RANGE readRange(0, 0);
-    newBuffer.bufferResource->Map(0, &readRange, reinterpret_cast<void**>(&mappedMemory.back()));
+    CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU. (so end is less than or equal to begin).
+    ThrowIfFailed(newBuffer.bufferResource->Map(0, &readRange, reinterpret_cast<void**>(&mappedMemory.back())));
 }

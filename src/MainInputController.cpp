@@ -130,7 +130,7 @@ void MainInputController::EarlyUpdate(HWND windowHandle)
         SetCursorPos(center.x, center.y);
     }
     else {
-        // Keep mouse delta of 0 when not flying
+        // Keep mouse delta of 0 when not flying.
         modelInputState.mouseDelta = {0.f, 0.f};
     }
 }

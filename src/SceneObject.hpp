@@ -7,7 +7,7 @@
 class SceneObject
 {
 public:
-	SceneObject(int index, Mesh* mesh);
+	SceneObject(Mesh* mesh);
 	SceneObject() = default;
 
 	void SetMaterial(StandardMaterial* material);
@@ -23,15 +23,12 @@ public:
 	The passed frameBufferIndex determines which in-flight copy of the data will be returned. */
 	D3D12_GPU_VIRTUAL_ADDRESS GetWVPBufferAddress(UINT frameBufferIndex) const;
 	void Draw(ComPtr<ID3D12GraphicsCommandList> commandList) const;
-	
-	int idx;
 
 	DirectX::XMFLOAT4 position;
 	DirectX::XMFLOAT4X4 rotation;
+	DirectX::XMFLOAT3 scale;
 	DirectX::XMFLOAT4X4 worldMat;
-	DirectX::XMMATRIX delta_rotXMat;
-	DirectX::XMMATRIX delta_rotYMat;
-	DirectX::XMMATRIX delta_rotZMat;
+
 private:
 	Mesh* mesh;
 	StandardMaterial* material;
