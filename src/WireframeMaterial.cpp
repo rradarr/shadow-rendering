@@ -20,4 +20,5 @@ std::vector<D3D12_ROOT_PARAMETER> WireframeMaterial::CreateRootParameters()
 void WireframeMaterial::CustomizePipelineStateObjectDescription(D3D12_GRAPHICS_PIPELINE_STATE_DESC& psoDesc)
 {
     psoDesc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+    psoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 }
