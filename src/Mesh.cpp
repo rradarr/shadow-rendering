@@ -319,7 +319,7 @@ bool Mesh::LoadModelFromFile(const std::string fileName, std::vector<Vertex>& me
         return false;
     }
 
-    // Vertices are stored in a vector as x, y, z floats, so vector size is divided by 3.
+    // Vertices are stored in a vector as separate x, y, z floats, so vector size is divided by 3.
     meshVertices.resize(attrib.vertices.size() / 3);
 
     // Each shape can be thought of as a separate mesh in the file, so a sum of index
@@ -332,27 +332,32 @@ bool Mesh::LoadModelFromFile(const std::string fileName, std::vector<Vertex>& me
     meshIndices.resize(numOfIndices);
 
     // Iterate over shapes in the file.
-    for (int shapeID = 0; shapeID < shapes.size(); shapeID++)
+    size_t processedIndicesCount = 0;
+    size_t countShapesToLoad = shapes.size();
+    for (int shapeID = 0; shapeID < countShapesToLoad; shapeID++)
     {
         // Iterate over indices in the shape. They index into attrib.vertices as if
         // each xyz triple was one element (so max index will be attrib.vertices.size / 3)
-        size_t shapeIndexNumber = shapes[shapeID].mesh.indices.size();
-        for (int vertexID = 0; vertexID < shapeIndexNumber; vertexID++) {
-            meshIndices[shapeID * shapeIndexNumber + vertexID] = static_cast<DWORD>(shapes[shapeID].mesh.indices[vertexID].vertex_index);
+        size_t shapeIndicesCount = shapes[shapeID].mesh.indices.size();
+        for (int indexID = 0; indexID < shapeIndicesCount; indexID++) {
+            meshIndices[processedIndicesCount + indexID] = static_cast<DWORD>(shapes[shapeID].mesh.indices[indexID].vertex_index);
 
-            // Store verte data in put structure.
+            // Prepare vertex data to be put into our Vertex structure.
             float vertexX, vertexY, vertexZ, vertexU, vertexV, normalX, normalY, normalZ;
 
-            vertexX = attrib.vertices[3 * shapes[shapeID].mesh.indices[vertexID].vertex_index];
-            vertexY = attrib.vertices[3 * shapes[shapeID].mesh.indices[vertexID].vertex_index + 1];
-            vertexZ = attrib.vertices[3 * shapes[shapeID].mesh.indices[vertexID].vertex_index + 2];
+            // Three (x, y, z) attrib.verices entries per vertex.
+            vertexX = attrib.vertices[3 * shapes[shapeID].mesh.indices[indexID].vertex_index];
+            vertexY = attrib.vertices[3 * shapes[shapeID].mesh.indices[indexID].vertex_index + 1];
+            vertexZ = attrib.vertices[3 * shapes[shapeID].mesh.indices[indexID].vertex_index + 2];
 
-            vertexU = attrib.texcoords[2 * shapes[shapeID].mesh.indices[vertexID].texcoord_index];
-            vertexV = attrib.texcoords[2 * shapes[shapeID].mesh.indices[vertexID].texcoord_index + 1];
+            // Two (u, v) attrib.texcoords entries per unwrapped vertex(!)
+            vertexU = attrib.texcoords[2 * shapes[shapeID].mesh.indices[indexID].texcoord_index];
+            vertexV = attrib.texcoords[2 * shapes[shapeID].mesh.indices[indexID].texcoord_index + 1];
 
-            normalX = attrib.normals[3 * shapes[shapeID].mesh.indices[vertexID].normal_index];
-            normalY = attrib.normals[3 * shapes[shapeID].mesh.indices[vertexID].normal_index + 1];
-            normalZ = attrib.normals[3 * shapes[shapeID].mesh.indices[vertexID].normal_index + 2];
+            // Three (x, y, z) attrib.normals entries per face.
+            normalX = attrib.normals[3 * shapes[shapeID].mesh.indices[indexID].normal_index];
+            normalY = attrib.normals[3 * shapes[shapeID].mesh.indices[indexID].normal_index + 1];
+            normalZ = attrib.normals[3 * shapes[shapeID].mesh.indices[indexID].normal_index + 2];
 
             Vertex vertex = {
                 {vertexX, vertexY, vertexZ},
@@ -360,8 +365,9 @@ bool Mesh::LoadModelFromFile(const std::string fileName, std::vector<Vertex>& me
                 {vertexU, vertexV},
                 {normalX, normalY, normalZ}
             };
-            meshVertices[meshIndices[shapeID * 3 + vertexID]] = vertex;
+            meshVertices[meshIndices[processedIndicesCount + indexID]] = vertex;
         }
+        processedIndicesCount += shapeIndicesCount;
     }
 
     return true;

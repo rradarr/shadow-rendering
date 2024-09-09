@@ -165,9 +165,10 @@ void VoyagerEngine::OnUpdate()
 
     // Position suzanne
     {
+        DirectX::XMMATRIX translationMat = DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat4(&suzanne.position));
         DirectX::XMMATRIX rotMat = DirectX::XMLoadFloat4x4(&suzanne.rotation);
         DirectX::XMMATRIX scaleMat = DirectX::XMMatrixScaling(0.3f, 0.3f, 0.3f);
-        DirectX::XMMATRIX worldMat = scaleMat * rotMat;
+        DirectX::XMMATRIX worldMat = scaleMat * rotMat * translationMat;
         DirectX::XMStoreFloat4x4(&m_wvpPerObject.worldMat, DirectX::XMMatrixTranspose(worldMat));
 
         DirectX::XMMATRIX transposed = DirectX::XMMatrixTranspose(worldMat * viewMat * projMat); // must transpose wvp matrix for the gpu
@@ -485,7 +486,7 @@ void VoyagerEngine::LoadAssets()
                 WVPResources.push_back(resource);
             }
             suzanne.SetWVPPerFrameBufferLocations(WVPResources);
-            suzanne.position = DirectX::XMFLOAT4(0.f, 0.0f, 0.0f, 0.0f);
+            suzanne.position = DirectX::XMFLOAT4(2.f, 2.0f, 2.0f, 0.0f);
             DirectX::XMStoreFloat4x4(&suzanne.rotation, DirectX::XMMatrixIdentity());
         }
 

@@ -447,3 +447,4 @@ FodyWeavers.xsd
 # Own Rules
 build/
 !Resources/*
+Resources/Test Resources/

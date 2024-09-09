@@ -20,7 +20,6 @@ EngineStateModel.cpp
 ImGuiController.cpp
 ImGuiPerformanceWindow.cpp
 ImGuiRenderingOptions.cpp
-SceneObject.cpp
 LitMaterial.cpp
 MainInputController.cpp
 Material.cpp
@@ -30,6 +29,7 @@ NormalsDebugRenderer.cpp
 Renderer.cpp
 ResourceManager.cpp
 RollingAverageUtil.cpp
+SceneObject.cpp
 StandardMaterial.cpp
 Texture.cpp
 TextureLoader.cpp
