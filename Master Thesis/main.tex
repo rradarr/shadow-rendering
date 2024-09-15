@@ -1,0 +1,197 @@
+% !TeX spellcheck = en_GB
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                        %
+%     Master thesis LaTeX template       %
+%  compliant with the SZJK regulations   %
+%                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                        %
+%  (c) Krzysztof Simiński, 2018-2024     %
+%                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                        %
+% The latest version of the templates is %
+% available at                           %
+% github.com/ksiminski/polsl-aei-theses  %
+%                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+% This LaTeX project formats the final thesis
+% with compliance to the SZJK regulations.
+% Please to not change formatting (fonts, margins,
+% bolds, italics, etc).
+%
+% You can compile the project in several ways.
+%
+% 1. pdfLaTeX compilation
+%
+% pdflatex main
+% bibtex   main
+% pdflatex main
+% pdflatex main
+%
+%
+% 2. XeLaTeX compilation
+%
+% Compilation with the XeLaTeX engine inserts Calibri font
+% in the title page. Of course the font has to be installed.
+%
+
+% xelatex main
+% bibtex  main
+% xelatex main
+% xelatex main
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% If you have any questions, remarks, just send me an email: %
+%            krzysztof.siminski(at)polsl.pl               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% We would like to improve the LaTeX templates
+% of final theses. By answering the questions
+% in the survey whose address your can find below
+% you help us to do so. The survey is completely
+% anonimous. Thank you!
+%
+% https://docs.google.com/forms/d/e/1FAIpQLScyllVxNKzKFHfILDfdbwC-jvT8YL0RSTFs-s27UGw9CKn-fQ/viewform?usp=sf_link
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                             %
+% CUSTOMISATION OF THE THESIS                 %
+%                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Please customise your thesis with the macros below.
+
+% TODO
+% author:
+\newcommand{\FirstNameAuthor}{Radosław Jacek}
+\newcommand{\SurnameAuthor}{Rzeczkowski}
+\newcommand{\IdAuthor}{290776}  % (remove $\langle$ and $\rangle)
+
+% coauthor:
+%\newcommand{\FirstNameCoauthor}{First Names}  % If there is a coauthor, put the first names here.
+%\newcommand{\SurnameCoauthor}{Surname}        % If there is a coauthor, put the surnames here.
+%\newcommand{\IdCoauthor}{$\langle$student id$\rangle$} % If there is a coauthor, put the student id here (remove $\langle$ and $\rangle)
+% If there is no coathor, leave the definitions empty like below. If a coauthor exists, comment the lines below.
+\newcommand{\FirstNameCoauthor}{} % If there is only one author, leave the definitions empty.
+\newcommand{\SurnameCoauthor}{}   % If there is only one author, leave the definitions empty.
+\newcommand{\IdCoauthor}{}        % If there is only one author, leave the definitions empty.
+%%%%%%%%%%
+
+\newcommand{\Supervisor}{Dr hab. inż. Agnieszka Szczęsna}  % supervisor (remove $\langle$ and $\rangle)
+\newcommand{\Title}{Selected techniques of rendering shadow models in interactive computer graphics}
+\newcommand{\TitleAlt}{Wybrane techniki renderowania modelu cieni w interaktywnej grafice komputerowej}
+\newcommand{\Program}{Informatyka}
+\newcommand{\Specialisation}{Interaktywna Grafika Trójwymiarowa} % your specialisation, remove \langle and \rangle in the final version
+\newcommand{\Id}{290776}                   % remove \langle and \rangle in the final version
+\newcommand{\Departament}{Wydział Automatyki, Elektroniki i Informatyki}         % remove \langle and \rangle in the final version
+
+
+% If you have a consultant for your thesis, put their name below ...
+\newcommand{\Consultant}{}  %  (remove $\langle$ and $\rangle)
+% ... else leave the braces empty:
+%\newcommand{\Consultant}{} % no consultant
+
+% end of thesis customisation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                             %
+% END OF CUSTOMISATION                        %
+%                                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{config/settings.tex} % Do not modify!
+
+\input{config/my-settings.tex} % Put your settings, packages, macros here.
+
+% \addbibresource{biblio/biblio.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+%\kslistofremarks
+
+\frontmatter
+\input{config/titlepage.tex}  % Please to not modify the titlepage.tex file!
+
+\cleardoublepage
+
+\rmfamily\normalfont
+\pagestyle{empty}
+
+
+%%% Let's start the thesis %%%%
+
+% TODO
+\input{chapters/0_editorials.tex} % editorials
+
+
+%%%%%%%%%%%%%%%%%% Table of contents %%%%%%%%%%%%%%%%%%%%%%
+% Add \thispagestyle{empty} to the toc file (main.toc), because \pagestyle{empty} doesn't work if the TOC has multiple pages
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{pagesWithoutNumbers}{\value{page}}
+\mainmatter
+\pagestyle{empty}
+
+\cleardoublepage
+
+\pagestyle{PageNumbersChapterTitles}
+
+%%%%%%%%%%%%%% body of the thesis %%%%%%%%%%%%%%%%%
+
+% TODO
+\input{chapters/1_intro.tex}
+
+% TODO
+\input{chapters/2_analysis.tex}
+
+% TODO
+\input{chapters/3_subject.tex}
+
+% TODO
+\input{chapters/4_experiments.tex}
+
+% TODO
+\input{chapters/5_summary.tex}
+
+\backmatter
+
+% \bibliographystyle{plain}  % bibtex
+% \bibliography{biblio/biblio.bib} % bibtex
+\printbibliography           % biblatex
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\begin{appendices}
+
+% TODO
+\input{chapters/06.tex} % technical documentation (optional!)
+
+% TODO
+\input{chapters/07.tex} % abbreviations and symbols
+
+% TODO
+\input{chapters/08.tex} % additional files
+
+\listoffigures
+\addcontentsline{toc}{chapter}{List of figures}
+\listoftables
+\addcontentsline{toc}{chapter}{List of tables}
+
+\end{appendices}
+
+\end{document}
+
+
+%% Finis coronat opus.
