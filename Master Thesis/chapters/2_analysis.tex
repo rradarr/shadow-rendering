@@ -1,7 +1,6 @@
-\chapter{Problem analysis} % The title of this chapter is similar to the title of the thesis.!
+\chapter{Problem analysis} % TODO: The title of this chapter should be similar to the title of the thesis.!
 
 \section{The task of rendering}
-% the old boring intro
 
 In this thesis, rendering is understood as the process of obtaining an image from a description of a three-dimensional scene. A scene can be rendered in a multitude of ways, with differences both in the specifics of the initial scene description and the rendered result. The rendered visuals can range from stylized to photorealistic. Rendering happens everywhere where a computer generated image is created for a viewer to see.
 
@@ -11,7 +10,24 @@ The fact that there are many techniques currently in use to render a single type
 
 The desired visual style is partially just a matter of preference defined by the style of the project. More importantly however it is a matter of clearly and efficiently conveying visual information, in a way that is consistent with the rest of the application and with what the end user expects. This means that realism, often touted the pinnacle and goal of computer graphics, is not necessarily always the best approach. A CAD (computer-aided design) application or a 3D modelling tool would be made less useful by including realistic reflections, highly contrasting full shadows and motion blur in the rendered viewport, as these programs need to clearly convey information about the shape and design of 3D objects, without distractions and obstructions. On the other hand, when a player starts a modern action-adventure game, they expect a level of realism in the game's graphics that allows for immersion in the presented world. The intricate visuals also make for a more engaging experience and can mean a better reception of a game. At the same time, design choices should be made to ensure that the realism or intricacy of the presented graphics does not get in the way of enjoying the gameplay, which in the end should be the main attribute of a video game.
 
-The performance requirements, or performance constraints, are usually better defined and divide rendering into two general categories: real-time rendering and offline rendering. When designing an offline renderer the performance constraints would most likely concern memory usage and possibly general time efficiency, as with offline rendering the time it takes to render an image is of small importance. Most important are image quality and fidelity, often also realism. Techniques used in this context can spend as much time performing calculations as is necessary for the desired output. Offline rendering work can also easily be distributed between many machines, so-called render farms. Real-time rendering on the other hand works with very strict and small time budgets. Because a real-time application needs to be responsive to user inputs and give the illusion of continuous motion it is expected to render at least 30 frames per second (FPS), giving the time budget for a single frame of at most 0.03 seconds. This time cannot all be spent rendering, as user inputs need to be handled and application logic performed in the same time frame. 
+The performance requirements, or performance constraints, are usually better defined and divide rendering into two general categories: real-time rendering and offline rendering. When designing an offline renderer the performance constraints would most likely concern memory usage and possibly general time efficiency, as with offline rendering the time it takes to render an image is of small importance. Most important are image quality and fidelity, often also realism. Techniques used in this context can spend as much time performing calculations as is necessary for the desired output. Offline rendering work can also easily be distributed between many machines, so-called render farms. Real-time rendering on the other hand works with very strict and small time budgets. Because a real-time application needs to be responsive to user inputs and give the illusion of continuous motion it is expected to render at least 30 frames per second (FPS), giving the time budget for a single frame of at most 0.03 seconds. This time cannot all be spent on rendering, as user inputs need to be handled and application logic performed in the same time frame. Because of that, real-time applications need to balance visual complexity and performance. They are often more casual consumer-oriented than offline rendering programs, so the hardware on which the application will run is expected to be moderately powerfull.
+
+It is apparent that the chioce of rendering techniques is complex and requires in-depth knowlege about each of them as early as the design stages of an application. This thesis aims to provide a guide through the rendering techniques used to render shadows in scenes. Some of the chosen techniques are the most widely adopted techniques, but some, while possibly less popular, are  noteworthy due to their promised outstanding performance or visual quality. This thesis introduces the techniques, gives detailed explanations of their algorithms, shows exemplary implementations and compares them in a series of tests. The comparison is made based on measures of performance (execution time), memory consumption, visual fidelity, realism and blalbalba % TODO: what exactly will I compare?
+
+\section{Rendering shadows}
+
+\subsection{Role of shadows in computer generated images}
+% why do we even bother with shadows?
+
+% add some images without and with different shadows
+
+\subsection{Shadow rendering techniques}
+% basic differentiation into ray and raster
+
+\subsubsection{Technique 1}
+\subsubsection{Technique 2}
+\subsubsection{Technique 3}
+\subsubsection{Technique 4}
 
 Different current techniques for shadow rendering?
 
