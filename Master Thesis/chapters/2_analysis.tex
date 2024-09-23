@@ -16,9 +16,7 @@ It is apparent that the choice of rendering techniques is complex and requires i
 
 % TODO: mention more issues more specific to shadows, that different techniques handle in different ways, such as aliasing?
 
-\section{Rendering shadows}
-
-\subsection{The role of shadows in computer generated images}
+\section{The role of shadows in computer generated images}
 
 Computer graphics usually aim to reflect our surrounding reality, with techniques for rendering phenomena modeled from physical laws and after observations made in the real world. When not aiming for realism, the displayed graphics need to be at least rooted in the common human observation experience for the information to be understandable and interpretable. Shadows are a phenomenon that is very commonly present in our daily lives, deeply rooted in the common experience. An 1997 article \cite{bib:article:depth_shadows} shows that even simple shadows provide the viewer essential information on the position and movement of objects, especially movement in depth. In some cases this information even overrides other cues such as change of size due to perspective. This effect is illustrated by Fig. \ref{fig:shadow_balls_example}.
 
@@ -94,9 +92,9 @@ The review also mentions that shadows in art, even if depicted in a way that is 
     \label{fig:classroom_example}
 \end{figure}
 
-\subsection{Shadow rendering techniques}
+\section{Shadow rendering techniques}
 
-\subsubsection{Naming conventions}
+\subsection{Naming conventions}
 
 In this thesis the term `shadows' is used interchangeably with term `cast shadows', not to be confused with shading on the surface of objects, which stems from the orientation of the surface with regard to the light source.
 
@@ -110,19 +108,27 @@ Shadows can be differentiated into hard and soft shadows. Perfectly hard shadows
     \caption{The umbra (under vertical lines) and penumbra (under slant lines) create a soft shadow.}
     \label{fig:shadow_soft}
 \end{figure}
-% basic differentiation into ray and raster
-asdfsdaf
 
-\subsubsection{Technique 1}
+\subsection{Coarse distinction of shadow rendering techniques}
+
+In this thesis a coarse distinction of the shadow rendering techniques into three groups is proposed. It is made based on the main mechanism utilized in a technique that defines which areas of the scene are in light and which are in shadow. Additionally, techniques in each group share similar issues that researches have attempted and are still attempting to resolve with newer iterations of the original algorithms.
+
+The first group consists of image-based techniques.
+
+Geometry-based
+
+Ray-based
+
+\subsection{Technique 1}
 This is the first technique.
 
-\subsubsection{Technique 2}
+\subsection{Technique 2}
 This is the second technique.
 
-\subsubsection{Technique 3}
+\subsection{Technique 3}
 This is the third technique.
 
-\subsubsection{Technique 4}
+\subsection{Technique 4}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
