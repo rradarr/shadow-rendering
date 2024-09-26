@@ -452,6 +452,7 @@ void VoyagerEngine::PopulateCommandList()
         renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
         
         // Then render the projected shadow.
+        sceneObjects = std::vector<SceneObject>{suzanne};
         projectionShadowRenderer.SetRTV(rtvHandle);
         projectionShadowRenderer.SetDSV(dsvHandle);
         projectionShadowRenderer.SetViewport(m_viewport);
