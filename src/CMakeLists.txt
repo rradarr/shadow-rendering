@@ -26,6 +26,8 @@ Material.cpp
 Mesh.cpp
 NormalsDebugMaterial.cpp
 NormalsDebugRenderer.cpp
+ProjectionShadowMaterial.cpp
+ProjectionShadowRenderer.cpp
 Renderer.cpp
 ResourceManager.cpp
 RollingAverageUtil.cpp

@@ -398,6 +398,10 @@ void VoyagerEngine::LoadMaterials()
 
     materialLit.SetShaders("VertexShader_lit.hlsl", "PixelShader_lit.hlsl");
     materialLit.CreateMaterial();
+
+    materialProjectionShadow.SetShaders("VertexShader_shadow_projection.hlsl", "PixelShader_shadow_projection.hlsl");
+    materialProjectionShadow.CreateMaterial();
+    projectionShadowRenderer.SetMaterial(&materialProjectionShadow);
 }
 
 void VoyagerEngine::LoadScene()
@@ -437,6 +441,22 @@ void VoyagerEngine::PopulateCommandList()
         normalsDebugRenderer.SetDSV(dsvHandle);
         normalsDebugRenderer.SetViewport(m_viewport);
         normalsDebugRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+    }
+    else if(chosenRenderingMode == RenderingState::RenderingMode::SHADOW_PROJECTION) {
+        // Render scene objects with the default renderer.
+        DefaultRenderer renderer;
+        renderer.SetLightingParametersBuffer(lightingParamsBuffer);
+        renderer.SetRTV(rtvHandle);
+        renderer.SetDSV(dsvHandle);
+        renderer.SetViewport(m_viewport);
+        renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+        
+        // Then render the projected shadow.
+        projectionShadowRenderer.SetRTV(rtvHandle);
+        projectionShadowRenderer.SetDSV(dsvHandle);
+        projectionShadowRenderer.SetViewport(m_viewport);
+        projectionShadowRenderer.SetLightingParametersBuffer(lightingParamsBuffer);
+        projectionShadowRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
     }
     else {
         // Render scene objects with the default renderer.

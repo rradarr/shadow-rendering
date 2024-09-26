@@ -9,6 +9,7 @@
 #include "ImGuiController.hpp"
 #include "WireframeRenderer.hpp"
 #include "NormalsDebugRenderer.hpp"
+#include "ProjectionShadowRenderer.hpp"
 
 using Microsoft::WRL::ComPtr;
 
@@ -73,9 +74,11 @@ private:
     WireframeMaterial materialWireframe;
     NormalsDebugMaterial materialNormalsDebug;
     LitMaterial materialLit;
+    ProjectionShadowMaterial materialProjectionShadow;
     // Renderers.
     WireframeRenderer wireframeRenderer;
     NormalsDebugRenderer normalsDebugRenderer;
+    ProjectionShadowRenderer projectionShadowRenderer;
 
     // Meshes and SceneObjects.
     Mesh suzanneMesh;
