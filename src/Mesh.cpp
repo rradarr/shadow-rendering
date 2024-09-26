@@ -23,6 +23,37 @@ void Mesh::CreateFromFile(const std::string fileName)
     CreateMeshVertexAndIndexBuffers(triangleVertices, triangleIndices);
 }
 
+void Mesh::CreatePlane(std::vector<Vertex>& vertices, std::vector<DWORD>& indices)
+{
+    vertices.reserve(4);
+
+    Vertex vert;
+    vert.color = DirectX::XMFLOAT4{1.f, 1.f, 1.f, 1.f};
+    vert.normal = DirectX::XMFLOAT3{0.f, 1.f, 0.f};
+
+    // Back left vertex.
+    vert.position = DirectX::XMFLOAT3{-0.5f, 0.f, -0.5f};
+    vert.uvCoordinates = DirectX::XMFLOAT2{0.f, 1.f};
+    vertices.push_back(vert);
+
+    // Back right vertex.
+    vert.position = DirectX::XMFLOAT3{0.5f, 0.f, -0.5f};
+    vert.uvCoordinates = DirectX::XMFLOAT2{1.f, 1.f};
+    vertices.push_back(vert);
+
+    // Front left vertex.
+    vert.position = DirectX::XMFLOAT3{-0.5f, 0.f, 0.5f};
+    vert.uvCoordinates = DirectX::XMFLOAT2{0.f, 0.f};
+    vertices.push_back(vert);
+
+    // Front right vertex.
+    vert.position = DirectX::XMFLOAT3{0.5f, 0.f, 0.5f};
+    vert.uvCoordinates = DirectX::XMFLOAT2{1.f, 0.f};
+    vertices.push_back(vert);
+
+    indices = std::vector<DWORD>{0, 2, 3, 3, 1, 0};
+}
+
 void Mesh::CreateCube(std::vector<Vertex>& vertices, std::vector<DWORD>& indices, const int resolution)
 {
     assert(resolution > 1);

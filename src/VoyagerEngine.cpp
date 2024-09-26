@@ -118,6 +118,19 @@ void VoyagerEngine::OnUpdate()
         suzanne.UpdateWVPMatrices(&m_wvpPerObject, sizeof(m_wvpPerObject), m_frameBufferIndex);
     }
 
+    // Position ground plane
+    {
+        DirectX::XMMATRIX translationMat = DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat4(&groundPlane.position));
+        DirectX::XMMATRIX rotMat = DirectX::XMLoadFloat4x4(&groundPlane.rotation);
+        DirectX::XMMATRIX scaleMat = DirectX::XMMatrixScaling(groundPlane.scale.x, groundPlane.scale.y, groundPlane.scale.z);
+        DirectX::XMMATRIX worldMat = scaleMat * rotMat * translationMat;
+        DirectX::XMStoreFloat4x4(&m_wvpPerObject.worldMat, DirectX::XMMatrixTranspose(worldMat));
+
+        DirectX::XMMATRIX transposed = DirectX::XMMatrixTranspose(worldMat * viewMat * projMat); // must transpose wvp matrix for the gpu
+        DirectX::XMStoreFloat4x4(&m_wvpPerObject.wvpMat, transposed); // store transposed wvp matrix in constant buffer
+        groundPlane.UpdateWVPMatrices(&m_wvpPerObject, sizeof(m_wvpPerObject), m_frameBufferIndex);
+    }
+
     imguiController.UpdateImGui();
 
     // std::cout << "Updated" << std::endl;
@@ -303,8 +316,32 @@ void VoyagerEngine::LoadAssets()
             }
             suzanne.SetWVPPerFrameBufferLocations(WVPResources);
             suzanne.scale = DirectX::XMFLOAT3(1.f, 1.f, 1.f);
-            suzanne.position = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 0.f);
+            suzanne.position = DirectX::XMFLOAT4(0.f, 1.f, 0.f, 1.f);
             DirectX::XMStoreFloat4x4(&suzanne.rotation, DirectX::XMMatrixIdentity());
+        }
+
+        // Create the ground plane.
+        {
+            std::vector<Vertex> groundVertices;
+            std::vector<DWORD> groundIndices;
+            Mesh::CreatePlane(groundVertices, groundIndices);
+            groundPlaneMesh = Mesh(groundVertices, groundIndices);
+
+            groundPlane = SceneObject(&groundPlaneMesh);
+
+            groundPlane.SetMaterial(&materialLit);
+            groundPlane.SetAlbedoTexture(descriptorHandle);
+
+            std::vector<MappedResourceLocation> WVPResources;
+            for(int i = 0; i < mc_frameBufferCount; i++){
+                ZeroMemory(&m_wvpPerObject, sizeof(m_wvpPerObject));
+                MappedResourceLocation resource = resourceManager.AddMappedUploadResource(&m_wvpPerObject, sizeof(m_wvpPerObject));
+                WVPResources.push_back(resource);
+            }
+            groundPlane.SetWVPPerFrameBufferLocations(WVPResources);
+            groundPlane.scale = DirectX::XMFLOAT3(5.f, 5.f, 5.f);
+            groundPlane.position = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
+            DirectX::XMStoreFloat4x4(&groundPlane.rotation, DirectX::XMMatrixIdentity());
         }
 
         // Create the depth/stencil heap and buffer.
@@ -387,7 +424,7 @@ void VoyagerEngine::PopulateCommandList()
 
     CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVHeap->GetCPUDescriptorHandleForHeapStart(), m_frameBufferIndex, m_rtvDescriptorSize);
     CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsHeap->GetCPUDescriptorHandleForHeapStart());
-    std::vector<SceneObject> sceneObjects{suzanne};
+    std::vector<SceneObject> sceneObjects{groundPlane, suzanne};
     RenderingState::RenderingMode chosenRenderingMode = EngineStateModel::GetInstance()->GetRenderingState().chosenRenderingMode;
     if (chosenRenderingMode == RenderingState::RenderingMode::WIREFRAME) {
         wireframeRenderer.SetRTV(rtvHandle);

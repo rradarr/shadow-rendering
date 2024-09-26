@@ -20,6 +20,7 @@ public:
     // Load a model (vertices, indices, UVs and vertex colors) from an .obj file.
     void CreateFromFile(const std::string fileName);
 
+    static void CreatePlane(std::vector<Vertex>& vertices, std::vector<DWORD>& indices);
     static void CreateCube(std::vector<Vertex>& vertices, std::vector<DWORD>& indices, const int resolution = 2);
     static void CreateSphere(std::vector<Vertex>& vertices, std::vector<DWORD>& indices, const int resolution = 5);
 

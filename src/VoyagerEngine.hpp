@@ -79,7 +79,9 @@ private:
 
     // Meshes and SceneObjects.
     Mesh suzanneMesh;
+    Mesh groundPlaneMesh;
     SceneObject suzanne;
+    SceneObject groundPlane;
 
     std::vector<SceneObject> sceneObjects;
 
