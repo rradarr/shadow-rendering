@@ -1,4 +1,31 @@
-\chapter{[Subject of the thesis]}
+\chapter{Subject of the thesis}
+\label{chapter:3_subject}
+
+\section{Test application}
+% TODO: describe what you wrote
+
+\section{Implemented shadow rendering techniques}
+Below, all the shadow rendering techniques that have been implemented during work on this thesis are described, along with explanations of their algorithms.
+
+\subsection{Planar shadows implementation}
+\label{section:planar_shadows_impl}
+
+Planar shadows, as described in section \ref{section:planar_shadows}, are a very simple technique to achieve hard shadows. The idea stems from the geometric understanding of how a shadow is formed. The shape of a shadow is basically the shadow caster projected onto the surface of a shadow receiver along rays from a light source, as shown in Fig. \ref{}. Using this geometric understanding and similiar triangles, the following equations and a projection matrix can be derived. Assuming \(l\) to be the position of a light source, \(v\) to be the position of a vertex of the shadow caster and \(p\) the position of the projected shadow vertex, a projection onto the \(y=0\) plane is described by:
+
+\begin{align}
+	\frac{p_x - l_x}{v_x - l_x} = \frac{l_y}{l_y - v_y} \Longleftrightarrow p_x = \frac{l_yv_x - l_xv_y}{l_y - v_y}
+\end{align}
+
+The \(z\) component is derived in analogous way, while \(y=0\). From that the projection matrix can be constructed:
+
+\begin{align}
+	\mathbf{M} = 
+	\begin{bmatrix}
+		1 & 2 & 3\\
+		a & b & c
+	\end{bmatrix}
+\end{align}
+
 
 \begin{itemize}
 \item solution to the problem proposed by the author of the thesis
