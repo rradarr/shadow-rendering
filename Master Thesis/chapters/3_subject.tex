@@ -10,7 +10,7 @@ Below, all the shadow rendering techniques that have been implemented during wor
 \subsection{Planar shadows implementation}
 \label{section:planar_shadows_impl}
 
-Planar shadows, as described in section \ref{section:planar_shadows}, are a very simple technique to achieve hard shadows. The idea stems from the geometric understanding of how a shadow is formed. The shape of a shadow is basically the shadow caster projected onto the surface of a shadow receiver along rays from a light source, as shown in Fig. \ref{}. Using this geometric understanding and similiar triangles, the following equations and a projection matrix can be derived. Assuming \(l\) to be the position of a light source, \(v\) to be the position of a vertex of the shadow caster and \(p\) the position of the projected shadow vertex, a projection onto the \(y=0\) plane is described by:
+Planar shadows, as described in section \ref{section:planar_shadows}, are a very simple technique to achieve hard shadows. The idea for the algorithm stems from the geometric understanding of how a shadow is formed. The shape of a shadow is basically the shadow caster projected onto the surface of a shadow receiver along rays from a light source, as shown in Fig. \ref{}. Using this geometric understanding and similiar triangles, the following equations and a projection matrix can be derived. Assuming \(l\) to be the position of a light source, \(v\) to be the position of a vertex of the shadow caster and \(p\) the position of the projected shadow vertex, a projection onto the \(y=0\) plane is described by:
 
 \begin{align}
 	\frac{p_x - l_x}{v_x - l_x} = \frac{l_y}{l_y - v_y} \Longleftrightarrow p_x = \frac{l_yv_x - l_xv_y}{l_y - v_y}
