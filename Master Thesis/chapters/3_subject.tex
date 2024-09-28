@@ -10,22 +10,57 @@ Below, all the shadow rendering techniques that have been implemented during wor
 \subsection{Planar shadows implementation}
 \label{section:planar_shadows_impl}
 
-Planar shadows, as described in section \ref{section:planar_shadows}, are a very simple technique to achieve hard shadows. The idea for the algorithm stems from the geometric understanding of how a shadow is formed. The shape of a shadow is basically the shadow caster projected onto the surface of a shadow receiver along rays from a light source, as shown in Fig. \ref{}. Using this geometric understanding and similiar triangles, the following equations and a projection matrix can be derived. Assuming \(l\) to be the position of a light source, \(v\) to be the position of a vertex of the shadow caster and \(p\) the position of the projected shadow vertex, a projection onto the \(y=0\) plane is described by:
+Planar shadows, as described in section \ref{section:planar_shadows}, are a very simple technique to achieve hard shadows, introduced by Blinn \cite{bib:article:blinn_shadows}. The idea for the algorithm stems from the geometric understanding of how a shadow is formed. The shape of a shadow is basically the shadow caster projected onto the surface of a shadow receiver along rays from a light source, as shown in Fig. \ref{fig:projection_shadow}. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./graf/projection_shadow.pdf}
+	\caption{Vertices of a shadow caster projected onto \(y=0\) plane create a planar shadow. Dashed lines visualize the similar triangles.}
+	\label{fig:projection_shadow}
+\end{figure}
+
+Using this geometric understanding and similar triangles, marked in Fig. \ref{fig:projection_shadow} in dashed lines, the following equations and a projection matrix can be derived. Assuming \(l\) to be the position of a light source, \(v\) to be the position of a vertex of the shadow caster and \(p\) the position of the projected shadow vertex, a projection onto the \(y=0\) plane is described by:
 
 \begin{align}
 	\frac{p_x - l_x}{v_x - l_x} = \frac{l_y}{l_y - v_y} \Longleftrightarrow p_x = \frac{l_yv_x - l_xv_y}{l_y - v_y}
 \end{align}
 
-The \(z\) component is derived in analogous way, while \(y=0\). From that the projection matrix can be constructed:
+The \(z\) component is derived in analogous way:
+
+\begin{align}
+	\frac{p_z - l_z}{v_z - l_z} = \frac{l_y}{l_y - v_y} \Longleftrightarrow p_z = \frac{l_yv_z - l_zv_y}{l_y - v_y}
+\end{align}
+
+The \(y\) component will be \(y=0\) since the projection happens onto the \(xz\) plane. From that the projection matrix can be constructed:
 
 \begin{align}
 	\mathbf{M} = 
-	\begin{bmatrix}
-		1 & 2 & 3\\
-		a & b & c
-	\end{bmatrix}
+	\begin{pmatrix}
+		l_y & -l_x & 0 & 0\\
+		0 & 0 & 0 & 0\\
+		0 & -l_z & l_y & 0\\
+		0 & -1 & 0 & l_y
+	\end{pmatrix}
 \end{align}
 
+The \(l_y - v_y\) factor in the denominator is obtained by utilizing the property of homogenous coordinates, where all components of a vector \(\mathbf{v} = \begin{bmatrix}x & y & z & w\end{bmatrix}^T\) get divided by the \(w\) component, which gives \(\mathbf{v} = \begin{bmatrix}x/w & y/w & z/w & 1\end{bmatrix}^T\).
+
+This matrix can be generalized to project points onto any plane, but this was not implemented.
+
+In the implementation the matrix is created in the vertex shader based on the position of the light source. The vertices of the caster, after being transformed into world space, are multiplied by it, projecting them onto the \(y=0\) plane. Then they are transformed with the view and perspective projection matrices as usual. The resulting mesh is rendered in black, with a pixel shader that just returns the black color. Special care should be taken when rendering the shadow mesh, since it perfectly overlaps the ground plane at \(y=0\). To avoid z-fighting this mesh needs to be rendered after the receiver and before the caster, with z depth testing turned off in the rendering pipeline, or, as is the case in the implementation, a negative depth offset needs to be added to the mesh to bring it above the ground plane.
+
+% TODO: add z-fighting image, add shadow beyond receiver image.
+
+Multiple issues arise with this technique. The receiver must be a flat plane, objects cannot shadow themselves, casters and receivers need separate treatment. Additionally, care needs to be taken to only render the shadow meshes on top of the geometry of a receiver. Since the shadow is a separate mesh, it could be cast beyond the actual surface of the receiver, creating an impossible shadow in the air. There is another possibility here for an impossible shadow. If the light source is between the caster and receiver, an anti-shadow will be cast as shown in Fig \ref{fig:projection_anti_shadow}. This creates another special case that needs to be checked for by the application. All these problems make this technique virtually unused in modern rendering engines.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.3\textwidth]{./graf/projection_anti_shadow.pdf}
+	\caption{The shadow caster projected through a light source, creating an anti-shadow.}
+	\label{fig:projection_anti_shadow}
+\end{figure}
+
+% TODO: add some notes on performance.
 
 \begin{itemize}
 \item solution to the problem proposed by the author of the thesis
