@@ -63,7 +63,7 @@ void Material::CreateRootSignature()
 {
     rootParameters = CreateRootParameters();
 
-    D3D12_STATIC_SAMPLER_DESC sampler = CreateSampler();
+    std::vector<D3D12_STATIC_SAMPLER_DESC> samplers = CreateSamplers();
 
     D3D12_ROOT_SIGNATURE_FLAGS flags = CreateRootSignatureFlags();
 
@@ -72,8 +72,8 @@ void Material::CreateRootSignature()
     rootSignatureDesc.Init(
         static_cast<UINT>(rootParameters.size()),
         rootParameters.data(),
-        1,
-        &sampler,
+        static_cast<UINT>(samplers.size()),
+        samplers.data(),
         flags);
 
     ComPtr<ID3DBlob> signature;
@@ -162,7 +162,7 @@ std::vector<D3D12_ROOT_PARAMETER> Material::CreateRootParameters()
     return rootParameters;
 }
 
-D3D12_STATIC_SAMPLER_DESC Material::CreateSampler()
+std::vector<D3D12_STATIC_SAMPLER_DESC> Material::CreateSamplers()
 {
     // Create the static sample description.
     D3D12_STATIC_SAMPLER_DESC sampler = {};
@@ -180,7 +180,7 @@ D3D12_STATIC_SAMPLER_DESC Material::CreateSampler()
     sampler.RegisterSpace = 0;
     sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-    return sampler;
+    return std::vector<D3D12_STATIC_SAMPLER_DESC> {sampler};
 }
 
 D3D12_ROOT_SIGNATURE_FLAGS Material::CreateRootSignatureFlags()

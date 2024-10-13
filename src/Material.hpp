@@ -28,18 +28,18 @@ protected:
 
     // Inheriting classes can override the following methods to specialize.
     virtual std::vector<D3D12_ROOT_PARAMETER> CreateRootParameters();
-    virtual D3D12_STATIC_SAMPLER_DESC CreateSampler();
+    virtual std::vector<D3D12_STATIC_SAMPLER_DESC> CreateSamplers();
     virtual D3D12_ROOT_SIGNATURE_FLAGS CreateRootSignatureFlags();
     virtual void CustomizePipelineStateObjectDescription(D3D12_GRAPHICS_PIPELINE_STATE_DESC& psoDesc);
 
     ComPtr<ID3D12RootSignature> rootSignature;
     ComPtr<ID3D12PipelineState> pipelineState;
 
+    std::string vertexShaderFileName;
+    std::string pixelShaderFileName;
+
 private:
     std::vector<D3D12_DESCRIPTOR_RANGE> descriptorTableVertexRanges;
     std::vector<D3D12_ROOT_PARAMETER> rootParameters;
-
-    std::string vertexShaderFileName;
-    std::string pixelShaderFileName;
 };
 

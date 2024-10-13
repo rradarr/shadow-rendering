@@ -28,5 +28,5 @@ private:
     // Inheriting classes should not override these methods.
     virtual std::vector<D3D12_ROOT_PARAMETER> CreateRootParameters() final;
     virtual D3D12_ROOT_SIGNATURE_FLAGS CreateRootSignatureFlags() final;
-    virtual D3D12_STATIC_SAMPLER_DESC CreateSampler() final { return Material::CreateSampler(); };
+    virtual std::vector<D3D12_STATIC_SAMPLER_DESC> CreateSamplers() final { return Material::CreateSamplers(); };
 };
