@@ -22,6 +22,7 @@ public:
 
     static void CreatePlane(std::vector<Vertex>& vertices, std::vector<DWORD>& indices);
     static void CreateCube(std::vector<Vertex>& vertices, std::vector<DWORD>& indices, const int resolution = 2);
+    static Mesh CreateCube(const int resolution = 2);
     static void CreateSphere(std::vector<Vertex>& vertices, std::vector<DWORD>& indices, const int resolution = 5);
 
     void InsertDrawIndexed(ComPtr<ID3D12GraphicsCommandList> commandList);

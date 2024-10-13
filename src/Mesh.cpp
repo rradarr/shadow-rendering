@@ -102,6 +102,7 @@ void Mesh::CreateCube(std::vector<Vertex>& vertices, std::vector<DWORD>& indices
                 point = DirectX::XMVectorAdd(point, py);
                 //point = DirectX::XMVector3Normalize(point);
                 DirectX::XMStoreFloat3(&vert.position, point);
+                DirectX::XMStoreFloat3(&vert.normal, sideNormal);
 
                 vertices.push_back(vert);
             }
@@ -138,6 +139,7 @@ void Mesh::CreateCube(std::vector<Vertex>& vertices, std::vector<DWORD>& indices
                 point = DirectX::XMVectorAdd(point, py);
                 //point = DirectX::XMVector3Normalize(point);
                 DirectX::XMStoreFloat3(&vert.position, point);
+                DirectX::XMStoreFloat3(&vert.normal, sideNormal);
 
                 vertices.push_back(vert);
             }
@@ -235,6 +237,16 @@ void Mesh::CreateCube(std::vector<Vertex>& vertices, std::vector<DWORD>& indices
             indices.push_back(bottomSideHelper[helperIdPos + resolution]);
         }
     }
+}
+
+Mesh Mesh::CreateCube(const int resolution)
+{
+    std::vector<Vertex> vertices;
+    std::vector<DWORD> indices;
+
+    Mesh::CreateCube(vertices, indices, resolution);
+
+    return Mesh(vertices, indices);
 }
 
 void Mesh::CreateSphere(std::vector<Vertex>& vertices, std::vector<DWORD>& indices, const int resolution)
