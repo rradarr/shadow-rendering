@@ -14,8 +14,11 @@ SamplerState s0 : register(s0);
 
 float4 main(PSInput input) : SV_TARGET
 {
-    float3 lightDirection_viewSpace = normalize((input.lightPosition_viewSpace - input.vertexPosition_viewSpace).xyz);
-    float3 diffuseStrength = clamp(dot(input.normal_viewSpace.xyz, lightDirection_viewSpace), 0.0, 1.0);
+    const float ambientBrightness = 0.02; // The shadows will not get darker than this.
 
-    return t0.Sample(s0, input.texCoord) * input.color * float4(diffuseStrength, 1);
+    float3 lightDirection_viewSpace = normalize((input.lightPosition_viewSpace - input.vertexPosition_viewSpace).xyz);
+    float3 diffuseStrength = saturate(dot(input.normal_viewSpace.xyz, lightDirection_viewSpace));
+
+    float4 surfaceColor = t0.Sample(s0, input.texCoord) * input.color;
+    return surfaceColor * float4(max(diffuseStrength, ambientBrightness), 1);
 }
