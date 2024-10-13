@@ -10,6 +10,7 @@
 #include "WireframeRenderer.hpp"
 #include "NormalsDebugRenderer.hpp"
 #include "ProjectionShadowRenderer.hpp"
+#include "ShadowMapRenderer.hpp"
 
 using Microsoft::WRL::ComPtr;
 
@@ -64,10 +65,14 @@ private:
 
     ComPtr<ID3D12Resource> m_depthStencilBuffer;
     ComPtr<ID3D12DescriptorHeap> m_dsHeap;
+    UINT m_dsvHeapIncrement;
     // For main shader access heap the static CbvSrvDescriptorHeapManager is used.
 
     // Textures.
     Texture sampleTexture;
+    Texture shadowMap;
+    CD3DX12_CPU_DESCRIPTOR_HANDLE shadowMapDSVHeapLocation;
+    CD3DX12_VIEWPORT shadowMapViewport;
     // Materials.
     DefaultTexturedMaterial materialTextured;
     Material materialNoTex;
@@ -75,10 +80,13 @@ private:
     NormalsDebugMaterial materialNormalsDebug;
     LitMaterial materialLit;
     ProjectionShadowMaterial materialProjectionShadow;
+    ShadowMapDepthMaterial materialShadowMapDepth;
+    ShadowMapMainMaterial materialShadowMapMain;
     // Renderers.
     WireframeRenderer wireframeRenderer;
     NormalsDebugRenderer normalsDebugRenderer;
     ProjectionShadowRenderer projectionShadowRenderer;
+    ShadowMapRenderer shadowMapRenderer;
 
     // Meshes and SceneObjects.
     Mesh suzanneMesh;
@@ -97,6 +105,7 @@ private:
     wvpConstantBuffer m_wvpPerObject;
     lightParamsConstantBuffer lightParams;
     MappedResourceLocation lightingParamsBuffer;
+    MappedResourceLocation shadowMapWVPBuffer;
 
     // Synchronization objects.
     UINT m_frameBufferIndex;

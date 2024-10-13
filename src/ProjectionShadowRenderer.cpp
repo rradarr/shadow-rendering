@@ -15,9 +15,8 @@ void ProjectionShadowRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandL
 
     commandList->RSSetViewports(1, &viewport);
     commandList->RSSetScissorRects(1, &scissor);
-    // const float clearColor[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-    // commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
-    // commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+
+    // Note: No clearing of render targets, as this is used after a default pass!
 
     commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 

@@ -32,6 +32,9 @@ Renderer.cpp
 ResourceManager.cpp
 RollingAverageUtil.cpp
 SceneObject.cpp
+ShadowMapDepthMaterial.cpp
+ShadowMapMainMaterial.cpp
+ShadowMapRenderer.cpp
 StandardMaterial.cpp
 Texture.cpp
 TextureLoader.cpp

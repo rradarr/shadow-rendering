@@ -1,11 +1,12 @@
 #include "stdafx.hpp"
 #include "EngineStateModel.hpp"
 
-const char* RenderingState::renderingModeNames[4]{
+const char* RenderingState::renderingModeNames[static_cast<int>(RenderingMode::NUM_RENDERING_MODES)]{
     "Default",
     "Wireframe",
     "Normals Debug",
-    "Shadows - projection shadows"
+    "Shadows - projection shadows",
+    "Shadows - simple shadow mapping"
  };
 
 EngineStateModel* EngineStateModel::instance{ nullptr };

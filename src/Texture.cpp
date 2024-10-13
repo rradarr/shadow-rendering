@@ -50,6 +50,20 @@ bool Texture::CreateFromFile(const std::string fileName)
     return true;
 }
 
+void Texture::CreateEmpty(D3D12_RESOURCE_DESC resourceDescriptor, D3D12_SHADER_RESOURCE_VIEW_DESC textureViewDescriptor, D3D12_RESOURCE_STATES initialState, D3D12_CLEAR_VALUE* clearValue)
+{
+    BufferMemoryManager buffMng;
+
+    textureDesc = resourceDescriptor;
+
+    CD3DX12_RESOURCE_DESC desc(textureDesc);
+    buffMng.AllocateBuffer(textureBuffer, &desc, initialState, D3D12_HEAP_TYPE_DEFAULT, clearValue);
+    textureBuffer->SetName(L"Texture buffer resource (created empty)");
+
+    // Create the SRV for the texture buffer, using provided ViewDescriptor.
+    viewOffsetInHeap = CbvSrvDescriptorHeapManager::AddShaderResourceView(textureViewDescriptor, textureBuffer);
+}
+
 void Texture::CreateTextureView()
 {
     D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};

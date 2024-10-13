@@ -8,9 +8,11 @@ struct RenderingState {
         WIREFRAME = 1,
         NORMALS_DEBUG = 2,
         SHADOW_PROJECTION = 3,
+        SHADOW_MAP = 4,
+        NUM_RENDERING_MODES
     };
     RenderingMode chosenRenderingMode = RenderingMode::DEFAULT;
-    static const char* renderingModeNames[4];
+    static const char* renderingModeNames[static_cast<int>(RenderingMode::NUM_RENDERING_MODES)];
 
     unsigned int selectedSceneID = 0;
 

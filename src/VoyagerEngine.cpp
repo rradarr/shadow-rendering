@@ -25,6 +25,7 @@ VoyagerEngine::VoyagerEngine(UINT windowWidth, UINT windowHeight, std::string wi
     m_viewport = CD3DX12_VIEWPORT{ 0.0f, 0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight) };
     m_scissorRect = CD3DX12_RECT{ 0, 0, static_cast<LONG>(windowWidth), static_cast<LONG>(windowHeight) };
     m_rtvDescriptorSize = 0;
+    m_dsvHeapIncrement = 0;
 
     EngineStateModel* state = EngineStateModel::GetInstance();
     state->GetWindowState().windowCenter = 
@@ -257,7 +258,13 @@ void VoyagerEngine::LoadPipeline()
 
     std::cout << "Pipeline loaded." << std::endl;
 
-    CbvSrvDescriptorHeapManager::CreateHeap(mc_frameBufferCount + 2);
+    // Single WVP CBV per frame for one object, plus a texture, light info buffer,
+    // shadow map texture and WVP for shadow mapping.
+    // TODO: how many do we really need?
+    CbvSrvDescriptorHeapManager::CreateHeap(mc_frameBufferCount + 4);
+
+    // Initialize the DepthStencilView heap increment size.
+    m_dsvHeapIncrement = DXContext::getDevice().Get()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 }
 
 void VoyagerEngine::LoadAssets()
@@ -315,9 +322,9 @@ void VoyagerEngine::LoadAssets()
                 WVPResources.push_back(resource);
             }
             suzanne.SetWVPPerFrameBufferLocations(WVPResources);
-            suzanne.scale = DirectX::XMFLOAT3(1.f, 1.f, 1.f);
-            suzanne.position = DirectX::XMFLOAT4(0.f, 1.f, 0.f, 1.f);
-            DirectX::XMStoreFloat4x4(&suzanne.rotation, DirectX::XMMatrixIdentity());
+            suzanne.scale = DirectX::XMFLOAT3(0.7f, 0.7f, 0.7f);
+            suzanne.position = DirectX::XMFLOAT4(0.f, 0.7f, 0.f, 1.f);
+            DirectX::XMStoreFloat4x4(&suzanne.rotation, DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(180.f)));
         }
 
         // Create the ground plane.
@@ -349,7 +356,7 @@ void VoyagerEngine::LoadAssets()
             BufferMemoryManager buffMng;
 
             D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
-            dsvHeapDesc.NumDescriptors = 1;
+            dsvHeapDesc.NumDescriptors = 2; // One for main render target, one for the shadow map.
             dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
             dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
             ThrowIfFailed(DXContext::getDevice().Get()->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_dsHeap)));
@@ -370,10 +377,54 @@ void VoyagerEngine::LoadAssets()
 
             DXContext::getDevice().Get()->CreateDepthStencilView(m_depthStencilBuffer.Get(), &depthStencilDesc, m_dsHeap->GetCPUDescriptorHandleForHeapStart());
         }
+
+        // Create the shadow map depth buffer / depth texture.
+        {
+            // For the shadow map we need additional space on the DSV and SRV heaps.
+            // We need a depth view and a texture view, both for the same texture
+            // resource. Using resource barriers we will transition between them.
+
+            // Create the shadow map texture view descriptor (for use in the Texture class).
+            D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+            srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+            srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+            srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+            srvDesc.Texture2D.MipLevels = 1;
+
+            D3D12_CLEAR_VALUE depthOptimizedClearValue = {};
+            depthOptimizedClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+            depthOptimizedClearValue.DepthStencil.Depth = 1.0f;
+            depthOptimizedClearValue.DepthStencil.Stencil = 0;
+
+            // Create the resource.
+            CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, 4096U, 4096U, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+            shadowMap.CreateEmpty(resourceDesc, srvDesc, D3D12_RESOURCE_STATE_GENERIC_READ, &depthOptimizedClearValue);
+
+            // Set the viewport to be used when rendering into the shadow map, it will be passed to the shadowMapRenderer.
+            shadowMapViewport = CD3DX12_VIEWPORT{0.0f, 0.0f, 4096.f, 4096.f};
+
+            // Create the shadow map depth view.
+            D3D12_DEPTH_STENCIL_VIEW_DESC depthStencilDesc = {};
+            depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+            depthStencilDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+            depthStencilDesc.Flags = D3D12_DSV_FLAG_NONE;
+
+            shadowMapDSVHeapLocation = CD3DX12_CPU_DESCRIPTOR_HANDLE{m_dsHeap->GetCPUDescriptorHandleForHeapStart()};
+            
+            shadowMapDSVHeapLocation.Offset(1, m_dsvHeapIncrement);
+            DXContext::getDevice().Get()->CreateDepthStencilView(
+                shadowMap.GetTextureResource().Get(),
+                &depthStencilDesc,
+                shadowMapDSVHeapLocation);
+
+            // Create the shadow map WVP constant buffer.
+            ZeroMemory(&m_wvpPerObject, sizeof(m_wvpPerObject));
+            shadowMapWVPBuffer = resourceManager.AddMappedUploadResource(&m_wvpPerObject, sizeof(m_wvpPerObject));
+        }
     }
 
-    LoadMaterials();
     SetLightPosition();
+    LoadMaterials();
 
     std::cout << "Assets loaded." << std::endl;
 }
@@ -402,11 +453,29 @@ void VoyagerEngine::LoadMaterials()
     materialProjectionShadow.SetShaders("VertexShader_shadow_projection.hlsl", "PixelShader_shadow_projection.hlsl");
     materialProjectionShadow.CreateMaterial();
     projectionShadowRenderer.SetMaterial(&materialProjectionShadow);
+
+    materialShadowMapDepth.SetShaders("VertexShader_shadow_mapping_depth.hlsl");
+    materialShadowMapDepth.CreateMaterial();
+    materialShadowMapMain.SetShaders("VertexShader_shadow_mapping.hlsl", "PixelShader_shadow_mapping.hlsl");
+    materialShadowMapMain.CreateMaterial();
+    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsHeap->GetCPUDescriptorHandleForHeapStart());
+    shadowMapRenderer.SetDSV(dsvHandle); // Note: RTV has to be set per frame, as we have multiple backbuffers.
+    shadowMapRenderer.SetViewport(m_viewport);
+    shadowMapRenderer.SetMainMaterial(&materialShadowMapMain);
+    shadowMapRenderer.SetLightingParametersBuffer(lightingParamsBuffer);
+    shadowMapRenderer.SetDepthPassMaterial(&materialShadowMapDepth);
+    shadowMapRenderer.SetDepthPassDSV(shadowMapDSVHeapLocation);
+    shadowMapRenderer.SetLightWVPBuffer(shadowMapWVPBuffer);
+    shadowMapRenderer.SetShadowMapResource(shadowMap.GetTextureResource());
+    CD3DX12_GPU_DESCRIPTOR_HANDLE shadowMapSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
+    shadowMapSRV = shadowMapSRV.Offset(shadowMap.GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize()); // TODO: Move getting the SRV desc. handle into a Texture method.
+    shadowMapRenderer.SetShadowMapSRV(shadowMapSRV);
+    shadowMapRenderer.SetShadowPassViewport(shadowMapViewport);
 }
 
 void VoyagerEngine::LoadScene()
 {
-    m_mainCamera.InitCamera(DirectX::XMFLOAT4(0.f, 0.f, -8.f, 0.f), DirectX::XMFLOAT4(0.f, 0.f, 0.f, 0.f), aspectRatio);
+    m_mainCamera.InitCamera(DirectX::XMFLOAT4(-2.f, 3.f, -7.f, 0.f), DirectX::XMFLOAT4(0.f, 0.f, 0.f, 0.f), aspectRatio);
 }
 
 void VoyagerEngine::PopulateCommandList()
@@ -459,6 +528,11 @@ void VoyagerEngine::PopulateCommandList()
         projectionShadowRenderer.SetLightingParametersBuffer(lightingParamsBuffer);
         projectionShadowRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
     }
+    else if (chosenRenderingMode == RenderingState::RenderingMode::SHADOW_MAP) {
+        // Render scene with simple shadow mapping.
+        shadowMapRenderer.SetRTV(rtvHandle);
+        shadowMapRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+    }
     else {
         // Render scene objects with the default renderer.
         DefaultRenderer renderer;
@@ -502,6 +576,29 @@ void VoyagerEngine::SetLightPosition()
 
     // Copy our ConstantBuffer instance to the mapped constant buffer resource.
     memcpy(lightingParamsBuffer.GetMappedResourceAddress(), &lightParams.lightPosition, sizeof(lightParams.lightPosition));
+
+    // Set the WVP matrices of the shadow mapping light.
+    Camera shadowMapLightCamera;
+    // Set the projection matrix.
+    DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 9.f, 25.f); // TODO: calculate this from the scene.
+    // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(80.f, 80.f, 1.f, 80.f);
+    // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixPerspectiveLH(7.f, 7.f, 9.f, 25.f);
+    DirectX::XMStoreFloat4x4(&shadowMapLightCamera.projMat, tmpMat);
+    // Set the view matrix.
+    shadowMapLightCamera.camPosition = DirectX::XMVECTOR{10.f, 10.f, -10.f, 1.f};
+    shadowMapLightCamera.camTarget = DirectX::XMVECTOR{0.f, 0.f, 0.f, 1.f};
+    tmpMat = DirectX::XMMatrixLookAtLH(
+        shadowMapLightCamera.camPosition,
+        shadowMapLightCamera.camTarget,
+        DirectX::XMVECTOR{0.f, 1.f, 0.f}
+    );
+    DirectX::XMStoreFloat4x4(&shadowMapLightCamera.viewMat, tmpMat);
+
+    wvpConstantBuffer shadowMapLightWVP{};
+    // The matrices need to be transposed because of column/row major ordering difference between hlsl and the DX implementations.
+    DirectX::XMStoreFloat4x4(&shadowMapLightWVP.viewMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&shadowMapLightCamera.viewMat)));
+    DirectX::XMStoreFloat4x4(&shadowMapLightWVP.projectionMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&shadowMapLightCamera.projMat)));
+    memcpy(shadowMapWVPBuffer.GetMappedResourceAddress(), &shadowMapLightWVP, sizeof(shadowMapLightWVP));
 }
 
 DirectX::XMFLOAT3 VoyagerEngine:: normalize(DirectX::XMFLOAT3 vec) {

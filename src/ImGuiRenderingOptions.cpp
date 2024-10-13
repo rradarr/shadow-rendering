@@ -38,4 +38,14 @@ void ImGuiRenderingOptions::Display()
         "of the object meshes in the scene by coloring the mesh with "
         "RGB values that represent normal vector XYZ components.");
     }
+    else if(renderingModeId == 3) {
+        ImGui::TextWrapped("This rendering mode renders the scene "
+        "with projection shadows. To do that, shadow casters are projected "
+        "onto a ground plane Y=0 with a special matrix and rendered with a "
+        "black material on top of the rest of the normally rendered scene.");
+    }
+    else if(renderingModeId == 4) {
+        ImGui::TextWrapped("This rendering mode uses simple shadow mapping "
+        "to render shadows.");
+    }
 }
