@@ -49,4 +49,9 @@ void ShadowMapDepthMaterial::CustomizePipelineStateObjectDescription(D3D12_GRAPH
     psoDesc.RasterizerState.DepthBias = 1;
     psoDesc.RasterizerState.SlopeScaledDepthBias = 1.f;
     psoDesc.RasterizerState.DepthBiasClamp = 10.f;
+
+    // Good sponza settings \/
+    // psoDesc.RasterizerState.DepthBias = 1;
+    // psoDesc.RasterizerState.SlopeScaledDepthBias = 2.f;
+    // psoDesc.RasterizerState.DepthBiasClamp = 10.f;
 }

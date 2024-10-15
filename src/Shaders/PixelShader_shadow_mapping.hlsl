@@ -25,9 +25,11 @@ float4 main(PSInput input) : SV_TARGET
     // Calculate the shadow.
     input.positionInLightSpace.xyz /= input.positionInLightSpace.w;
     // Move the xy coordiantes from [-1;1] to UV [0;1] and flip the Y axis.
-    float2 shadowMapUV = (input.positionInLightSpace.xy / float2(2.0, -2.0)) + 0.5;
+    // float2 shadowMapUV = (input.positionInLightSpace.xy / float2(2.0, -2.0)) + 0.5;
+    float2 shadowMapUV = input.positionInLightSpace.xy;
     float shadowMapValue = shadowMapTex.Sample(shadowMapSampler, shadowMapUV).r;
     float lit = step(input.positionInLightSpace.z, shadowMapValue) * (1 - ambientBrightness) + ambientBrightness;
+    // TODO: the above line is weird, an acident, but gives us some diffuse in the shadows, which is nice...
 
     float4 surfaceColor = albedoTex.Sample(albedoSampler, input.texCoord) * input.color;
     float4 litColor = surfaceColor * float4(max(diffuseStrength, ambientBrightness), 1);

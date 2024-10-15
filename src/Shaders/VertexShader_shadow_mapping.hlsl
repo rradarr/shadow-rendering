@@ -26,6 +26,16 @@ struct lightParams
 };
 ConstantBuffer<lightParams> lightConstants : register(b1);
 
+float4x4 GetShadowMapOffsetMatrix()
+{
+    const float4x4 offset = {
+        0.5f, 0.0f, 0.0f, 0.5f,
+        0.0f, -0.5f, 0.0f, 0.5f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f,
+    };
+    return transpose(offset);
+}
 
 PSInput main(float4 position : POSITION, float4 color : COLOR, float2 uv : UV, float3 normal : NORMAL)
 {
@@ -47,6 +57,8 @@ PSInput main(float4 position : POSITION, float4 color : COLOR, float2 uv : UV, f
     // Calculate position in light space.
     result.positionInLightSpace = mul(vertexPosition_worldSpace, lightWVP.viewMatrix);
     result.positionInLightSpace = mul(result.positionInLightSpace, lightWVP.projMatrix);
+    // Note: When using this offset matrix, DO NOT use the shadowMapUV transform in the pixel shader!
+    result.positionInLightSpace = mul(result.positionInLightSpace, GetShadowMapOffsetMatrix());
 
     result.color = color;
     result.texCoord = uv;

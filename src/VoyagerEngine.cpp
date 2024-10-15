@@ -299,7 +299,7 @@ void VoyagerEngine::LoadAssets()
 
     // Load the texture
     {
-        sampleTexture.CreateFromFile("texture.png");
+        sampleTexture.CreateFromFile("blank_texture.png");
     }
 
     // Create the vertex and index buffers.
@@ -324,6 +324,9 @@ void VoyagerEngine::LoadAssets()
             suzanne.SetWVPPerFrameBufferLocations(WVPResources);
             suzanne.scale = DirectX::XMFLOAT3(0.7f, 0.7f, 0.7f);
             suzanne.position = DirectX::XMFLOAT4(0.f, 0.7f, 0.f, 1.f);
+            // Sponza settings \/
+            // suzanne.scale = DirectX::XMFLOAT3(0.01f, 0.01f, 0.01f);
+            // suzanne.position = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
             DirectX::XMStoreFloat4x4(&suzanne.rotation, DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(180.f)));
         }
 
@@ -401,6 +404,7 @@ void VoyagerEngine::LoadAssets()
             shadowMap.CreateEmpty(resourceDesc, srvDesc, D3D12_RESOURCE_STATE_GENERIC_READ, &depthOptimizedClearValue);
 
             // Set the viewport to be used when rendering into the shadow map, it will be passed to the shadowMapRenderer.
+            // TODO: was 4096
             shadowMapViewport = CD3DX12_VIEWPORT{0.0f, 0.0f, 4096.f, 4096.f};
 
             // Create the shadow map depth view.
@@ -476,6 +480,7 @@ void VoyagerEngine::LoadMaterials()
 void VoyagerEngine::LoadScene()
 {
     m_mainCamera.InitCamera(DirectX::XMFLOAT4(-2.f, 3.f, -7.f, 0.f), DirectX::XMFLOAT4(0.f, 0.f, 0.f, 0.f), aspectRatio);
+    // m_mainCamera.InitCamera(DirectX::XMFLOAT4(10.f, 20.f, -10.f, 0.f), DirectX::XMFLOAT4(0.f, 0.f, 0.f, 0.f), aspectRatio);
 }
 
 void VoyagerEngine::PopulateCommandList()
@@ -581,11 +586,12 @@ void VoyagerEngine::SetLightPosition()
     Camera shadowMapLightCamera;
     // Set the projection matrix.
     DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 9.f, 25.f); // TODO: calculate this from the scene.
-    // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(80.f, 80.f, 1.f, 80.f);
+    // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(50.f, 50.f, 1.f, 80.f); // <- Sponza settings.
     // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixPerspectiveLH(7.f, 7.f, 9.f, 25.f);
     DirectX::XMStoreFloat4x4(&shadowMapLightCamera.projMat, tmpMat);
     // Set the view matrix.
     shadowMapLightCamera.camPosition = DirectX::XMVECTOR{10.f, 10.f, -10.f, 1.f};
+    // shadowMapLightCamera.camPosition = DirectX::XMVECTOR{6.f, 20.f, -6.f, 1.f}; // <- Sponza settings.
     shadowMapLightCamera.camTarget = DirectX::XMVECTOR{0.f, 0.f, 0.f, 1.f};
     tmpMat = DirectX::XMMatrixLookAtLH(
         shadowMapLightCamera.camPosition,
