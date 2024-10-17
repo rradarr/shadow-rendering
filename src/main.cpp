@@ -9,6 +9,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 #ifdef _DEBUG
     if (!CreateNewConsole(1024))
         return -1;
+    std::cout << "Debug enabled." << std::endl;    
 #endif // _DEBUG
 
     std::cout << "Starting application..." << std::endl;

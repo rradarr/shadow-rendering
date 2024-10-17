@@ -19,7 +19,6 @@
                 "strategy": "set"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
                 "CMAKE_CXX_COMPILER": "cl"
             }
@@ -30,11 +29,33 @@
             "description": "Target Windows with the msvc compiler, debug build type",
             "inherits": "windows-x64",
             "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl",
-                "CMAKE_BUILD_TYPE": "Debug",
-                "ENABLE_DEVELOPER_MODE": "ON"
+                "DCMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+            }
+        },
+        {
+            "name": "windows-msvc-release",
+            "displayName": "msvc Release",
+            "description": "Target Windows with the msvc compiler, release build type",
+            "inherits": "windows-x64",
+            "cacheVariables": {
+                "DCMAKE_BUILD_TYPE": "Release",
+                "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded"
             }
         }
-    ]
+    ],
+    "buildPresets": [
+    {
+      "name": "windows-debug-dev",
+      "displayName": "Debug",
+      "configurePreset": "windows-msvc-debug-developer-mode",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-release",
+      "displayName": "Release",
+      "configurePreset": "windows-msvc-release",
+      "configuration": "Release"
+    }
+  ]
 }

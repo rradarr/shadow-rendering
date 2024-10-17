@@ -1,8 +1,11 @@
-file(COPY ../Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE})
-file(GLOB MY_SHADERS
-  "Shaders/*.hlsl"
-)
-file(COPY ${MY_SHADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/Resources)
+# set(FINAL_DIR $<$<CONFIG:Debug>:Debug>)
+# $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>
+# file(COPY ../Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR})
+
+# file(GLOB MY_SHADERS
+#   "Shaders/*.hlsl"
+# )
+# file(COPY ${MY_SHADERS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/Resources)
 
 add_executable(${CMAKE_PROJECT_NAME} WIN32
 main.cpp
@@ -45,3 +48,16 @@ WireframeMaterial.cpp
 WireframeRenderer.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE imgui)
+
+add_custom_command(
+  TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/src/Shaders
+    ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/Resources)
+
+add_custom_command(
+  TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/Resources
+    ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/Resources)
+
