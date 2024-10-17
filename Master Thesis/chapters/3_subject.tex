@@ -80,19 +80,19 @@ Multiple issues arise with this technique. The receiver must be a flat plane, ob
 
 % TODO: add some notes on performance.
 
-\subsection{Basic shadow mapping}
+\subsection{Implementation of basic shadow mapping}
 \label{section:basic_mapping_impl}
 As mentioned in chapter \ref{section:basic_mapping}, shadow mapping for a single light source is performed using two render passes. The first one generates the shadow map itself, the second and final pass renders the scene with shadows determined using the shadow map. The shadow map is a z-buffer, which means that, for each texel, it stores the values of the z coordinate of the scene surface point being rendered. These coordinates are stored after transforming the vertices of the scene into the NDC space, or normalized device coordinate space, of a given light source. This transformation is achieved in the vertex shader, by using the regular world, view, projection (WVP) transformation matrices, with the distinction that the view and projection matrices are not of the scene observer but of the light source. In truth, multiplying the vertex positions by the WVP matrix will result in clip space homogenous coordinates, which then will be transformed automatically by the pipeline into NDC during the perspective division, when the homogenous coordinates are divided by their \(w\) component. The stored depth values will then be in the \(0-1\) range, usually \(0\) being at the near clipping plane and \(1\) at the far clipping plane. This z-buffer can then be used as a texture shader resource in a pixel shader to render the final scene. To read the depth values from the shadow map, the NDC coordinates of each surface point need to be calculated again. The \(x\) any \(y\) components will then be used to access a texel in the shadow map, the \(z\) component will be compared with the contents of the shadow map. Do note that the actual Euclidean distance between the shaded point and the light source is not used, as these values would be in different coordinate spaces. When the shadow map value is accessed, it is compared with the \(z\) value of the point that is currently being shaded. If the shadow map value is greater, then the point being shaded is farther away from the light source than some other surface seen at this point from the point of view of the light. This means that it is not illuminated and is in shadow. Otherwise, the point is lit by the light source. The process is illustrated in Fig. \ref{fig:shadow_map_basic}. Fig. \ref{fig:shadow_map_screens} shows a rendered view of a scene with shadow mapping and the shadow map itself.
 
 
-\begin{figure}[h]
+\begin{figure}[hp]
 	\centering
 	\includegraphics[width=0.5\textwidth]{./graf/shadow_mapping_basic.pdf}
 	\caption{The light source \(l\) has stored the depth value \(z_l\) in its shadow map. When rendering the scene from the viewpoint of the observer \(v\), the stored depth is compared to the depth \(z_v\). This value will be larger than the one in the shadow map, so the point will be in shadow.}
 	\label{fig:shadow_map_basic}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[hbp]
     \centering
     \begin{subfigure}{0.45\textwidth}
 		\centering
@@ -141,7 +141,24 @@ When rendering the shadow map an appropriate projection matrix has to be constru
 
 When creating a projection matrix as well as the view matrix for a shadow map, care has to be taken to capture all relevant shadow casters. This is especially true for large scale scenes and directional lights, as rendering the entirety of a scene into the shadow map would most of the time be unnecessary and suboptimal. Most of the rendered map would not be used in a given frame, and the distribution of shadow map resolution would be poor. It would be enough for the light view to tightly encompass the view frustum of the observer to obtain correct results. This is called fitting and will be presented in the following sections. This idea can be taken further as shown by Ji\v{r}\'{\i} Bittner \cite{bib:proc:bittner_caster_culling} to allow for an approximate FPS gain of 1.5 times. Their method uses a custom advanced algorithm to cull shadow casters and render only those that contribute to the current main viewpoint.
 
-Another issue of shadow maps is self-shadowing, or surface acne. This is also a result of aliasing, since the continuous scene geometry and its depth data is sampled in a discrete manner into an image when rendering the shadow map. If the shadow map texel does not correlate one-to-one with the final view samples, which happens very often and is highly likely, the shadow map samples will cover a non-zero area on the geometry surface in the final view of the scene, which is illustrated in Fig. \ref{fig:shadow_mapping_acne_explanation}. This can cause the surface to erroneously shadow itself, as shown in Fig. \ref{fig:shadow_mapping_acne}. This issue gets more pronounced the higher the angle between the light source view ray and the surface normal. It can be resolved by adding a depth bias when rendering the shadow map, which will ensure the samples are below the actual surface. In modern rendering APIs the depth bias can be configured for a pipeline and applied automatically when rendering. Especially useful is the combination of a constant depth bias and a slope-scaled depth bias. The second bias helps eliminate the problem when surfaces appear more edge-on in the light view by scaling the depth bias with the angle between the light direction and surface. Too high depth bias can cause peter-panning, a situation shown in Fig. \ref{fig:shadow_mapping_panning} where a shadow caster gets detached from its shadow. Because of this, depth bias values often need to be hand-tuned on a per-scene basis. Other approaches have also been proposed, such as using only the back faces of objects to render the shadow map \cite{bib:rep:wang_second_depth_mapping} or utilizing depth peeling to store average depths between the back and front faces of an object \cite{bib:book:woo_midpoint_depth_map}, but they both still require some bias to avoid shadow-acne in areas such as silhouette edges or concavities.
+Another issue of shadow maps is self-shadowing, or surface acne. This is also a result of aliasing, since the continuous scene geometry and its depth data is sampled in a discrete manner into an image when rendering the shadow map. If the shadow map texel does not correlate one-to-one with the final view samples, which happens very often and is highly likely, the shadow map samples will cover a non-zero area on the geometry surface in the final view of the scene, which is illustrated in Fig. \ref{fig:shadow_mapping_acne_explanation}.
+\begin{figure}[hp]
+	\centering
+	\begin{subfigure}{0.7\textwidth}
+        \includegraphics[width=\textwidth]{./graf/shadow_mapping_acne.pdf}
+        \caption{Depth samples being compared with depth values over an area of the actual mesh lead to aliasing and shadow acne.}
+        \label{fig:shadow_mapping_acne_explanation_3d}
+    \end{subfigure}
+	\begin{subfigure}{0.7\textwidth}
+        \includegraphics[width=\textwidth]{./graf/shadow_mapping_acne_side.pdf}
+        \caption{The aliasing issue present in shadow maps illustrated in two dimensions from the side.}
+        \label{fig:shadow_mapping_acne_explanation_side}
+    \end{subfigure}
+
+    \caption{The cause of shadow acne. Light source \(l\) renders the shadow map onto its projection plane \(p\), having some finite resolution. The sampled depth value \(z\) is stored in a texel. This creates a virtual surface orthogonal to the light direction on top of the actual geometry surface \(s\). When rendering the scene, depth values in the area \(a_1\) will have a lower depth value stored in the shadow map texel than their actual depth, causing them to be in light. Samples in the \(a_2\) area will have greater depth, causing them to be evaluated as being in shadow.}
+    \label{fig:shadow_mapping_acne_explanation}
+\end{figure}
+This can cause the surface to erroneously shadow itself, as shown in Fig. \ref{fig:shadow_mapping_acne}. This issue gets more pronounced the higher the angle between the light source view ray and the surface normal. It can be resolved by adding a depth bias when rendering the shadow map, which will ensure the samples are below the actual surface. In modern rendering APIs the depth bias can be configured for a pipeline and applied automatically when rendering. Especially useful is the combination of a constant depth bias and a slope-scaled depth bias. The second bias helps eliminate the problem when surfaces appear more edge-on in the light view by scaling the depth bias with the angle between the light direction and surface. Too high depth bias can cause peter-panning, a situation shown in Fig. \ref{fig:shadow_mapping_panning} where a shadow caster gets detached from its shadow. Because of this, depth bias values often need to be hand-tuned on a per-scene basis. Other approaches have also been proposed, such as using only the back faces of objects to render the shadow map \cite{bib:rep:wang_second_depth_mapping} or utilizing depth peeling to store average depths between the back and front faces of an object \cite{bib:book:woo_midpoint_depth_map}, but they both still require some bias to avoid shadow-acne in areas such as silhouette edges or concavities.
 
 \begin{figure}[h]
     \centering
@@ -163,65 +180,144 @@ Another issue of shadow maps is self-shadowing, or surface acne. This is also a 
     \label{fig:shadow_mapping_issues}
 \end{figure}
 
-\begin{figure}
-	\centering
-	\begin{subfigure}{0.7\textwidth}
-        \includegraphics[width=\textwidth]{./graf/shadow_mapping_acne.pdf}
-        \caption{Depth samples being compared with depth values over an area of the actual mesh lead to aliasing and shadow acne.}
-        \label{fig:shadow_mapping_acne_explanation_3d}
-    \end{subfigure}
-	\begin{subfigure}{0.7\textwidth}
-        \includegraphics[width=\textwidth]{./graf/shadow_mapping_acne_side.pdf}
-        \caption{The aliasing issue present in shadow maps illustrated in two dimensions from the side.}
-        \label{fig:shadow_mapping_acne_explanation_side}
-    \end{subfigure}
+The z-buffer of a rendered image can be actually non-linear in its \([0-1]\) range. Perspective projection matrices are sometimes built in such a way that the precision closer to \(1\) is lower than closer to \(0\). This is purposefully done to gain more precision closer to the viewer, where it is more needed when performing hidden-surface removal than far away, where objects will become very small due to perspective foreshortening. This can be an issue with shadow mapping, since objects close to the light source are not necessarily close to the viewer. In fact the opposite can often be true. As shown by Stefan Barbec \cite{bib:article:barbec_linear_depth}, the z-buffer for the use in shadow mapping can be linearized using a linear transformation dependent on the projection matrix used. The following perspective projection matrix present in the DX Math library can be linearized with equation \ref{eq:projection_linearization}.
 
-    \caption{The cause of shadow acne. Light source \(l\) renders the shadow map onto its projection plane \(p\), having some finite resolution. The sampled depth value \(z\) is stored in a texel. This creates a virtual surface orthogonal to the light direction on top of the actual geometry surface \(s\). When rendering the scene, depth values in the area \(a_1\) will have a lower depth value stored in the shadow map texel than their actual depth, causing them to be in light. Samples in the \(a_2\) area will have greater depth, causing them to be evaluated as being in shadow.}
-    \label{fig:shadow_mapping_acne_explanation}
+\begin{gather}
+	\label{eq:projection_perspective}
+	\begin{pmatrix}
+		W & 0 & 0 & 0\\
+		0 & H & 0 & 0\\
+		0 & 0 & \frac{f}{f-n} & \frac{-fn}{f-n}\\
+		0 & 0 & 1 & 0
+	\end{pmatrix}
+    \begin{pmatrix}
+		x\\
+		y\\
+		z\\
+		w
+	\end{pmatrix} =
+    \begin{pmatrix}
+		Wx\\
+		Hy\\
+		\frac{zf}{f-n} - \frac{wfn}{f-n}\\
+		z
+	\end{pmatrix} \Rightarrow 
+    \begin{pmatrix}
+		Wx\\
+		Hy\\
+		\frac{zf}{f-n} - \frac{fn}{f-n}\\
+		z
+	\end{pmatrix}
+    \quad \text{for} \quad w = 1\\[10pt]
+    \begin{pmatrix}
+		Wx\\
+		Hy\\
+		\frac{zf}{f-n} - \frac{fn}{f-n}\\
+		z
+	\end{pmatrix} / z =
+    \begin{pmatrix}
+		\frac{Wx}{z}\\
+		\frac{Hy}{z}\\
+		\frac{f}{f-n} - \frac{fn}{z(f-n)}\\
+		1
+	\end{pmatrix}
+\end{gather}
+
+After the perspective division the final form of the z-value equation is obtained. Below, in Fig. \ref{plot:perspective_z}, the z-values are plotted for exemplary near and far clipping planes equal \(n=2\), \(f=15\).
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        xlabel=Scene z-values,ylabel=Depth post projection,
+        y tick label style={
+            /pgf/number format/.cd,
+                fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                fixed zerofill, % 1.0 zamiast 1
+                precision=1,
+            /tikz/.cd
+        },
+        x tick label style={
+            /pgf/number format/.cd,
+                fixed,
+                fixed,
+                precision=2,
+            /tikz/.cd
+        }
+    ]
+    \addplot [domain=2.0:17.0] {(15/13)-(30/(13*x))};
+    \end{axis} 
+    \end{tikzpicture}
+    \caption{The z-values after a perspective projection become non-linear.}
+    \label{plot:perspective_z}
 \end{figure}
 
-% mention linearization of the shadow map.
+The values can be linearized back again simply by multiplying the clip-space z-value by \(\frac{z}{f}\), which gives the following equation.
 
-\begin{itemize}
-\item solution to the problem proposed by the author of the thesis
-\item theoretical analysis of proposed solutions
-\item rationale of applied methods, algorithms, and tools
-\end{itemize}
+\begin{align}
+	\label{eq:projection_linearization}
+	\left(\frac{f}{f-n} - \frac{fn}{z(f-n)}\right) * \frac{z}{f} = \frac{z-n}{f-n}
+\end{align}
 
-Here I should describe my reasoning for the testing, reasoning for
-selecting the techniques that I do select, my program for testing.
+In the application z-buffer linearization was not implemented, as after investigation it turned out that an orthographic projection, which is used for the directional light, does not introduce nonlinearity to the z-buffer range. This can be seen by inspecting how the matrix will affect the \(w\) component. The orthographic projection matrix as implemented in the DX Math library is presented below.
 
-\section{[Section title]}
+\begin{align}
+	\label{eq:projection_ortho}
+	\mathbf{M_{o}} = 
+	\begin{pmatrix}
+		W & 0 & 0 & 0\\
+		0 & H & 0 & 0\\
+		0 & 0 & \frac{1}{f-n} & \frac{-n}{f-n}\\
+		0 & 0 & 0 & 1
+	\end{pmatrix}
+\end{align}
 
-\section{[Subsection title]}
+This matrix does not modify the \(w\) component and the \(z\) values will remain linear. In fact the formula for depth values after using this matrix is exactly the same as the perspective one after linearization.
 
-Each figure in the document should be referred to at least once (fig. \ref{fig:2}).
+\subsection{Fitted shadow maps}
+\label{section:fitted_mapping_impl}
+Here I describe how to fit shadow maps, which includes warping and cascades.
 
-\begin{figure}
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    y tick label style={
-        /pgf/number format/.cd,
-            fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
-            fixed zerofill, % 1.0 zamiast 1
-            precision=1,
-        /tikz/.cd
-    },
-    x tick label style={
-        /pgf/number format/.cd,
-            fixed,
-            fixed zerofill,
-            precision=2,
-        /tikz/.cd
-    }
-]
-\addplot [domain=0.0:0.1] {rnd};
-\end{axis} 
-\end{tikzpicture}
-\caption{Figure caption.} % Figure caption is BELOW the figure!
-\label{fig:2}
-\end{figure}
+% \begin{itemize}
+% \item solution to the problem proposed by the author of the thesis
+% \item theoretical analysis of proposed solutions
+% \item rationale of applied methods, algorithms, and tools
+% \end{itemize}
+
+% Here I should describe my reasoning for the testing, reasoning for
+% selecting the techniques that I do select, my program for testing.
+
+% \section{[Section title]}
+
+% \section{[Subsection title]}
+
+% Each figure in the document should be referred to at least once (fig. \ref{fig:2}).
+
+% \begin{figure}
+% \centering
+% \begin{tikzpicture}
+% \begin{axis}[
+%     y tick label style={
+%         /pgf/number format/.cd,
+%             fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+%             fixed zerofill, % 1.0 zamiast 1
+%             precision=1,
+%         /tikz/.cd
+%     },
+%     x tick label style={
+%         /pgf/number format/.cd,
+%             fixed,
+%             fixed zerofill,
+%             precision=2,
+%         /tikz/.cd
+%     }
+% ]
+% \addplot [domain=0.0:0.1] {rnd};
+% \end{axis} 
+% \end{tikzpicture}
+% \caption{Figure caption.} % Figure caption is BELOW the figure!
+% \label{fig:2}
+% \end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -272,41 +368,41 @@ Each figure in the document should be referred to at least once (fig. \ref{fig:2
 %%%%%%%%%%%%%%%%%%%%%
 
 
-Each table in the document should be referred to at least once (Tab. \ref{tab:results}).
+% Each table in the document should be referred to at least once (Tab. \ref{tab:results}).
 
-\begin{table}
-\centering
-\caption{A caption of a table is ABOVE it.}
-\label{tab:results}
-\begin{tabular}{rrrrrrrr}
-\toprule
-	         &                                     \multicolumn{7}{c}{method}                                      \\
-	         \cmidrule{2-8}
-	         &         &         &        \multicolumn{3}{c}{alg. 3}        & \multicolumn{2}{c}{alg. 4, $\gamma = 2$} \\
-	         \cmidrule(r){4-6}\cmidrule(r){7-8}
-	$\zeta$ &     alg. 1 &   alg. 2 & $\alpha= 1.5$ & $\alpha= 2$ & $\alpha= 3$ &   $\beta = 0.1$  &   $\beta = -0.1$ \\
-\midrule
-	       0 &  8.3250 & 1.45305 &       7.5791 &    14.8517 &    20.0028 & 1.16396 &                       1.1365 \\
-	       5 &  0.6111 & 2.27126 &       6.9952 &    13.8560 &    18.6064 & 1.18659 &                       1.1630 \\
-	      10 & 11.6126 & 2.69218 &       6.2520 &    12.5202 &    16.8278 & 1.23180 &                       1.2045 \\
-	      15 &  0.5665 & 2.95046 &       5.7753 &    11.4588 &    15.4837 & 1.25131 &                       1.2614 \\
-	      20 & 15.8728 & 3.07225 &       5.3071 &    10.3935 &    13.8738 & 1.25307 &                       1.2217 \\
-	      25 &  0.9791 & 3.19034 &       5.4575 &     9.9533 &    13.0721 & 1.27104 &                       1.2640 \\
-	      30 &  2.0228 & 3.27474 &       5.7461 &     9.7164 &    12.2637 & 1.33404 &                       1.3209 \\
-	      35 & 13.4210 & 3.36086 &       6.6735 &    10.0442 &    12.0270 & 1.35385 &                       1.3059 \\
-	      40 & 13.2226 & 3.36420 &       7.7248 &    10.4495 &    12.0379 & 1.34919 &                       1.2768 \\
-	      45 & 12.8445 & 3.47436 &       8.5539 &    10.8552 &    12.2773 & 1.42303 &                       1.4362 \\
-	      50 & 12.9245 & 3.58228 &       9.2702 &    11.2183 &    12.3990 & 1.40922 &                       1.3724 \\
-\bottomrule
-\end{tabular}
-\end{table}  
+% \begin{table}
+% \centering
+% \caption{A caption of a table is ABOVE it.}
+% \label{tab:results}
+% \begin{tabular}{rrrrrrrr}
+% \toprule
+% 	         &                                     \multicolumn{7}{c}{method}                                      \\
+% 	         \cmidrule{2-8}
+% 	         &         &         &        \multicolumn{3}{c}{alg. 3}        & \multicolumn{2}{c}{alg. 4, $\gamma = 2$} \\
+% 	         \cmidrule(r){4-6}\cmidrule(r){7-8}
+% 	$\zeta$ &     alg. 1 &   alg. 2 & $\alpha= 1.5$ & $\alpha= 2$ & $\alpha= 3$ &   $\beta = 0.1$  &   $\beta = -0.1$ \\
+% \midrule
+% 	       0 &  8.3250 & 1.45305 &       7.5791 &    14.8517 &    20.0028 & 1.16396 &                       1.1365 \\
+% 	       5 &  0.6111 & 2.27126 &       6.9952 &    13.8560 &    18.6064 & 1.18659 &                       1.1630 \\
+% 	      10 & 11.6126 & 2.69218 &       6.2520 &    12.5202 &    16.8278 & 1.23180 &                       1.2045 \\
+% 	      15 &  0.5665 & 2.95046 &       5.7753 &    11.4588 &    15.4837 & 1.25131 &                       1.2614 \\
+% 	      20 & 15.8728 & 3.07225 &       5.3071 &    10.3935 &    13.8738 & 1.25307 &                       1.2217 \\
+% 	      25 &  0.9791 & 3.19034 &       5.4575 &     9.9533 &    13.0721 & 1.27104 &                       1.2640 \\
+% 	      30 &  2.0228 & 3.27474 &       5.7461 &     9.7164 &    12.2637 & 1.33404 &                       1.3209 \\
+% 	      35 & 13.4210 & 3.36086 &       6.6735 &    10.0442 &    12.0270 & 1.35385 &                       1.3059 \\
+% 	      40 & 13.2226 & 3.36420 &       7.7248 &    10.4495 &    12.0379 & 1.34919 &                       1.2768 \\
+% 	      45 & 12.8445 & 3.47436 &       8.5539 &    10.8552 &    12.2773 & 1.42303 &                       1.4362 \\
+% 	      50 & 12.9245 & 3.58228 &       9.2702 &    11.2183 &    12.3990 & 1.40922 &                       1.3724 \\
+% \bottomrule
+% \end{tabular}
+% \end{table}  
 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.5\textwidth]{./graf/test_image.jpg}
-\caption{Caption of a figure is always below the figure akakak.}
-\label{fig:duped_image4}
-\end{figure}
+% \begin{figure}
+% \centering
+% \includegraphics[width=0.5\textwidth]{./graf/test_image.jpg}
+% \caption{Caption of a figure is always below the figure akakak.}
+% \label{fig:duped_image4}
+% \end{figure}
 
-some citation of the above \ref{fig:duped_image4}
+% some citation of the above \ref{fig:duped_image4}
