@@ -12,6 +12,8 @@
 #include "ProjectionShadowRenderer.hpp"
 #include "ShadowMapRenderer.hpp"
 
+// #include "TracyD3D12.hpp"
+
 using Microsoft::WRL::ComPtr;
 
 class VoyagerEngine : public Engine
@@ -115,6 +117,8 @@ private:
     HANDLE m_fenceEvent;
     ComPtr<ID3D12Fence> m_fence[mc_frameBufferCount];
     UINT64 m_fenceValue[mc_frameBufferCount];
+
+    // Tracy objects.
 
     void LoadPipeline();
     void LoadAssets();

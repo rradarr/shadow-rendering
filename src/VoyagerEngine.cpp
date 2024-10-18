@@ -14,6 +14,7 @@
 #include "MainInputController.hpp"
 
 #include "SceneObject.hpp"
+#include "Tracy.hpp"
 #include <random>
 #include <limits>
 
@@ -142,10 +143,16 @@ void VoyagerEngine::OnUpdate()
     imguiController.UpdateImGui();
 
     // std::cout << "Updated" << std::endl;
+
+    // Mark the frame end for Tracy.
+    FrameMark;
 }
 
 void VoyagerEngine::OnRender()
 {
+    // Mark zone for Tracy.
+    ZoneScoped;
+
     // Record all the commands we need to render the scene into the command list.
     PopulateCommandList();
 

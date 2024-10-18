@@ -53,6 +53,24 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui_external)
 
+FetchContent_Declare(
+    tracy_profiler
+    GIT_REPOSITORY https://github.com/wolfpld/tracy.git
+    GIT_TAG v0.11.1
+    GIT_SHALLOW TRUE
+    GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(tracy_profiler)
+
+option(TRACY_ENABLE "" ON)
+option(TRACY_ON_DEMAND "" ON)
+add_compile_definitions(TRACY_ENABLE)
+# add_subdirectory(${tracy_profiler_SOURCE_DIR}/tracy)  # target: TracyClient or alias Tracy::TracyClient
+add_library(tracy
+	${tracy_profiler_SOURCE_DIR}/public/TracyClient.cpp
+)
+target_include_directories(tracy PUBLIC ${tracy_profiler_SOURCE_DIR}/public/tracy/)
+
 add_library(imgui
 	${imgui_external_SOURCE_DIR}/imgui.cpp
 	${imgui_external_SOURCE_DIR}/imgui_draw.cpp

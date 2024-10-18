@@ -448,3 +448,4 @@ FodyWeavers.xsd
 build/
 !Resources/*
 Resources/Test Resources/
+tracy_server/

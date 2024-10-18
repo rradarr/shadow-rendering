@@ -49,6 +49,8 @@ WireframeRenderer.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE imgui)
 
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE tracy)
+
 add_custom_command(
   TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory
