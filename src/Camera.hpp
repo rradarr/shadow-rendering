@@ -7,7 +7,7 @@ class Camera
 public:
     void InitCamera(DirectX::XMFLOAT4 position, DirectX::XMFLOAT4 target, float frameAspectRatio);
 
-    void UpdateCamera(DirectX::XMFLOAT2 lookRotation, DirectX::XMFLOAT3 movement);
+    void UpdateCamera(DirectX::XMFLOAT2 lookRotation, DirectX::XMFLOAT3 movement, double deltaTime);
 
     DirectX::XMFLOAT4X4 projMat; // this will store our projection matrix
     DirectX::XMFLOAT4X4 viewMat; // this will store our view matrix

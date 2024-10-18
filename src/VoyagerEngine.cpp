@@ -36,7 +36,9 @@ void VoyagerEngine::OnInit(HWND windowHandle)
 {
     this->windowHandle = windowHandle;
 
+    // Note: just override this to false if vsync is ok.
     allowsTearing = CheckTearingSupport();
+    // allowsTearing = false;
     LoadPipeline();
     LoadAssets();
     LoadScene();
@@ -55,14 +57,18 @@ void VoyagerEngine::OnUpdate()
 
     OnEarlyUpdate();
 
+    double deltaTime = Timer::GetInstance()->GetDeltaTime();
+
     // Update the camera.
     {
-        DirectX::XMFLOAT2 delta;
-        DirectX::XMStoreFloat2(&delta, EngineStateModel::GetInstance()->GetInputState().mouseDelta);
-        m_mainCamera.UpdateCamera(delta, EngineStateModel::GetInstance()->GetInputState().keyboradMovementInput);
+        DirectX::XMFLOAT2 mouseDelta;
+        DirectX::XMStoreFloat2(&mouseDelta, EngineStateModel::GetInstance()->GetInputState().mouseDelta);
+        m_mainCamera.UpdateCamera(
+            mouseDelta,
+            EngineStateModel::GetInstance()->GetInputState().keyboradMovementInput,
+            deltaTime
+        );
     }
-
-    double deltaTime = Timer::GetInstance()->GetDeltaTime();
 
     // Store the view and projection matrices for use in shaders (lighting).
     DirectX::XMStoreFloat4x4(&m_wvpPerObject.viewMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&m_mainCamera.viewMat)));
@@ -153,7 +159,7 @@ void VoyagerEngine::OnRender()
     // Present the frame.
     // Note: sync interval 0 to allow tearing, otherwise use 1. Also the flag should be removed if vsync on.
     UINT presentFlags = allowsTearing? DXGI_PRESENT_ALLOW_TEARING : 0;
-    ThrowIfFailed(m_swapChain->Present(allowsTearing? 0 : 1, DXGI_PRESENT_ALLOW_TEARING));
+    ThrowIfFailed(m_swapChain->Present(allowsTearing? 0 : 1, presentFlags));
 
     // std::cout << "Rendered" << std::endl;
 }
@@ -607,6 +613,7 @@ bool VoyagerEngine::CheckTearingSupport()
 void VoyagerEngine::SetLightPosition()
 {
     lightParams.lightPosition = { 10, 10, -10 };
+    // lightParams.lightPosition = { 6, 20, -6 }; // <- Good for sponza.
 
     // Copy our ConstantBuffer instance to the mapped constant buffer resource.
     memcpy(lightingParamsBuffer.GetMappedResourceAddress(), &lightParams.lightPosition, sizeof(lightParams.lightPosition));

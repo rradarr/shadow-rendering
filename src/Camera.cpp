@@ -31,11 +31,15 @@ void Camera::InitCamera(DirectX::XMFLOAT4 cameraPosition, DirectX::XMFLOAT4 came
     camPosition = DirectX::XMLoadFloat4(&position);
 }
 
-void Camera::UpdateCamera(DirectX::XMFLOAT2 lookRotation, DirectX::XMFLOAT3 movement)
+void Camera::UpdateCamera(DirectX::XMFLOAT2 lookRotation, DirectX::XMFLOAT3 movement, double deltaTime)
 {
+    const float fDeltaTime = static_cast<float>(deltaTime);
+    const float lookSpeedScale = 0.6f * fDeltaTime;
+    const float moveSpeedScale = 1.8f * fDeltaTime;
+
     DirectX::XMMATRIX camRotationMatrix;
-    float camYaw = lookRotation.x * 0.005f;
-    float camPitch = lookRotation.y * 0.005f;
+    float camYaw = lookRotation.x * lookSpeedScale;
+    float camPitch = lookRotation.y * lookSpeedScale;
     camRotationMatrix = DirectX::XMMatrixRotationRollPitchYaw(camPitch, camYaw, 0);
 
     DirectX::XMVECTOR rotAngles = DirectX::XMVECTOR{ camPitch , camYaw, 0 };
@@ -64,7 +68,6 @@ void Camera::UpdateCamera(DirectX::XMFLOAT2 lookRotation, DirectX::XMFLOAT3 move
 
     camTarget = localFront;
 
-    float moveSpeedScale = 0.02f;
     camPosition = DirectX::XMVectorAdd(camPosition, DirectX::XMVectorScale(localRight, movement.x * moveSpeedScale));
     camPosition = DirectX::XMVectorAdd(camPosition, DirectX::XMVectorScale(localUp, movement.y * moveSpeedScale));
     camPosition = DirectX::XMVectorAdd(camPosition, DirectX::XMVectorScale(localFront, movement.z * moveSpeedScale));
