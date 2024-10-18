@@ -68,6 +68,8 @@ private:
     UINT m_dsvHeapIncrement;
     // For main shader access heap the static CbvSrvDescriptorHeapManager is used.
 
+    bool allowsTearing = false;
+
     // Textures.
     Texture sampleTexture;
     Texture shadowMap;
@@ -121,9 +123,11 @@ private:
     void PopulateCommandList();
     void WaitForPreviousFrame();
 
-    void SetLightPosition();
-
     void OnEarlyUpdate();
+
+    // Utility methods.
+    bool CheckTearingSupport();
+    void SetLightPosition();
 
     DirectX::XMFLOAT3 normalize(DirectX::XMFLOAT3 vec);
     DirectX::XMFLOAT3 scale(DirectX::XMFLOAT3 vec, float scale);

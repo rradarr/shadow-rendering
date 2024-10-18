@@ -36,6 +36,7 @@ void VoyagerEngine::OnInit(HWND windowHandle)
 {
     this->windowHandle = windowHandle;
 
+    allowsTearing = CheckTearingSupport();
     LoadPipeline();
     LoadAssets();
     LoadScene();
@@ -150,7 +151,9 @@ void VoyagerEngine::OnRender()
     ThrowIfFailed(m_commandQueue->Signal(m_fence[m_frameBufferIndex].Get(), m_fenceValue[m_frameBufferIndex]));
 
     // Present the frame.
-    ThrowIfFailed(m_swapChain->Present(1, 0));
+    // Note: sync interval 0 to allow tearing, otherwise use 1. Also the flag should be removed if vsync on.
+    UINT presentFlags = allowsTearing? DXGI_PRESENT_ALLOW_TEARING : 0;
+    ThrowIfFailed(m_swapChain->Present(allowsTearing? 0 : 1, DXGI_PRESENT_ALLOW_TEARING));
 
     // std::cout << "Rendered" << std::endl;
 }
@@ -207,6 +210,7 @@ void VoyagerEngine::LoadPipeline()
     swapChainDesc.OutputWindow = WindowsApplication::GetHwnd();
     swapChainDesc.SampleDesc.Count = 1;
     swapChainDesc.Windowed = TRUE;
+    swapChainDesc.Flags = allowsTearing? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0; // Note: remove this flag if v-sync should be on.
 
     ComPtr<IDXGISwapChain> swapChain;
     ThrowIfFailed(DXContext::getFactory().Get()->CreateSwapChain(
@@ -219,6 +223,9 @@ void VoyagerEngine::LoadPipeline()
 
     // This sample does not support fullscreen transitions.
     ThrowIfFailed(DXContext::getFactory().Get()->MakeWindowAssociation(WindowsApplication::GetHwnd(), DXGI_MWA_NO_ALT_ENTER));
+
+    // Ensure fullscreen is not on (for tearing).
+    m_swapChain->SetFullscreenState(false, NULL);
 
     m_frameBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
 
@@ -573,6 +580,28 @@ void VoyagerEngine::WaitForPreviousFrame()
         ThrowIfFailed(m_fence[m_frameBufferIndex]->SetEventOnCompletion(m_fenceValue[m_frameBufferIndex], m_fenceEvent));
         WaitForSingleObject(m_fenceEvent, INFINITE);
     }
+}
+
+bool VoyagerEngine::CheckTearingSupport()
+{
+    BOOL allowTearing = FALSE;
+
+    ComPtr<IDXGIFactory5> factory5;
+    if (SUCCEEDED(DXContext::getFactory()->QueryInterface(IID_PPV_ARGS(&factory5))))
+    // if (SUCCEEDED(DXContext::getFactory().As(&factory5)))
+    {
+        if (FAILED(factory5->CheckFeatureSupport(
+                DXGI_FEATURE_PRESENT_ALLOW_TEARING, 
+                &allowTearing, sizeof(allowTearing))))
+        {
+            allowTearing = FALSE;
+        }
+    }
+
+#ifdef _DEBUG
+    std::cout << "INFO: Tearing support: " << (allowTearing == TRUE? "Yes" : "No") << std::endl;
+#endif
+    return allowTearing == TRUE;
 }
 
 void VoyagerEngine::SetLightPosition()
