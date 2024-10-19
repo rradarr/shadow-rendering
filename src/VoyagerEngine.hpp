@@ -12,7 +12,7 @@
 #include "ProjectionShadowRenderer.hpp"
 #include "ShadowMapRenderer.hpp"
 
-// #include "TracyD3D12.hpp"
+#include "TracyD3D12.hpp"
 
 using Microsoft::WRL::ComPtr;
 
@@ -119,6 +119,7 @@ private:
     UINT64 m_fenceValue[mc_frameBufferCount];
 
     // Tracy objects.
+    TracyD3D12Ctx tracyCtx;
 
     void LoadPipeline();
     void LoadAssets();

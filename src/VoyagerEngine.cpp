@@ -15,6 +15,7 @@
 
 #include "SceneObject.hpp"
 #include "Tracy.hpp"
+// #include "TracyD3D12.hpp" // Note: included in VoyagerEngine.hpp.
 #include <random>
 #include <limits>
 
@@ -48,17 +49,27 @@ void VoyagerEngine::OnInit(HWND windowHandle)
     MainInputController::GetInstance();
 
     imguiController.InitImGui(windowHandle, mc_frameBufferCount, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+    
+    // Initialize the Tracy D3D12 context.
+    tracyCtx = TracyD3D12Context(DXContext::getDevice().Get(), m_commandQueue.Get());
+
     std::cout << "Engine initialized." << std::endl;
 }
 
 void VoyagerEngine::OnUpdate()
 {
+    // Mark zone for Tracy.
+    ZoneScoped;
+
     m_frameBufferIndex = m_swapChain->GetCurrentBackBufferIndex();
     WaitForPreviousFrame();
 
     OnEarlyUpdate();
 
     double deltaTime = Timer::GetInstance()->GetDeltaTime();
+
+    // Output last deltaTime for Tracy.
+    TracyPlot("deltaTime", deltaTime);
 
     // Update the camera.
     {
@@ -143,9 +154,6 @@ void VoyagerEngine::OnUpdate()
     imguiController.UpdateImGui();
 
     // std::cout << "Updated" << std::endl;
-
-    // Mark the frame end for Tracy.
-    FrameMark;
 }
 
 void VoyagerEngine::OnRender()
@@ -169,10 +177,18 @@ void VoyagerEngine::OnRender()
     ThrowIfFailed(m_swapChain->Present(allowsTearing? 0 : 1, presentFlags));
 
     // std::cout << "Rendered" << std::endl;
+
+    // Mark the frame end for Tracy.
+    TracyD3D12Collect(tracyCtx);
+    TracyD3D12NewFrame(tracyCtx);
+    FrameMark;
 }
 
 void VoyagerEngine::OnDestroy()
 {
+    // Destroy the tracy DX12 context.
+    TracyD3D12Destroy(tracyCtx);
+
     // Get swapchain out out fullscreen before exiting
     BOOL fs = false;
     if (m_swapChain->GetFullscreenState(&fs, NULL))
@@ -505,6 +521,9 @@ void VoyagerEngine::LoadScene()
 
 void VoyagerEngine::PopulateCommandList()
 {
+    // Mark zone for Tracy.
+    ZoneScoped;
+
     // We already waited for the GPU to finish work for this framebuffer (we cannot reset a commandAllocator before it's commands have finished executing!)
     ThrowIfFailed(m_commandAllocator[m_frameBufferIndex]->Reset());
 
@@ -512,74 +531,82 @@ void VoyagerEngine::PopulateCommandList()
     // list, that command list can then be reset at any time and must be before
     // re-recording.
     ThrowIfFailed(m_commandList->Reset(m_commandAllocator[m_frameBufferIndex].Get(), materialLit.GetPSO().Get()));
+    
+    {
+        // Start a D3D12 Tracy zone.
+        TracyD3D12Zone(tracyCtx, m_commandList.Get(), "Main cmdList");
 
-    // Indicate that the back buffer will be used as a render target.
-    auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    m_commandList->ResourceBarrier(1, &barrier);
+        // Indicate that the back buffer will be used as a render target.
+        auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameBufferIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+        m_commandList->ResourceBarrier(1, &barrier);
 
-    ID3D12DescriptorHeap* descriptorHeaps[] = { CbvSrvDescriptorHeapManager::GetHeap().Get() };
-    m_commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+        ID3D12DescriptorHeap* descriptorHeaps[] = { CbvSrvDescriptorHeapManager::GetHeap().Get() };
+        m_commandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
-    CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVHeap->GetCPUDescriptorHandleForHeapStart(), m_frameBufferIndex, m_rtvDescriptorSize);
-    CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsHeap->GetCPUDescriptorHandleForHeapStart());
-    std::vector<SceneObject> sceneObjects{groundPlane, suzanne};
-    RenderingState::RenderingMode chosenRenderingMode = EngineStateModel::GetInstance()->GetRenderingState().chosenRenderingMode;
-    if (chosenRenderingMode == RenderingState::RenderingMode::WIREFRAME) {
-        wireframeRenderer.SetRTV(rtvHandle);
-        wireframeRenderer.SetDSV(dsvHandle);
-        wireframeRenderer.SetViewport(m_viewport);
-        wireframeRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
-    }
-    else if (chosenRenderingMode == RenderingState::RenderingMode::NORMALS_DEBUG) {
-        normalsDebugRenderer.SetRTV(rtvHandle);
-        normalsDebugRenderer.SetDSV(dsvHandle);
-        normalsDebugRenderer.SetViewport(m_viewport);
-        normalsDebugRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
-    }
-    else if(chosenRenderingMode == RenderingState::RenderingMode::SHADOW_PROJECTION) {
-        // Render scene objects with the default renderer.
-        DefaultRenderer renderer;
-        renderer.SetLightingParametersBuffer(lightingParamsBuffer);
-        renderer.SetRTV(rtvHandle);
-        renderer.SetDSV(dsvHandle);
-        renderer.SetViewport(m_viewport);
-        renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
-        
-        // Then render the projected shadow.
-        sceneObjects = std::vector<SceneObject>{suzanne};
-        projectionShadowRenderer.SetRTV(rtvHandle);
-        projectionShadowRenderer.SetDSV(dsvHandle);
-        projectionShadowRenderer.SetViewport(m_viewport);
-        projectionShadowRenderer.SetLightingParametersBuffer(lightingParamsBuffer);
-        projectionShadowRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
-    }
-    else if (chosenRenderingMode == RenderingState::RenderingMode::SHADOW_MAP) {
-        // Render scene with simple shadow mapping.
-        shadowMapRenderer.SetRTV(rtvHandle);
-        shadowMapRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
-    }
-    else {
-        // Render scene objects with the default renderer.
-        DefaultRenderer renderer;
-        renderer.SetLightingParametersBuffer(lightingParamsBuffer);
-        renderer.SetRTV(rtvHandle);
-        renderer.SetDSV(dsvHandle);
-        renderer.SetViewport(m_viewport);
-        renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
-    }
+        CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVHeap->GetCPUDescriptorHandleForHeapStart(), m_frameBufferIndex, m_rtvDescriptorSize);
+        CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle(m_dsHeap->GetCPUDescriptorHandleForHeapStart());
+        std::vector<SceneObject> sceneObjects{groundPlane, suzanne};
+        RenderingState::RenderingMode chosenRenderingMode = EngineStateModel::GetInstance()->GetRenderingState().chosenRenderingMode;
+        if (chosenRenderingMode == RenderingState::RenderingMode::WIREFRAME) {
+            wireframeRenderer.SetRTV(rtvHandle);
+            wireframeRenderer.SetDSV(dsvHandle);
+            wireframeRenderer.SetViewport(m_viewport);
+            wireframeRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+        }
+        else if (chosenRenderingMode == RenderingState::RenderingMode::NORMALS_DEBUG) {
+            normalsDebugRenderer.SetRTV(rtvHandle);
+            normalsDebugRenderer.SetDSV(dsvHandle);
+            normalsDebugRenderer.SetViewport(m_viewport);
+            normalsDebugRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+        }
+        else if(chosenRenderingMode == RenderingState::RenderingMode::SHADOW_PROJECTION) {
+            // Render scene objects with the default renderer.
+            DefaultRenderer renderer;
+            renderer.SetLightingParametersBuffer(lightingParamsBuffer);
+            renderer.SetRTV(rtvHandle);
+            renderer.SetDSV(dsvHandle);
+            renderer.SetViewport(m_viewport);
+            renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+            
+            // Then render the projected shadow.
+            sceneObjects = std::vector<SceneObject>{suzanne};
+            projectionShadowRenderer.SetRTV(rtvHandle);
+            projectionShadowRenderer.SetDSV(dsvHandle);
+            projectionShadowRenderer.SetViewport(m_viewport);
+            projectionShadowRenderer.SetLightingParametersBuffer(lightingParamsBuffer);
+            projectionShadowRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+        }
+        else if (chosenRenderingMode == RenderingState::RenderingMode::SHADOW_MAP) {
+            // Render scene with simple shadow mapping.
+            shadowMapRenderer.SetRTV(rtvHandle);
+            shadowMapRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+        }
+        else {
+            // Render scene objects with the default renderer.
+            DefaultRenderer renderer;
+            renderer.SetLightingParametersBuffer(lightingParamsBuffer);
+            renderer.SetRTV(rtvHandle);
+            renderer.SetDSV(dsvHandle);
+            renderer.SetViewport(m_viewport);
+            renderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+        }
 
-    // ImGui doesn't have its own renderer as rendering ImGui is very simple.
-    imguiController.RenderImGui(m_commandList);
+        // ImGui doesn't have its own renderer as rendering ImGui is very simple.
+        imguiController.RenderImGui(m_commandList);
 
-    // Indicate that the back buffer will now be used to present.
-    barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-    m_commandList->ResourceBarrier(1, &barrier);
+        // Indicate that the back buffer will now be used to present.
+        barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameBufferIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+        m_commandList->ResourceBarrier(1, &barrier);
+    }
 
     ThrowIfFailed(m_commandList->Close());
 }
 
 void VoyagerEngine::WaitForPreviousFrame()
 {
+    // Mark a wait zone for Tracy.
+    ZoneScoped;
+
     // WAITING FOR THE FRAME TO COMPLETE BEFORE CONTINUING IS NOT BEST PRACTICE.
     // This is code implemented as such for simplicity. More advanced samples
     // illustrate how to use fences for efficient resource usage.                   - So says Microsoft ~_~
