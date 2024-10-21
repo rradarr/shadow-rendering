@@ -274,9 +274,9 @@ In the application z-buffer linearization was not implemented, as after investig
 
 This matrix does not modify the \(w\) component and the \(z\) values will remain linear. In fact the formula for depth values after using this matrix is exactly the same as the perspective one after linearization.
 
-\subsection{Fitted shadow maps}
+\subsection{Warped shadow maps with LiSPSM}
 \label{section:fitted_mapping_impl}
-Here I describe how to fit shadow maps, which includes warping and cascades.
+For warping with LiSPSM we need:
 
 % \begin{itemize}
 % \item solution to the problem proposed by the author of the thesis

@@ -153,7 +153,7 @@ There are more advanced techniques, including using the depth information of the
 Fitting, since it depends on the view position and direction, can be temporally unstable. When the viewport changes there can be noticeable flickering on the edges of the shadows, caused by temporal aliasing. This can be minimized by quantizing the offset of the shadow map that is used when fitting to texel increments.
 
 \subsection{Warping shadow maps}
-Simple description of warping? Prob w/o implementation.
+Warping shadow maps was introduced by Stamminger \cite{bib:article:stamminger_psm} and aims to counteract perspective aliasing. Perspective aliasing means that more samples of the shadow map are taken closer to the viewer due to perspective foreshortening, meaning that a higher concentration of shadow map samples is required there than further away. A warped shadow map accomplishes exactly that with minimal performance impact by using a specific parametrized perspective transformation on the scene geometry before rendering into the shadow map. The mentioned technique is called perspective shadow maps (PSM). More approaches were build basing on this proposition, namely light space perspective shadow maps (LiSPSM) \cite{bib:proc:wimmer_lispsm} and trapezoidal shadow maps (TSM) \cite{bib:proc:matrin_tsm}. Both these techniques are very similar and give better results than PSM. It has been proven that LiSPSM actually gives best results out of the three as it leads to the best distribution of error over the shadow map area. \cite{bib:proc:lloyd_lispsm_vs_tsm}. These warping techniques can actually be used in tandem with partitioning approaches which are described next.
 
 \subsection{Partitioning shadow maps}
 Simple description of cascades? Prob w/o implementation.
@@ -169,44 +169,42 @@ Here geometry/stencil based techniques begin, starting with stencil-based, hard-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{itemize}
-\item What problem do I want (have to :-) to solve?
-\item Why the problem is important?
-\item How do others solve the problem?
-\item What are pros and cons of my solution?
-\end{itemize}
+% \begin{itemize}
+% \item What problem do I want (have to :-) to solve?
+% \item Why the problem is important?
+% \item How do others solve the problem?
+% \item What are pros and cons of my solution?
+% \end{itemize}
 
-References to 
-book \cite{bib:book},
-scientific papers in journals \cite{bib:article},
-conference papers \cite{bib:conference},
-and web pages \cite{bib:internet}.
+% References to 
+% book \cite{bib:book},
+% scientific papers in journals \cite{bib:article},
+% conference papers \cite{bib:conference},
+% and web pages \cite{bib:internet}.
 
-Equations should be numbered:
-\begin{align}
-y = \frac{\partial x}{\partial t}
-\end{align}
+% Equations should be numbered:
+% \begin{align}
+% y = \frac{\partial x}{\partial t}
+% \end{align}
 
-\begin{itemize}
-\item problem analysis, problem statement
-\item state of the art, literature research (all sources in the thesis have to be referenced, eg journal article \cite{bib:article} book \cite{bib:book}, conference paper \cite{bib:conference}, internet source \cite{bib:internet})
-\item description of known solutions, algorithms
-\item location of the thesis in scientific domain
-\item The title of this chapter is similar to the title of the thesis.
-\end{itemize}
+% \begin{itemize}
+% \item problem analysis, problem statement
+% \item state of the art, literature research (all sources in the thesis have to be referenced, eg journal article \cite{bib:article} book \cite{bib:book}, conference paper \cite{bib:conference}, internet source \cite{bib:internet})
+% \item description of known solutions, algorithms
+% \item location of the thesis in scientific domain
+% \item The title of this chapter is similar to the title of the thesis.
+% \end{itemize}
 
-\begin{Definition}\label{def:definition}
-body of the definitions
-\end{Definition}
+% \begin{Definition}\label{def:definition}
+% body of the definitions
+% \end{Definition}
 
-\begin{Theorem}[optional name]\label{t:theorem}
-body of the theorem
-\end{Theorem}
+% \begin{Theorem}[optional name]\label{t:theorem}
+% body of the theorem
+% \end{Theorem}
 
-\begin{Example}[optional name]\label{ex:example}
-body of the example
-\end{Example}
+% \begin{Example}[optional name]\label{ex:example}
+% body of the example
+% \end{Example}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-
-
