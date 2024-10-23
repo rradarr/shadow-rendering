@@ -9,6 +9,9 @@ public:
 
     void UpdateCamera(DirectX::XMFLOAT2 lookRotation, DirectX::XMFLOAT3 movement, double deltaTime);
 
+    void GetPostProjectionPositions(std::vector<DirectX::XMFLOAT4>& positions, bool clip);
+    void GetPostViewPositions(std::vector<DirectX::XMFLOAT4>& positions);
+
     DirectX::XMFLOAT4X4 projMat; // this will store our projection matrix
     DirectX::XMFLOAT4X4 viewMat; // this will store our view matrix
     DirectX::XMMATRIX rotMat;
@@ -26,5 +29,7 @@ public:
     DirectX::XMVECTOR globalFront;
     DirectX::XMVECTOR camTarget;
     DirectX::XMVECTOR camPosition;
-};
 
+private:
+    DirectX::XMVECTOR ClipXYToNDCCube(DirectX::XMVECTOR position);
+};

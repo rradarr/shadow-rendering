@@ -106,6 +106,7 @@ private:
 
     // Scene objects
     Camera m_mainCamera;
+    Camera m_shadowMapLightCamera;
     wvpConstantBuffer m_wvpPerObject;
     lightParamsConstantBuffer lightParams;
     MappedResourceLocation lightingParamsBuffer;
@@ -133,6 +134,8 @@ private:
     // Utility methods.
     bool CheckTearingSupport();
     void SetLightPosition();
+    std::vector<DirectX::XMFLOAT4> FindSceneExtents();
+    void UpdateLightFitting();
 
     DirectX::XMFLOAT3 normalize(DirectX::XMFLOAT3 vec);
     DirectX::XMFLOAT3 scale(DirectX::XMFLOAT3 vec, float scale);

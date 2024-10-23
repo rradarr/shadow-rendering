@@ -152,6 +152,8 @@ void VoyagerEngine::OnUpdate()
     }
 
     imguiController.UpdateImGui();
+    
+    UpdateLightFitting();
 
     // std::cout << "Updated" << std::endl;
 }
@@ -345,8 +347,9 @@ void VoyagerEngine::LoadAssets()
 
         // Load suzanne
         {
-            suzanneMesh.CreateFromFile("suzanne.obj");
-            suzanne = SceneObject(&suzanneMesh);
+            std::vector<DirectX::XMFLOAT4> boundingB;
+            suzanneMesh.CreateFromFile("suzanne.obj", &boundingB);
+            suzanne = SceneObject(&suzanneMesh, boundingB);
 
             suzanne.SetAlbedoTexture(descriptorHandle);
             suzanne.SetMaterial(&materialLit);
@@ -364,6 +367,8 @@ void VoyagerEngine::LoadAssets()
             // suzanne.scale = DirectX::XMFLOAT3(0.01f, 0.01f, 0.01f);
             // suzanne.position = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
             DirectX::XMStoreFloat4x4(&suzanne.rotation, DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(180.f)));
+
+            suzanne.UpdateBoundingBox();
         }
 
         // Create the ground plane.
@@ -372,8 +377,9 @@ void VoyagerEngine::LoadAssets()
             std::vector<DWORD> groundIndices;
             Mesh::CreatePlane(groundVertices, groundIndices);
             groundPlaneMesh = Mesh(groundVertices, groundIndices);
+            std::vector<DirectX::XMFLOAT4> boundingB = Mesh::GetBoundingBox(groundVertices);
 
-            groundPlane = SceneObject(&groundPlaneMesh);
+            groundPlane = SceneObject(&groundPlaneMesh, boundingB);
 
             groundPlane.SetMaterial(&materialLit);
             groundPlane.SetAlbedoTexture(descriptorHandle);
@@ -388,6 +394,8 @@ void VoyagerEngine::LoadAssets()
             groundPlane.scale = DirectX::XMFLOAT3(5.f, 5.f, 5.f);
             groundPlane.position = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
             DirectX::XMStoreFloat4x4(&groundPlane.rotation, DirectX::XMMatrixIdentity());
+
+            groundPlane.UpdateBoundingBox();
         }
 
         // Create the depth/stencil heap and buffer.
@@ -517,6 +525,10 @@ void VoyagerEngine::LoadScene()
 {
     m_mainCamera.InitCamera(DirectX::XMFLOAT4(-2.f, 3.f, -7.f, 0.f), DirectX::XMFLOAT4(0.f, 0.f, 0.f, 0.f), aspectRatio);
     // m_mainCamera.InitCamera(DirectX::XMFLOAT4(10.f, 20.f, -10.f, 0.f), DirectX::XMFLOAT4(0.f, 0.f, 0.f, 0.f), aspectRatio);
+
+    // m_mainCamera.InitCamera(DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f), DirectX::XMFLOAT4(0.f, 0.f, -1.f, 1.f), aspectRatio);
+
+    UpdateLightFitting();
 }
 
 void VoyagerEngine::PopulateCommandList()
@@ -653,28 +665,180 @@ void VoyagerEngine::SetLightPosition()
     memcpy(lightingParamsBuffer.GetMappedResourceAddress(), &lightParams.lightPosition, sizeof(lightParams.lightPosition));
 
     // Set the WVP matrices of the shadow mapping light.
-    Camera shadowMapLightCamera;
     // Set the projection matrix.
     DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 9.f, 25.f); // TODO: calculate this from the scene.
+    // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 1.f, 50.f);
     // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(50.f, 50.f, 1.f, 80.f); // <- Sponza settings.
     // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixPerspectiveLH(7.f, 7.f, 9.f, 25.f);
-    DirectX::XMStoreFloat4x4(&shadowMapLightCamera.projMat, tmpMat);
+    DirectX::XMStoreFloat4x4(&m_shadowMapLightCamera.projMat, tmpMat);
     // Set the view matrix.
-    shadowMapLightCamera.camPosition = DirectX::XMVECTOR{10.f, 10.f, -10.f, 1.f};
+    m_shadowMapLightCamera.camPosition = DirectX::XMVECTOR{10.f, 10.f, -10.f, 1.f};
     // shadowMapLightCamera.camPosition = DirectX::XMVECTOR{6.f, 20.f, -6.f, 1.f}; // <- Sponza settings.
-    shadowMapLightCamera.camTarget = DirectX::XMVECTOR{0.f, 0.f, 0.f, 1.f};
+    m_shadowMapLightCamera.camTarget = DirectX::XMVECTOR{0.f, 0.f, 0.f, 1.f};
     tmpMat = DirectX::XMMatrixLookAtLH(
-        shadowMapLightCamera.camPosition,
-        shadowMapLightCamera.camTarget,
+        m_shadowMapLightCamera.camPosition,
+        m_shadowMapLightCamera.camTarget,
         DirectX::XMVECTOR{0.f, 1.f, 0.f}
     );
-    DirectX::XMStoreFloat4x4(&shadowMapLightCamera.viewMat, tmpMat);
+    DirectX::XMStoreFloat4x4(&m_shadowMapLightCamera.viewMat, tmpMat);
 
     wvpConstantBuffer shadowMapLightWVP{};
     // The matrices need to be transposed because of column/row major ordering difference between hlsl and the DX implementations.
-    DirectX::XMStoreFloat4x4(&shadowMapLightWVP.viewMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&shadowMapLightCamera.viewMat)));
-    DirectX::XMStoreFloat4x4(&shadowMapLightWVP.projectionMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&shadowMapLightCamera.projMat)));
+    DirectX::XMStoreFloat4x4(&shadowMapLightWVP.viewMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&m_shadowMapLightCamera.viewMat)));
+    DirectX::XMStoreFloat4x4(&shadowMapLightWVP.projectionMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&m_shadowMapLightCamera.projMat)));
     memcpy(shadowMapWVPBuffer.GetMappedResourceAddress(), &shadowMapLightWVP, sizeof(shadowMapLightWVP));
+}
+
+std::vector<DirectX::XMFLOAT4> VoyagerEngine::FindSceneExtents()
+{
+    // For all scene objects, or for suzanne and ground plane...
+    std::vector<SceneObject> objects {suzanne, groundPlane};
+    
+    // Gather all bounding vertices.
+    std::vector<DirectX::XMFLOAT4> boundingVerts;
+    for(SceneObject& object : objects) {
+        std::vector<DirectX::XMFLOAT4> objectBoundingVerts = object.GetBoundingBox();
+        boundingVerts.insert(
+            std::end(boundingVerts),
+            std::begin(objectBoundingVerts),
+            std::end(objectBoundingVerts));
+    }
+
+    return Mesh::GetBoundingBox(boundingVerts);
+}
+
+void VoyagerEngine::UpdateLightFitting()
+{
+    // Test camera frustum calculation.
+    // The frustum cube before perspective division?
+    std::vector<DirectX::XMFLOAT4> ndcFrustum{
+        DirectX::XMFLOAT4(-1, 1, 0, 1), // Near Plane
+        DirectX::XMFLOAT4(-1, -1, 0, 1),
+        DirectX::XMFLOAT4(1, -1, 0, 1),
+        DirectX::XMFLOAT4(1, 1, 0, 1),
+        DirectX::XMFLOAT4(-1, 1, 1, 1), // Far plane
+        DirectX::XMFLOAT4(-1, -1, 1, 1),
+        DirectX::XMFLOAT4(1, -1, 1, 1),
+        DirectX::XMFLOAT4(1, 1, 1, 1)
+    };
+
+    // Multiply the frustum by inverse VP camera matrix.
+    // Note: perspective divsion cannot be brought back! Or can it...?
+    DirectX::XMMATRIX projectionMat = DirectX::XMLoadFloat4x4(&m_mainCamera.projMat);
+    DirectX::XMMATRIX viewMat = DirectX::XMLoadFloat4x4(&m_mainCamera.viewMat);
+
+    DirectX::XMMATRIX VPMat = DirectX::XMMatrixMultiply(viewMat, projectionMat);
+    DirectX::XMMATRIX VPMatInv = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(VPMat), VPMat);
+
+    // Transform from observer clip into world space.
+    std::vector<DirectX::XMFLOAT4> worldSpaceNdcFrustum;
+    worldSpaceNdcFrustum.resize(ndcFrustum.size());
+    DirectX::XMVector4TransformStream(
+        worldSpaceNdcFrustum.data(),
+        sizeof(DirectX::XMFLOAT4),
+        ndcFrustum.data(),
+        sizeof(DirectX::XMFLOAT4),
+        ndcFrustum.size(),
+        VPMatInv
+    );
+
+    // Get light space post-perspective coordinates.
+    m_shadowMapLightCamera.GetPostProjectionPositions(worldSpaceNdcFrustum, false);
+    std::vector<DirectX::XMFLOAT4> lightSpaceViewerFrustum = worldSpaceNdcFrustum;
+
+    // Get a bounding box in light clip space of the viewer frustum, clamp to NDC range.
+    // Note: without clipping the light frustum will follow the viewer outside of
+    // the original light view range (so, if set correctly, outside of the scene).
+    std::vector<DirectX::XMFLOAT4> clipSpaceFrustumBounds = Mesh::GetBoundingBox(lightSpaceViewerFrustum);
+    for(auto& position : clipSpaceFrustumBounds) {
+        DirectX::XMVECTOR point = DirectX::XMLoadFloat4(&position);
+        point = DirectX::XMVectorClamp(
+            point,
+            DirectX::XMVectorSet(-1.f, -1.f, -std::numeric_limits<float>::infinity(), -10),
+            DirectX::XMVectorSet(1.f, 1.f, std::numeric_limits<float>::infinity(), 10)
+        );
+        DirectX::XMStoreFloat4(&position, point);
+    }
+    // Now, with the frustum bounding box coordinates in light clip space,
+    // clamped by max light XY settings, we can use x and y ob box for fitting.
+
+    // Fit XY extent to the lightSpaceViewerFrustum.
+    std::vector<DirectX::XMFLOAT4> minMaxCoordVals = Mesh::GetMinMaxPoints(clipSpaceFrustumBounds);
+    float sx = 2.f / (minMaxCoordVals[1].x - minMaxCoordVals[0].x);
+    float sy = 2.f / (minMaxCoordVals[1].y - minMaxCoordVals[0].y);
+    float ox = (minMaxCoordVals[1].x + minMaxCoordVals[0].x) * -sx / 2.f;
+    float oy = (minMaxCoordVals[1].y + minMaxCoordVals[0].y) * -sy / 2.f;
+
+    DirectX::XMFLOAT4X4 fittingMatrix {
+        sx, 0.f, 0.f, ox,
+        0.f, sy, 0.f, oy,
+        0.f, 0.f, 1.f, 0.f,
+        0.f, 0.f, 0.f, 1.f
+    };
+    // Store this matrix into the light camera.
+    // Utilize the proj matrix slot for that, no need to modify the shader.
+    DirectX::XMMATRIX cameraProjection = DirectX::XMLoadFloat4x4(&m_shadowMapLightCamera.projMat);
+    DirectX::XMMATRIX fit = DirectX::XMLoadFloat4x4(&fittingMatrix);
+    // We need to transpose either matrix: the fit matrix is normal and will
+    // work as is in shaders too. The DX Math projection matrix needs to be
+    // transposed to work in hlsl.
+    fit = DirectX::XMMatrixTranspose(fit);
+    cameraProjection = cameraProjection * fit;
+
+    // Store the fitted matrix into camera WVP buffer.
+    wvpConstantBuffer shadowMapLightWVP{};
+    // The matrices need to be transposed because of column/row major ordering difference between hlsl and the DX implementations.
+    DirectX::XMStoreFloat4x4(&shadowMapLightWVP.viewMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&m_shadowMapLightCamera.viewMat)));
+    DirectX::XMStoreFloat4x4(&shadowMapLightWVP.projectionMat, DirectX::XMMatrixTranspose(cameraProjection));
+    memcpy(shadowMapWVPBuffer.GetMappedResourceAddress(), &shadowMapLightWVP, sizeof(shadowMapLightWVP));
+
+    // Find z scene extents in light space.
+    // TODO: god damn, can't be boothered with this, we will use hand-adjusted
+    // near and far planes...
+    // std::vector<DirectX::XMFLOAT4> sceneBoungingBox = FindSceneExtents();
+
+    {
+        // Find orientation matrix L.
+        // For this, first move the light view vector into light view space.
+        DirectX::XMMATRIX viewMat = DirectX::XMLoadFloat4x4(&m_mainCamera.viewMat);
+        DirectX::XMMATRIX invViewMat = DirectX::XMMatrixInverse(&DirectX::XMMatrixDeterminant(viewMat), viewMat);
+        DirectX::XMVECTOR viewVecWorld = DirectX::XMVector4Transform(DirectX::XMVectorSet(0.f, 0.f, -1.f, 0.f), invViewMat);
+        DirectX::XMFLOAT4 viewVecWorldFloat4;
+        DirectX::XMStoreFloat4(&viewVecWorldFloat4, viewVecWorld);
+        std::vector<DirectX::XMFLOAT4> pos {viewVecWorldFloat4};
+        m_shadowMapLightCamera.GetPostViewPositions(pos);
+        DirectX::XMVECTOR viewVecLightSpace = DirectX::XMLoadFloat4(&pos[0]);
+        viewVecLightSpace = DirectX::XMVectorSetZ(viewVecLightSpace, 0.f); // Make the view vec perpendicular to the light view.
+        // Create the rotation matrix.
+        DirectX::XMMATRIX matrixL = DirectX::XMMatrixLookAtLH(
+            DirectX::XMVectorSet(0.f, 0.f, 0.f, 1.f),
+            viewVecLightSpace,
+            DirectX::XMVectorSet(0.f, 0.f, 1.f, 0.f));
+
+        // Find the warp view and projection matrices.
+        // PSR convex body should be used for this, we will use the clipped bounding
+        // box of the view frustum. Move PSR into LPV of the light and find n and f.
+        // worldSpaceNdcFrustum - This is already in light post-perspective (post projection divide, should it?)!
+        std::vector<DirectX::XMFLOAT4> frustumRotatedInLightSpace;
+        frustumRotatedInLightSpace.resize(worldSpaceNdcFrustum.size());
+        DirectX::XMVector4TransformStream(
+            frustumRotatedInLightSpace.data(),
+            sizeof(DirectX::XMFLOAT4),
+            worldSpaceNdcFrustum.data(),
+            sizeof(DirectX::XMFLOAT4),
+            worldSpaceNdcFrustum.size(),
+            matrixL
+        );
+        std::vector<DirectX::XMFLOAT4> bounds = Mesh::GetMinMaxPoints(frustumRotatedInLightSpace);
+        float minZ = bounds[0].z;
+        float maxZ = bounds[1].z;
+        // Find center of projection.
+        float pX = (bounds[1].x - bounds[0].x) / 2.f;
+        float pY = (bounds[1].y - bounds[0].y) / 2.f;
+
+        // Now, give up.
+    }
+
 }
 
 DirectX::XMFLOAT3 VoyagerEngine:: normalize(DirectX::XMFLOAT3 vec) {

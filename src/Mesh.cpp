@@ -12,13 +12,17 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<DWORD> indices)
     CreateMeshVertexAndIndexBuffers(vertices, indices);
 }
 
-void Mesh::CreateFromFile(const std::string fileName)
+void Mesh::CreateFromFile(const std::string fileName, std::vector<DirectX::XMFLOAT4>* boundingBox)
 {
     std::vector<Vertex> triangleVertices;
     std::vector<DWORD> triangleIndices;
     
     // TODO: handle a bad return.
     bool ret = LoadModelFromFile(fileName, triangleVertices, triangleIndices);
+
+    if(boundingBox != nullptr) {
+        *boundingBox = GetBoundingBox(triangleVertices);
+    }
     
     CreateMeshVertexAndIndexBuffers(triangleVertices, triangleIndices);
 }
@@ -257,6 +261,81 @@ void Mesh::CreateSphere(std::vector<Vertex>& vertices, std::vector<DWORD>& indic
         position = DirectX::XMVector3Normalize(position);
         DirectX::XMStoreFloat3(&vertices[i].position, position);
     }
+}
+
+std::vector<DirectX::XMFLOAT4> Mesh::GetBoundingBox(std::vector<Vertex>& meshVertices)
+{
+    std::vector<DirectX::XMFLOAT4> vertices;
+    for(int i = 0; i < meshVertices.size(); i++) {
+        DirectX::XMFLOAT3 pos = meshVertices[i].position;
+        vertices.push_back(DirectX::XMFLOAT4{pos.x, pos.y, pos.z, 1.f});
+    }
+    return GetBoundingBox(vertices);
+}
+
+std::vector<DirectX::XMFLOAT4> Mesh::GetBoundingBox(std::vector<DirectX::XMFLOAT4>& meshVertices)
+{
+    std::vector<DirectX::XMFLOAT4> boundingBox;
+    boundingBox.reserve(8);
+    
+    std::vector<DirectX::XMFLOAT4> minMaxPoints = GetMinMaxPoints(meshVertices);
+
+    // Create the bounding vertices.
+    boundingBox.push_back(DirectX::XMFLOAT4{minMaxPoints[0].x, minMaxPoints[0].y, minMaxPoints[0].z, 1.f});
+    boundingBox.push_back(DirectX::XMFLOAT4{minMaxPoints[0].x, minMaxPoints[1].y, minMaxPoints[0].z, 1.f});
+    boundingBox.push_back(DirectX::XMFLOAT4{minMaxPoints[0].x, minMaxPoints[0].y, minMaxPoints[1].z, 1.f});
+    boundingBox.push_back(DirectX::XMFLOAT4{minMaxPoints[0].x, minMaxPoints[1].y, minMaxPoints[1].z, 1.f});
+    boundingBox.push_back(DirectX::XMFLOAT4{minMaxPoints[1].x, minMaxPoints[0].y, minMaxPoints[0].z, 1.f});
+    boundingBox.push_back(DirectX::XMFLOAT4{minMaxPoints[1].x, minMaxPoints[1].y, minMaxPoints[0].z, 1.f});
+    boundingBox.push_back(DirectX::XMFLOAT4{minMaxPoints[1].x, minMaxPoints[0].y, minMaxPoints[1].z, 1.f});
+    boundingBox.push_back(DirectX::XMFLOAT4{minMaxPoints[1].x, minMaxPoints[1].y, minMaxPoints[1].z, 1.f});
+
+    return boundingBox;
+}
+
+std::vector<DirectX::XMFLOAT4> Mesh::GetMinMaxPoints(std::vector<DirectX::XMFLOAT4>& points)
+{
+    DirectX::XMFLOAT4 initialPos = points[0];
+    float minX = initialPos.x;
+    float maxX = initialPos.x;
+    float minY = initialPos.y;
+    float maxY = initialPos.y;
+    float minZ = initialPos.z;
+    float maxZ = initialPos.z;
+    float minW = initialPos.w;
+    float maxW = initialPos.w;
+    for(int i = 1; i < points.size(); i++) {
+        DirectX::XMFLOAT4 pos = points[i];
+        if(pos.x < minX) {
+            minX = pos.x;
+        }
+        else if (pos.x > maxX) {
+            maxX = pos.x;
+        }
+        if(pos.y < minY) {
+            minY = pos.y;
+        }
+        else if (pos.y > maxY) {
+            maxY = pos.y;
+        }
+        if(pos.z < minZ) {
+            minZ = pos.z;
+        }
+        else if (pos.z > maxZ) {
+            maxZ = pos.z;
+        }
+        if(pos.w < minW) {
+            minW = pos.w;
+        }
+        else if (pos.w > maxW) {
+            maxW = pos.w;
+        }
+    }
+
+    return std::vector<DirectX::XMFLOAT4> {
+        {minX, minY, minZ, minW},
+        {maxX, maxY, maxZ, maxW}
+    };
 }
 
 void Mesh::InsertDrawIndexed(ComPtr<ID3D12GraphicsCommandList> commandList)

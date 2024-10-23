@@ -2,7 +2,7 @@
 
 #include "SceneObject.hpp"
 
-SceneObject::SceneObject(Mesh* mesh) : mesh(mesh) {
+SceneObject::SceneObject(Mesh* mesh, std::vector<DirectX::XMFLOAT4> boundingBox) : mesh(mesh), boundingBox(boundingBox) {
 	position = DirectX::XMFLOAT4{0.f, 0.f, 0.f, 0.f};
 	scale = DirectX::XMFLOAT3{1.f, 1.f, 1.f};
 	DirectX::XMStoreFloat4x4(&rotation, DirectX::XMMatrixIdentity());
@@ -27,6 +27,28 @@ void SceneObject::UpdateWVPMatrices(void* data, size_t dataSize, UINT resourceFr
 {
 	assert(dataSize == WVPResourceLocations[resourceFramebufferIndex].GetAllocatedResourceSize());
 	memcpy(WVPResourceLocations[resourceFramebufferIndex].GetMappedResourceAddress(), data, dataSize);
+}
+
+void SceneObject::UpdateBoundingBox()
+{
+	DirectX::XMMATRIX translationMat = DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat4(&this->position));
+	DirectX::XMMATRIX rotMat = DirectX::XMLoadFloat4x4(&this->rotation);
+	DirectX::XMMATRIX scaleMat = DirectX::XMMatrixScaling(this->scale.x, this->scale.y, this->scale.z);
+	DirectX::XMMATRIX worldMat = scaleMat * rotMat * translationMat;
+
+	std::vector<DirectX::XMFLOAT4> transformedBoundingBox;
+	transformedBoundingBox.resize(8);
+
+	DirectX::XMVector4TransformStream(
+		transformedBoundingBox.data(),
+		sizeof(DirectX::XMFLOAT4),
+		boundingBox.data(),
+		sizeof(DirectX::XMFLOAT4),
+		boundingBox.size(),
+		worldMat
+	);
+
+	boundingBox = transformedBoundingBox;
 }
 
 StandardMaterial *const SceneObject::GetMaterial() const

@@ -18,12 +18,17 @@ public:
     Mesh() = default;
     Mesh(std::vector<Vertex> vertices, std::vector<DWORD> indices);
     // Load a model (vertices, indices, UVs and vertex colors) from an .obj file.
-    void CreateFromFile(const std::string fileName);
+    void CreateFromFile(const std::string fileName, std::vector<DirectX::XMFLOAT4>* boundingBox = nullptr);
 
     static void CreatePlane(std::vector<Vertex>& vertices, std::vector<DWORD>& indices);
     static void CreateCube(std::vector<Vertex>& vertices, std::vector<DWORD>& indices, const int resolution = 2);
     static Mesh CreateCube(const int resolution = 2);
     static void CreateSphere(std::vector<Vertex>& vertices, std::vector<DWORD>& indices, const int resolution = 5);
+
+    static std::vector<DirectX::XMFLOAT4> GetBoundingBox(std::vector<Vertex>& meshVertices);
+    static std::vector<DirectX::XMFLOAT4> GetBoundingBox(std::vector<DirectX::XMFLOAT4>& meshVertices);
+    // Returns two vectors, first including minimum component values, second maximum ones.
+    static std::vector<DirectX::XMFLOAT4> GetMinMaxPoints(std::vector<DirectX::XMFLOAT4>& points);
 
     void InsertDrawIndexed(ComPtr<ID3D12GraphicsCommandList> commandList);
     void InsertBufferBind(ComPtr<ID3D12GraphicsCommandList> commandList);
