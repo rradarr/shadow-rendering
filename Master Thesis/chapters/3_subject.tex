@@ -274,9 +274,32 @@ In the application z-buffer linearization was not implemented, as after investig
 
 This matrix does not modify the \(w\) component and the \(z\) values will remain linear. In fact the formula for depth values after using this matrix is exactly the same as the perspective one after linearization.
 
-\subsection{Warped shadow maps with LiSPSM}
-\label{section:fitted_mapping_impl}
-For warping with LiSPSM we need:
+\subsection{Fitting shadow maps}
+An attempt to implement LiSPSM was made, but was not successful due to poor coverage of the implementation details both in the original paper and on the internet.
+
+Only a part of the algorithm was implemented, basically providing simplified fitting of the shadow map view. The shadow map camera has certain extents set up by hand for each scene, such that the whole scene fits within view. Since the entire scene is not necessarily viewed at once by the observer, only the part that is within the observer view frustum can be rendered to the shadow map. Therefore, the shadow map post-projection space can be adjusted to include the area viewed by the observer.
+
+This can be achieved by building a fitting transformation matrix \(\mathbf{F}\) that includes translation and scaling, that is applied after the light view and projection matrices, resulting in \(\mathbf{F}\mathbf{P}_L\mathbf{V}_L\). To obtain \(\mathbf{F}\), first the observer view frustum extents need to be found in world space, which can be obtained by applying the inverse of observer view and projection matrices to an NDC cuboid. This can be a cube with ranges \([-1:1]\) in \(x\), \(y\), \(z\) in APIs like OpenGL, or a cuboid with ranges \([-1:1]\) in \(x\) and \(y\), and \([0:1]\) in \(z\) in DirectX. Once the vertices of this cuboid are moved into world space, they can be multiplied by the view and projection matrices of the light source, \(\mathbf{P}_L\mathbf{V}_L\), and their components divided by \(w\) to bring them into the post-projection space of the light source. Once there, a bounding box can be found enclosing these points. To not move the contents of the shadow map beyond the original extent specified for the light source, the components of the vertices of this bounding box can be clamped to the NDC range. The whole process is shown in Fig. \ref{fig:shadow_map_fitting}.
+\begin{figure}
+    \centering
+	\includegraphics[width=0.4\textwidth]{./graf/shadow_map_focusing.pdf}
+	\caption{The steps involved in fitting the shadow map. The NDC cuboid in a) is in observer post-projection space, or clip space. It is moved to the state presented in b) using inverse matrices, resulting in a world space representation of the viewing frustum. It is them transformed into c), the light view clipping space. Finally, a clamped bounding box is found, shown in d).}
+	\label{fig:shadow_map_fitting}
+\end{figure}
+Finally, the minimum and maximum \(x\) and \(y\) values of these bounding vertices can be found and used in the following fitting matrix.
+\begin{align}
+	\mathbf{F} &= 
+	\begin{pmatrix}
+		s_x & 0 & 0 & o_x\\
+		0 & s_y & 0 & o_y\\
+		0 & 0 & 1 & 0\\
+		0 & 0 & 0 & 1
+	\end{pmatrix}, \text{where}\\[10pt]
+	s_x &= \frac{2}{x_{max} - x_{min}} \quad\text{and}\quad o_x = \frac{-s_x(x_{max} + x_{min})}{2}
+\end{align}
+The calculation of \(s_y\) and \(o_y\) is analogous.
+
+\subsection{Some other shadow maps}
 
 % \begin{itemize}
 % \item solution to the problem proposed by the author of the thesis
