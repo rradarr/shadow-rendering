@@ -153,12 +153,13 @@ There are more advanced techniques, including using the depth information of the
 Fitting, since it depends on the view position and direction, can be temporally unstable. When the viewport changes there can be noticeable flickering on the edges of the shadows, caused by temporal aliasing. This can be minimized by quantizing the offset of the shadow map that is used when fitting to texel increments.
 
 \subsection{Warping shadow maps}
-Warping shadow maps was introduced by Stamminger \cite{bib:article:stamminger_psm} and aims to counteract perspective aliasing. Perspective aliasing means that more samples of the shadow map are taken closer to the viewer due to perspective foreshortening, meaning that a higher concentration of shadow map samples is required there than further away. A warped shadow map accomplishes exactly that with minimal performance impact by using a specific parametrized perspective transformation on the scene geometry before rendering into the shadow map. The mentioned technique is called perspective shadow maps (PSM). More approaches were build basing on this proposition, namely light space perspective shadow maps (LiSPSM) \cite{bib:proc:wimmer_lispsm} and trapezoidal shadow maps (TSM) \cite{bib:proc:matrin_tsm}. Both these techniques are very similar and give better results than PSM. It has been proven that LiSPSM actually gives best results out of the three as it leads to the best distribution of error over the shadow map area. \cite{bib:proc:lloyd_lispsm_vs_tsm}. These warping techniques can actually be used in tandem with partitioning approaches which are described next.
+Warping shadow maps was introduced by Stamminger \cite{bib:article:stamminger_psm} and aims to counteract perspective aliasing. Perspective aliasing means that more samples of the shadow map are taken closer to the viewer due to perspective foreshortening, meaning that a higher concentration of shadow map samples is required there than further away. A warped shadow map accomplishes exactly that with minimal performance impact by using a specific parametrized perspective transformation on the scene geometry before rendering into the shadow map. The mentioned technique is called perspective shadow maps (PSM). More approaches were build basing on this proposition, namely light space perspective shadow maps (LiSPSM) \cite{bib:proc:wimmer_lispsm} and trapezoidal shadow maps (TSM) \cite{bib:proc:matrin_tsm}. Both these techniques are very similar and give better results than PSM. It has been proven that LiSPSM actually gives best results out of the three as it leads to the best distribution of error over the shadow map area. \cite{bib:proc:lloyd_lispsm_vs_tsm}. These warping techniques can actually be used in tandem with shadow map partitioning approaches.
+% TODO: are they? <- \/ which are described next.
 
-\subsection{Partitioning shadow maps}
-Simple description of cascades? Prob w/o implementation.
+% \subsection{Partitioning shadow maps}
+% Simple description of cascades? Prob w/o implementation.
 
-\subsection{Filtering shadow maps?}
+\subsection{Filtering shadow maps}
 There are many filtering techniques, so each should probably get its own subsection. PCF, variance shadow maps
 
 \subsection{Rendering soft shadows with shadow maps}
