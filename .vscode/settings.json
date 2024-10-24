@@ -136,5 +136,76 @@
         "**/Library/Application Support/MiKTeX/texmfs/**",
         "/dev/null",
         "E:/programistyczne/Masters Project/build/**"
+    ],
+    "saveEditorLayout.list": [
+        {
+            "name": "Thesis LaTeX View",
+            "documents": [
+                {
+                    "fsPath": "e:\\programistyczne\\Masters Project\\Master Thesis\\main.tex",
+                    "column": 1,
+                    "pinned": false
+                },
+                {
+                    "fsPath": "e:\\programistyczne\\Masters Project\\Master Thesis\\biblio\\biblio.bib",
+                    "column": 1,
+                    "pinned": false
+                },
+                {
+                    "fsPath": "e:\\programistyczne\\Masters Project\\Master Thesis\\chapters\\2_analysis.tex",
+                    "column": 1,
+                    "pinned": false
+                },
+                {
+                    "fsPath": "e:\\programistyczne\\Masters Project\\Master Thesis\\chapters\\3_subject.tex",
+                    "column": 1,
+                    "pinned": false
+                },
+                {
+                    "fsPath": "e:\\programistyczne\\Masters Project\\Master Thesis\\chapters\\4_experiments.tex",
+                    "column": 1,
+                    "pinned": false
+                },
+                {
+                    "fsPath": "e:\\programistyczne\\Masters Project\\Master Thesis\\chapters\\07.tex",
+                    "column": 1,
+                    "pinned": false
+                }
+            ],
+            "layout": {
+                "orientation": 0,
+                "groups": [
+                    {
+                        "size": 1109
+                    },
+                    {
+                        "size": 1166
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Voyager Code",
+            "documents": [
+                {
+                    "fsPath": "e:\\programistyczne\\Masters Project\\src\\VoyagerEngine.hpp",
+                    "column": 1,
+                    "pinned": true
+                },
+                {
+                    "fsPath": "e:\\programistyczne\\Masters Project\\src\\VoyagerEngine.cpp",
+                    "column": 1,
+                    "pinned": true
+                }
+            ],
+            "layout": {
+                "orientation": 0,
+                "groups": [
+                    {
+                        "size": 2275
+                    }
+                ]
+            }
+        }
     ]
 }

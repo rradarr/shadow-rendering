@@ -40,7 +40,7 @@ void VoyagerEngine::OnInit(HWND windowHandle)
 
     // Note: just override this to false if vsync is ok.
     allowsTearing = CheckTearingSupport();
-    // allowsTearing = false;
+    allowsTearing = false;
     LoadPipeline();
     LoadAssets();
     LoadScene();
@@ -444,12 +444,12 @@ void VoyagerEngine::LoadAssets()
             depthOptimizedClearValue.DepthStencil.Stencil = 0;
 
             // Create the resource.
-            CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, 4096U, 4096U, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+            CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, 1024U, 1024U, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
             shadowMap.CreateEmpty(resourceDesc, srvDesc, D3D12_RESOURCE_STATE_GENERIC_READ, &depthOptimizedClearValue);
 
             // Set the viewport to be used when rendering into the shadow map, it will be passed to the shadowMapRenderer.
             // TODO: was 4096
-            shadowMapViewport = CD3DX12_VIEWPORT{0.0f, 0.0f, 4096.f, 4096.f};
+            shadowMapViewport = CD3DX12_VIEWPORT{0.0f, 0.0f, 1024.f, 1024.f};
 
             // Create the shadow map depth view.
             D3D12_DEPTH_STENCIL_VIEW_DESC depthStencilDesc = {};
