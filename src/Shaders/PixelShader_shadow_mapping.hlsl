@@ -35,25 +35,40 @@ float GetLitPercentage(float4 lightSpaceSamplePos) {
     // Find texel size.
     uint width, height, numMips;
     shadowMapTex.GetDimensions(0, width, height, numMips);
-    float dx = 1.0f / (float)width;
+    const float scale = 1.f;
+    const float dx = 1.0f / (float)width * scale;
+    const float dy = 1.0f / (float)height * scale;
 
     float lit = 0.0f;
-    // const int kernelSize = 3;
+    const int kernelSize = 3;
+    float2 offsets[kernelSize*kernelSize];
     // const float2 offsets[kernelSize*kernelSize] =
     // {
     //     float2(-dx,  -dx), float2(0.0f,  -dx), float2(dx,  -dx),
     //     float2(-dx, 0.0f), float2(0.0f, 0.0f), float2(dx, 0.0f),
     //     float2(-dx,  +dx), float2(0.0f,  +dx), float2(dx,  +dx)
     // };
-    const int kernelSize = 5;
-    const float2 offsets[kernelSize*kernelSize] =
-    {
-        float2(-2.f*dx,  -2.f*dx), float2(-dx,  -2.f*dx), float2(0.0f, -2.f*dx), float2(dx, -2.f*dx), float2(2.f*dx, -2.f*dx),
-        float2(-2.f*dx,  -dx), float2(-dx,  -dx), float2(0.0f, -dx), float2(dx, -dx), float2(2.f*dx, -dx),
-        float2(-2.f*dx,  0.f), float2(-dx,  0.f), float2(0.0f, 0.0f), float2(dx, 0.0f), float2(2.f*dx, 0.0f),
-        float2(-2.f*dx,  dx), float2(-dx,  dx), float2(0.0f, dx), float2(dx, dx), float2(2.f*dx, dx),
-        float2(-2.f*dx,  2.f*dx), float2(-dx,  2.f*dx), float2(0.0f, 2.f*dx), float2(dx, 2.f*dx), float2(2.f*dx, 2.f*dx)
-    };
+    // const int kernelSize = 5;
+    // const float2 offsets[kernelSize*kernelSize] =
+    // {
+    //     float2(-2.f*dx,  -2.f*dx), float2(-dx,  -2.f*dx), float2(0.0f, -2.f*dx), float2(dx, -2.f*dx), float2(2.f*dx, -2.f*dx),
+    //     float2(-2.f*dx,  -dx), float2(-dx,  -dx), float2(0.0f, -dx), float2(dx, -dx), float2(2.f*dx, -dx),
+    //     float2(-2.f*dx,  0.f), float2(-dx,  0.f), float2(0.0f, 0.0f), float2(dx, 0.0f), float2(2.f*dx, 0.0f),
+    //     float2(-2.f*dx,  dx), float2(-dx,  dx), float2(0.0f, dx), float2(dx, dx), float2(2.f*dx, dx),
+    //     float2(-2.f*dx,  2.f*dx), float2(-dx,  2.f*dx), float2(0.0f, 2.f*dx), float2(dx, 2.f*dx), float2(2.f*dx, 2.f*dx)
+    // };
+
+    // Calculate the offsets.
+    float yOffset = dy * (kernelSize - 1) / -2.f;
+    for(int r = 0; r < kernelSize; r++) {
+        float xOffset = dx * (kernelSize - 1) / -2.f;
+        for(int c = 0; c < kernelSize; c++) {
+            
+            offsets[c + r*kernelSize] = float2(xOffset,  yOffset);
+            xOffset += dx;
+        }
+        yOffset += dy;
+    }
 
     [unroll]
     for(int i = 0; i < kernelSize*kernelSize; ++i)
@@ -65,7 +80,7 @@ float GetLitPercentage(float4 lightSpaceSamplePos) {
                 lightSpaceSamplePos.z).x
         );
     }
-    lit = lit / (kernelSize*kernelSize);
+    lit /= kernelSize*kernelSize;
 
     return lit;
 }

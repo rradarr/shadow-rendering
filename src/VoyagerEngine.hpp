@@ -110,7 +110,9 @@ private:
     wvpConstantBuffer m_wvpPerObject;
     lightParamsConstantBuffer lightParams;
     MappedResourceLocation lightingParamsBuffer;
-    MappedResourceLocation shadowMapWVPBuffer;
+    // Since we update the shadow view each frame we need per-frame buffers.
+    // MappedResourceLocation shadowMapWVPBuffer;
+    std::vector<MappedResourceLocation> shadowMapWVPBuffers;
 
     // Synchronization objects.
     UINT m_frameBufferIndex;

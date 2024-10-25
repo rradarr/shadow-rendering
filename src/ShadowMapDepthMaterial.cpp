@@ -47,8 +47,8 @@ void ShadowMapDepthMaterial::CustomizePipelineStateObjectDescription(D3D12_GRAPH
     psoDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
     psoDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
     psoDesc.RasterizerState.DepthBias = 1;
-    psoDesc.RasterizerState.SlopeScaledDepthBias = 1.f;
-    psoDesc.RasterizerState.DepthBiasClamp = 10.f;
+    psoDesc.RasterizerState.SlopeScaledDepthBias = 2.f; // Wider PCF kernels need more bias...
+    psoDesc.RasterizerState.DepthBiasClamp = 20.f;
 
     // Good sponza settings \/
     // psoDesc.RasterizerState.DepthBias = 1;

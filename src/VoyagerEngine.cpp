@@ -444,12 +444,12 @@ void VoyagerEngine::LoadAssets()
             depthOptimizedClearValue.DepthStencil.Stencil = 0;
 
             // Create the resource.
-            CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, 1024U, 1024U, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+            CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, 4096U, 4096U, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
             shadowMap.CreateEmpty(resourceDesc, srvDesc, D3D12_RESOURCE_STATE_GENERIC_READ, &depthOptimizedClearValue);
 
             // Set the viewport to be used when rendering into the shadow map, it will be passed to the shadowMapRenderer.
             // TODO: was 4096
-            shadowMapViewport = CD3DX12_VIEWPORT{0.0f, 0.0f, 1024.f, 1024.f};
+            shadowMapViewport = CD3DX12_VIEWPORT{0.0f, 0.0f, 4096.f, 4096.f};
 
             // Create the shadow map depth view.
             D3D12_DEPTH_STENCIL_VIEW_DESC depthStencilDesc = {};
@@ -465,9 +465,12 @@ void VoyagerEngine::LoadAssets()
                 &depthStencilDesc,
                 shadowMapDSVHeapLocation);
 
-            // Create the shadow map WVP constant buffer.
-            ZeroMemory(&m_wvpPerObject, sizeof(m_wvpPerObject));
-            shadowMapWVPBuffer = resourceManager.AddMappedUploadResource(&m_wvpPerObject, sizeof(m_wvpPerObject));
+            // Create the shadow map WVP constant buffers. (We could use one, but since we fit the map each frame we need per-frame)
+            for(int i = 0; i < mc_frameBufferCount; i++){
+                ZeroMemory(&m_wvpPerObject, sizeof(m_wvpPerObject));
+                MappedResourceLocation resource = resourceManager.AddMappedUploadResource(&m_wvpPerObject, sizeof(m_wvpPerObject));
+                shadowMapWVPBuffers.push_back(resource);
+            }
         }
     }
 
@@ -513,7 +516,7 @@ void VoyagerEngine::LoadMaterials()
     shadowMapRenderer.SetLightingParametersBuffer(lightingParamsBuffer);
     shadowMapRenderer.SetDepthPassMaterial(&materialShadowMapDepth);
     shadowMapRenderer.SetDepthPassDSV(shadowMapDSVHeapLocation);
-    shadowMapRenderer.SetLightWVPBuffer(shadowMapWVPBuffer);
+    // shadowMapRenderer.SetLightWVPBuffer(shadowMapWVPBuffer); Needs to be updated each frame.
     shadowMapRenderer.SetShadowMapResource(shadowMap.GetTextureResource());
     CD3DX12_GPU_DESCRIPTOR_HANDLE shadowMapSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
     shadowMapSRV = shadowMapSRV.Offset(shadowMap.GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize()); // TODO: Move getting the SRV desc. handle into a Texture method.
@@ -590,6 +593,7 @@ void VoyagerEngine::PopulateCommandList()
         }
         else if (chosenRenderingMode == RenderingState::RenderingMode::SHADOW_MAP) {
             // Render scene with simple shadow mapping.
+            shadowMapRenderer.SetLightWVPBuffer(shadowMapWVPBuffers[m_frameBufferIndex]);
             shadowMapRenderer.SetRTV(rtvHandle);
             shadowMapRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
         }
@@ -686,7 +690,7 @@ void VoyagerEngine::SetLightPosition()
     // The matrices need to be transposed because of column/row major ordering difference between hlsl and the DX implementations.
     DirectX::XMStoreFloat4x4(&shadowMapLightWVP.viewMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&m_shadowMapLightCamera.viewMat)));
     DirectX::XMStoreFloat4x4(&shadowMapLightWVP.projectionMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&m_shadowMapLightCamera.projMat)));
-    memcpy(shadowMapWVPBuffer.GetMappedResourceAddress(), &shadowMapLightWVP, sizeof(shadowMapLightWVP));
+    memcpy(shadowMapWVPBuffers[0].GetMappedResourceAddress(), &shadowMapLightWVP, sizeof(shadowMapLightWVP));
 }
 
 std::vector<DirectX::XMFLOAT4> VoyagerEngine::FindSceneExtents()
@@ -790,7 +794,7 @@ void VoyagerEngine::UpdateLightFitting()
     // The matrices need to be transposed because of column/row major ordering difference between hlsl and the DX implementations.
     DirectX::XMStoreFloat4x4(&shadowMapLightWVP.viewMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&m_shadowMapLightCamera.viewMat)));
     DirectX::XMStoreFloat4x4(&shadowMapLightWVP.projectionMat, DirectX::XMMatrixTranspose(cameraProjection));
-    memcpy(shadowMapWVPBuffer.GetMappedResourceAddress(), &shadowMapLightWVP, sizeof(shadowMapLightWVP));
+    memcpy(shadowMapWVPBuffers[m_frameBufferIndex].GetMappedResourceAddress(), &shadowMapLightWVP, sizeof(shadowMapLightWVP));
 
     // Find z scene extents in light space.
     // TODO: god damn, can't be boothered with this, we will use hand-adjusted
