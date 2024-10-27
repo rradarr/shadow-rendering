@@ -16,12 +16,14 @@ public:
         CBV_LIGHT_WVP = 2,
         TABLE_TEXTURE_ALBEDO = 3,
         TABLE_TEXTURE_SHADOW = 4, // Note: we have to tables bc I can't be asked to keep the descriptors contiguous.
+        TABLE_TEXTURE_OFFSETS = 5,
         PARAM_COUNT
     };
 
 private:
     std::vector<D3D12_DESCRIPTOR_RANGE> descriptorTablePixelRanges;
     std::vector<D3D12_DESCRIPTOR_RANGE> descriptorTableShadowPixelRanges;
+    std::vector<D3D12_DESCRIPTOR_RANGE> descriptorTableOffsetsPixelRanges;
     std::vector<D3D12_ROOT_PARAMETER> rootParameters;
 
     // Inheriting classes should not override these methods.

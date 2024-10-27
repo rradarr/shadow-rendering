@@ -155,6 +155,18 @@ void VoyagerEngine::OnUpdate()
     
     UpdateLightFitting();
 
+    //Update light params
+    {
+        RenderingState renderState = EngineStateModel::GetInstance()->GetRenderingState();
+        lightParams.lightFilterKernelScaleBias.x = static_cast<float>(renderState.chosenPFCMode);
+        lightParams.lightFilterKernelScaleBias.y = static_cast<float>(renderState.manualPCFKernelSize);
+        lightParams.lightFilterKernelScaleBias.z = renderState.pcfSampleOffset;
+        lightParams.lightFilterKernelScaleBias.w = renderState.inShaderDepthBias;
+        lightParams.mapAmbientSampler.x = renderState.ambientStrength;
+        lightParams.mapAmbientSampler.y = static_cast<float>(renderState.useBilinearFiltering);
+        memcpy(lightingParamsBuffer[m_frameBufferIndex].GetMappedResourceAddress(), &lightParams, sizeof(lightParams));
+    }
+
     // std::cout << "Updated" << std::endl;
 }
 
@@ -329,15 +341,19 @@ void VoyagerEngine::LoadAssets()
         }
     }
 
-    // Create the buffer for lighting parameters.
+    // Create the buffers for lighting parameters.
     {
-        ZeroMemory(&lightParams, sizeof(lightParams));
-        lightingParamsBuffer = resourceManager.AddMappedUploadResource(&lightParams, sizeof(lightParams));        
+        for(int i = 0; i < mc_frameBufferCount; i++){
+            ZeroMemory(&lightParams, sizeof(lightParams));
+            MappedResourceLocation resource = resourceManager.AddMappedUploadResource(&lightParams, sizeof(lightParams));
+            lightingParamsBuffer.push_back(resource);
+        }   
     }
 
-    // Load the texture
+    // Load the textures
     {
         sampleTexture.CreateFromFile("blank_texture.png");
+        CreatePCFOffsetTexture();
     }
 
     // Create the vertex and index buffers.
@@ -444,12 +460,12 @@ void VoyagerEngine::LoadAssets()
             depthOptimizedClearValue.DepthStencil.Stencil = 0;
 
             // Create the resource.
-            CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, 4096U, 4096U, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+            const unsigned int shadowMapResolution = 512U; // TODO: was 4096
+            CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, shadowMapResolution, shadowMapResolution, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
             shadowMap.CreateEmpty(resourceDesc, srvDesc, D3D12_RESOURCE_STATE_GENERIC_READ, &depthOptimizedClearValue);
 
             // Set the viewport to be used when rendering into the shadow map, it will be passed to the shadowMapRenderer.
-            // TODO: was 4096
-            shadowMapViewport = CD3DX12_VIEWPORT{0.0f, 0.0f, 4096.f, 4096.f};
+            shadowMapViewport = CD3DX12_VIEWPORT{0.0f, 0.0f, static_cast<float>(shadowMapResolution), static_cast<float>(shadowMapResolution)};
 
             // Create the shadow map depth view.
             D3D12_DEPTH_STENCIL_VIEW_DESC depthStencilDesc = {};
@@ -513,7 +529,6 @@ void VoyagerEngine::LoadMaterials()
     shadowMapRenderer.SetDSV(dsvHandle); // Note: RTV has to be set per frame, as we have multiple backbuffers.
     shadowMapRenderer.SetViewport(m_viewport);
     shadowMapRenderer.SetMainMaterial(&materialShadowMapMain);
-    shadowMapRenderer.SetLightingParametersBuffer(lightingParamsBuffer);
     shadowMapRenderer.SetDepthPassMaterial(&materialShadowMapDepth);
     shadowMapRenderer.SetDepthPassDSV(shadowMapDSVHeapLocation);
     // shadowMapRenderer.SetLightWVPBuffer(shadowMapWVPBuffer); Needs to be updated each frame.
@@ -522,6 +537,9 @@ void VoyagerEngine::LoadMaterials()
     shadowMapSRV = shadowMapSRV.Offset(shadowMap.GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize()); // TODO: Move getting the SRV desc. handle into a Texture method.
     shadowMapRenderer.SetShadowMapSRV(shadowMapSRV);
     shadowMapRenderer.SetShadowPassViewport(shadowMapViewport);
+    CD3DX12_GPU_DESCRIPTOR_HANDLE offsetsSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
+    offsetsSRV = offsetsSRV.Offset(pcfOffsetsTexture.GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize()); // TODO: Move getting the SRV desc. handle into a Texture method.
+    shadowMapRenderer.SetPCFOffsetsSRV(offsetsSRV);
 }
 
 void VoyagerEngine::LoadScene()
@@ -577,7 +595,7 @@ void VoyagerEngine::PopulateCommandList()
         else if(chosenRenderingMode == RenderingState::RenderingMode::SHADOW_PROJECTION) {
             // Render scene objects with the default renderer.
             DefaultRenderer renderer;
-            renderer.SetLightingParametersBuffer(lightingParamsBuffer);
+            renderer.SetLightingParametersBuffer(lightingParamsBuffer[m_frameBufferIndex]);
             renderer.SetRTV(rtvHandle);
             renderer.SetDSV(dsvHandle);
             renderer.SetViewport(m_viewport);
@@ -588,11 +606,12 @@ void VoyagerEngine::PopulateCommandList()
             projectionShadowRenderer.SetRTV(rtvHandle);
             projectionShadowRenderer.SetDSV(dsvHandle);
             projectionShadowRenderer.SetViewport(m_viewport);
-            projectionShadowRenderer.SetLightingParametersBuffer(lightingParamsBuffer);
+            projectionShadowRenderer.SetLightingParametersBuffer(lightingParamsBuffer[m_frameBufferIndex]);
             projectionShadowRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
         }
         else if (chosenRenderingMode == RenderingState::RenderingMode::SHADOW_MAP) {
             // Render scene with simple shadow mapping.
+            shadowMapRenderer.SetLightingParametersBuffer(lightingParamsBuffer[m_frameBufferIndex]);
             shadowMapRenderer.SetLightWVPBuffer(shadowMapWVPBuffers[m_frameBufferIndex]);
             shadowMapRenderer.SetRTV(rtvHandle);
             shadowMapRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
@@ -600,7 +619,7 @@ void VoyagerEngine::PopulateCommandList()
         else {
             // Render scene objects with the default renderer.
             DefaultRenderer renderer;
-            renderer.SetLightingParametersBuffer(lightingParamsBuffer);
+            renderer.SetLightingParametersBuffer(lightingParamsBuffer[m_frameBufferIndex]);
             renderer.SetRTV(rtvHandle);
             renderer.SetDSV(dsvHandle);
             renderer.SetViewport(m_viewport);
@@ -666,7 +685,7 @@ void VoyagerEngine::SetLightPosition()
     // lightParams.lightPosition = { 6, 20, -6 }; // <- Good for sponza.
 
     // Copy our ConstantBuffer instance to the mapped constant buffer resource.
-    memcpy(lightingParamsBuffer.GetMappedResourceAddress(), &lightParams.lightPosition, sizeof(lightParams.lightPosition));
+    memcpy(lightingParamsBuffer[0].GetMappedResourceAddress(), &lightParams.lightPosition, sizeof(lightParams.lightPosition));
 
     // Set the WVP matrices of the shadow mapping light.
     // Set the projection matrix.
@@ -845,6 +864,61 @@ void VoyagerEngine::UpdateLightFitting()
 
 }
 
+void VoyagerEngine::CreatePCFOffsetTexture()
+{
+    // Prepare CPU storage for the data.
+    const int windowSize = 16;
+    const int filterSize = 8;
+    // Will be stored into a 3D texture of windowSize x windowSize x (filterSize * filterSize * 2).
+    // This means the sample patterns will repeat every windowSize x windowSize in screen space.
+    // The filter will have filterSize * filterSize float2 offsets, stored in half the depth texels in xy and zw.
+    std::vector<float> data(windowSize * windowSize * filterSize * filterSize * 2, 0.5f);
+
+    // Generate the data.
+    int index = 0;
+    for(int texY = 0; texY < windowSize; texY++) {
+        for(int texX = 0; texX < windowSize; texX++) {
+            for(int v = filterSize - 1; v >= 0; v--) {
+                for(int u = 0; u < filterSize; u++) {
+                    // randFloat() has range [0:1], so (randFloat() - 0.5f) has range [-0.5:0.5].
+                    // Divide by filter size to get all samples in normalized range [0:1] in x and y.
+                    float x = ((float)u + 0.5f + (randFloat() - 0.5f)) / (float)filterSize;
+                    float y = ((float)v + 0.5f + (randFloat() - 0.5f)) / (float)filterSize;
+
+                    // The sqrtf(y) works as a distance to center. Since we first iterate through
+                    // all large y values, the generated outer samples are first in the filter.
+                    data[index] = sqrtf(y) * cosf(2 * DirectX::XM_PI * x);
+                    data[index + 1] = sqrtf(y) * sinf(2 * DirectX::XM_PI * x);
+
+                    // std::cout << sqrtf(powf((data[index] - 0.f), 2) + powf(data[index + 1] - 0.f, 2)) << std::endl;
+
+                    index += 2;
+                }
+            }
+        }
+    }
+
+    // Store the data into a texture.
+    CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex3D(
+        DXGI_FORMAT_R32G32B32A32_FLOAT, // TODO: Maybe 16 bits per-component?
+        filterSize * filterSize / 2, windowSize, windowSize, 1U
+    );
+    D3D12_SHADER_RESOURCE_VIEW_DESC viewDesc{};
+    viewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    viewDesc.Format = desc.Format;
+    viewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
+    viewDesc.Texture3D.MipLevels = 1;
+
+    D3D12_SUBRESOURCE_DATA subData{};
+    subData.pData = data.data();
+    // subData.RowPitch = filterSize * filterSize / 2;
+    // subData.SlicePitch = filterSize * filterSize / 2 * windowSize;
+    subData.RowPitch = (filterSize * filterSize / 2) * 128 / 8;
+    subData.SlicePitch = subData.RowPitch * windowSize;
+    
+    pcfOffsetsTexture.CreateFromData(desc, viewDesc, subData);
+}
+
 DirectX::XMFLOAT3 VoyagerEngine:: normalize(DirectX::XMFLOAT3 vec) {
     float length = std::sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
     return DirectX::XMFLOAT3(vec.x / length, vec.y / length, vec.z / length);
@@ -854,7 +928,7 @@ DirectX::XMFLOAT3 VoyagerEngine::scale(DirectX::XMFLOAT3 vec, float scale) {
     return DirectX::XMFLOAT3(vec.x * scale, vec.y * scale, vec.z * scale);
 }
 
-float randFloat() {
+float VoyagerEngine::randFloat() {
     return static_cast<float>(rand()) / RAND_MAX;
 }
 

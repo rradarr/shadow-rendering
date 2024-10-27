@@ -17,6 +17,21 @@ struct RenderingState {
     unsigned int selectedSceneID = 0;
 
     bool renderGUI = true;
+
+    // Shadow map related settings.
+    enum class PCFMode {
+        SIMPLE = 0,
+        MANUAL_FILTER = 1,
+        RANDOM_OFFESTS_FILTER = 2,
+        NUM_PCF_MODES
+    };
+    PCFMode chosenPFCMode = PCFMode::SIMPLE;
+    static const char* pcfModeNames[static_cast<int>(PCFMode::NUM_PCF_MODES)];
+    unsigned int manualPCFKernelSize = 3;
+    float pcfSampleOffset = 1.f;
+    float inShaderDepthBias = 0.f;
+    float ambientStrength = 0.02f;
+    int useBilinearFiltering = 0;
 };
 
 struct InputState {

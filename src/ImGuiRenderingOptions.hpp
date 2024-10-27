@@ -11,4 +11,7 @@ public:
     ~ImGuiRenderingOptions();
 
     void Display();
+
+private:
+    void DisplayShadowMapOptions();
 };

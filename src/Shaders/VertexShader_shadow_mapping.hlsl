@@ -23,6 +23,8 @@ ConstantBuffer<wvpMatrixValue> lightWVP : register(b2);
 struct lightParams
 {
     float3 lightPosition;
+    float4 lightFilterKernelScaleBias;
+    float4 mapAmbient;
 };
 ConstantBuffer<lightParams> lightConstants : register(b1);
 

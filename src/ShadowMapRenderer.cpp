@@ -80,6 +80,9 @@ void ShadowMapRenderer::Render(ComPtr<ID3D12GraphicsCommandList> commandList, co
         commandList->SetGraphicsRootDescriptorTable(
             ShadowMapMainMaterial::TABLE_TEXTURE_SHADOW,
             shadowMapSRVHandle);
+        commandList->SetGraphicsRootDescriptorTable(
+            ShadowMapMainMaterial::TABLE_TEXTURE_OFFSETS,
+            pcfOffsetsSRVHandle);
 
         for(const SceneObject& sceneObject : sceneObjects) {
             commandList->SetGraphicsRootConstantBufferView(

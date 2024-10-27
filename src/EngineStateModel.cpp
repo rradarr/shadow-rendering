@@ -9,6 +9,12 @@ const char* RenderingState::renderingModeNames[static_cast<int>(RenderingMode::N
     "Shadows - simple shadow mapping"
  };
 
+const char* RenderingState::pcfModeNames[static_cast<int>(PCFMode::NUM_PCF_MODES)]{
+    "Regular shadow map",
+    "Manual square filter PCF",
+    "Random offsets filter PCF"
+};
+
 EngineStateModel* EngineStateModel::instance{ nullptr };
 std::mutex EngineStateModel::mutex;
 

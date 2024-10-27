@@ -26,6 +26,18 @@ std::vector<D3D12_ROOT_PARAMETER> ShadowMapMainMaterial::CreateRootParameters()
     descriptorTablePixelShadow.NumDescriptorRanges = static_cast<UINT>(descriptorTableShadowPixelRanges.size());
     descriptorTablePixelShadow.pDescriptorRanges = descriptorTableShadowPixelRanges.data();
 
+    // Shadow map PCF offsets (stored in a 3D texture).
+    descriptorTableOffsetsPixelRanges.resize(1);
+    descriptorTableOffsetsPixelRanges[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    descriptorTableOffsetsPixelRanges[0].NumDescriptors = 1;
+    descriptorTableOffsetsPixelRanges[0].BaseShaderRegister = 2; // t2 in shader
+    descriptorTableOffsetsPixelRanges[0].RegisterSpace = 0;
+    descriptorTableOffsetsPixelRanges[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+    D3D12_ROOT_DESCRIPTOR_TABLE descriptorTablePixelOffsets;
+    descriptorTablePixelOffsets.NumDescriptorRanges = static_cast<UINT>(descriptorTableOffsetsPixelRanges.size());
+    descriptorTablePixelOffsets.pDescriptorRanges = descriptorTableOffsetsPixelRanges.data();
+
     // Create root descriptor for object wvp matrices.
     D3D12_ROOT_DESCRIPTOR rootCBVDescriptor;
     rootCBVDescriptor.ShaderRegister = 0; // b0 in shader
@@ -49,7 +61,7 @@ std::vector<D3D12_ROOT_PARAMETER> ShadowMapMainMaterial::CreateRootParameters()
     
     rootParameters[CBV_LIGHT_PARAMS].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[CBV_LIGHT_PARAMS].Descriptor = rootCBVLightParamsDescriptor;
-    rootParameters[CBV_LIGHT_PARAMS].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;  // TODO: Light params are per vertex in other materials?
+    rootParameters[CBV_LIGHT_PARAMS].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;  // TODO: I want this both in vert and pixel.
 
     rootParameters[CBV_LIGHT_WVP].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
     rootParameters[CBV_LIGHT_WVP].Descriptor = rootCBVLightWVPDescriptor;
@@ -63,6 +75,10 @@ std::vector<D3D12_ROOT_PARAMETER> ShadowMapMainMaterial::CreateRootParameters()
     rootParameters[TABLE_TEXTURE_SHADOW].DescriptorTable = descriptorTablePixelShadow;
     rootParameters[TABLE_TEXTURE_SHADOW].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
+    rootParameters[TABLE_TEXTURE_OFFSETS].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    rootParameters[TABLE_TEXTURE_OFFSETS].DescriptorTable = descriptorTablePixelOffsets;
+    rootParameters[TABLE_TEXTURE_OFFSETS].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
     return rootParameters;
 }
 
@@ -73,6 +89,7 @@ void ShadowMapMainMaterial::CustomizePipelineStateObjectDescription(D3D12_GRAPHI
 
 std::vector<D3D12_STATIC_SAMPLER_DESC> ShadowMapMainMaterial::CreateSamplers()
 {
+    std::vector<D3D12_STATIC_SAMPLER_DESC> samplers;
     // Create the static sampler description for the albedo texture.
     D3D12_STATIC_SAMPLER_DESC samplerAlbedo = {};
     samplerAlbedo.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
@@ -88,11 +105,11 @@ std::vector<D3D12_STATIC_SAMPLER_DESC> ShadowMapMainMaterial::CreateSamplers()
     samplerAlbedo.ShaderRegister = 0; // s0 in shader
     samplerAlbedo.RegisterSpace = 0;
     samplerAlbedo.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+    samplers.push_back(samplerAlbedo);
 
     // Create the static sampler description for the depth shadow map.
     D3D12_STATIC_SAMPLER_DESC samplerDepthShadowMap = {};
-    samplerDepthShadowMap.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
-    // samplerDepthShadowMap.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+    samplerDepthShadowMap.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
     samplerDepthShadowMap.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
     samplerDepthShadowMap.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
     samplerDepthShadowMap.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
@@ -105,7 +122,14 @@ std::vector<D3D12_STATIC_SAMPLER_DESC> ShadowMapMainMaterial::CreateSamplers()
     samplerDepthShadowMap.ShaderRegister = 1; // s1 in shader
     samplerDepthShadowMap.RegisterSpace = 0;
     samplerDepthShadowMap.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-    return std::vector<D3D12_STATIC_SAMPLER_DESC>{samplerAlbedo, samplerDepthShadowMap};
+    samplers.push_back(samplerDepthShadowMap);
+
+    // Create additional shadow map sampler with bilinear filtering.
+    samplerDepthShadowMap.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+    samplerDepthShadowMap.ShaderRegister = 2; // s2 in shader
+    samplers.push_back(samplerDepthShadowMap);
+
+    return samplers;
 }
 
 D3D12_ROOT_SIGNATURE_FLAGS ShadowMapMainMaterial::CreateRootSignatureFlags()

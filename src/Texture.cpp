@@ -12,6 +12,11 @@ Texture::Texture(const std::string fileName)
     CreateFromFile(fileName);
 }
 
+Texture::Texture(CD3DX12_RESOURCE_DESC textureDescriptor, D3D12_SHADER_RESOURCE_VIEW_DESC textureViewDescriptor, D3D12_SUBRESOURCE_DATA textureData)
+{
+    CreateFromData(textureDescriptor, textureViewDescriptor, textureData);
+}
+
 bool Texture::CreateFromFile(const std::string fileName)
 {
     std::wstring tmpName(fileName.begin(), fileName.end());
@@ -35,7 +40,7 @@ bool Texture::CreateFromFile(const std::string fileName)
     textureData.RowPitch = imageBytesPerRow;
     textureData.SlicePitch = imageBytesPerRow * textureDesc.Height;
     buffMng.FillBuffer(textureBuffer, textureData, textureUploadBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-    textureBuffer->SetName(L"Texture buffer resource");
+    textureBuffer->SetName(L"Texture buffer resource (from image)");
 
     // Create the SRV Descriptor Heap
     /*D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
@@ -46,6 +51,26 @@ bool Texture::CreateFromFile(const std::string fileName)
     m_SRVHeap->SetName(L"SRV Heap");*/
 
     CreateTextureView();
+
+    return true;
+}
+
+bool Texture::CreateFromData(CD3DX12_RESOURCE_DESC textureDescriptor, D3D12_SHADER_RESOURCE_VIEW_DESC textureViewDescriptor, D3D12_SUBRESOURCE_DATA textureData)
+{
+    BufferMemoryManager buffMng;
+
+    textureDesc = textureDescriptor;
+
+    UINT64 textureUploadBufferSize = 0;
+    DXContext::getDevice().Get()->GetCopyableFootprints(&textureDescriptor, 0, 1, 0, nullptr, nullptr, nullptr, &textureUploadBufferSize);
+    ComPtr<ID3D12Resource> textureUploadBuffer;
+    buffMng.AllocateBuffer(textureBuffer, &textureDescriptor, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_HEAP_TYPE_DEFAULT);
+    buffMng.AllocateBuffer(textureUploadBuffer, static_cast<UINT>(textureUploadBufferSize), D3D12_RESOURCE_STATE_GENERIC_READ, D3D12_HEAP_TYPE_UPLOAD);
+
+    buffMng.FillBuffer(textureBuffer, textureData, textureUploadBuffer, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    textureBuffer->SetName(L"Texture buffer resource (from data)");
+
+    viewOffsetInHeap = CbvSrvDescriptorHeapManager::AddShaderResourceView(textureViewDescriptor, textureBuffer);
 
     return true;
 }

@@ -7,7 +7,9 @@ class Texture
 public:
     Texture() = default;
     Texture(const std::string fileName);
+    Texture(CD3DX12_RESOURCE_DESC textureDescriptor, D3D12_SHADER_RESOURCE_VIEW_DESC textureViewDescriptor, D3D12_SUBRESOURCE_DATA textureData);
     bool CreateFromFile(const std::string fileName);
+    bool CreateFromData(CD3DX12_RESOURCE_DESC textureDescriptor, D3D12_SHADER_RESOURCE_VIEW_DESC textureViewDescriptor, D3D12_SUBRESOURCE_DATA textureData);
     /* Create an empty texture resource in the default heap. */
     void CreateEmpty(
         D3D12_RESOURCE_DESC resourceDescriptor,

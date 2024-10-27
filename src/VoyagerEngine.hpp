@@ -46,11 +46,14 @@ private:
             //BYTE padding[256]; // Constant buffers must be 256-byte aligned which has to do with constant reads on the GPU.
         //};
     };
+
     struct lightParamsConstantBuffer {
-        union {
-            DirectX::XMFLOAT3 lightPosition;
-            BYTE padding[256]; // Constant buffers must be 256-byte aligned which has to do with constant reads on the GPU.
-        };
+        DirectX::XMFLOAT3 lightPosition; BYTE pad[4];
+        // Here we store in a silly way the light algorithm type (eg. for shadow mapping type of PCF), kernel size, offset scale and in-shader bias.
+        DirectX::XMFLOAT4 lightFilterKernelScaleBias;
+        // Here only the shadow map ambient and sampler kind are stored for now.
+        DirectX::XMFLOAT4 mapAmbientSampler;
+        BYTE padding[224]; // Constant buffers must be 256-byte aligned which has to do with constant reads on the GPU.
     };
     //int ConstantBufferPerObjectAlignedSize = (sizeof(wvpConstantBuffer) + 255) & ~255;
 
@@ -77,6 +80,7 @@ private:
     Texture shadowMap;
     CD3DX12_CPU_DESCRIPTOR_HANDLE shadowMapDSVHeapLocation;
     CD3DX12_VIEWPORT shadowMapViewport;
+    Texture pcfOffsetsTexture;
     // Materials.
     DefaultTexturedMaterial materialTextured;
     Material materialNoTex;
@@ -109,7 +113,8 @@ private:
     Camera m_shadowMapLightCamera;
     wvpConstantBuffer m_wvpPerObject;
     lightParamsConstantBuffer lightParams;
-    MappedResourceLocation lightingParamsBuffer;
+    // They will be influenced by GUI so we need per-buffer data.
+    std::vector<MappedResourceLocation> lightingParamsBuffer;
     // Since we update the shadow view each frame we need per-frame buffers.
     // MappedResourceLocation shadowMapWVPBuffer;
     std::vector<MappedResourceLocation> shadowMapWVPBuffers;
@@ -138,8 +143,10 @@ private:
     void SetLightPosition();
     std::vector<DirectX::XMFLOAT4> FindSceneExtents();
     void UpdateLightFitting();
+    void CreatePCFOffsetTexture();
 
     DirectX::XMFLOAT3 normalize(DirectX::XMFLOAT3 vec);
     DirectX::XMFLOAT3 scale(DirectX::XMFLOAT3 vec, float scale);
+    float VoyagerEngine::randFloat();
 };
 

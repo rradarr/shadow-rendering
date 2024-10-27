@@ -21,6 +21,7 @@ public:
     void SetShadowMapResource(ComPtr<ID3D12Resource> shadowMapResource) {shadowMap = shadowMapResource; }
     void SetDepthPassDSV(CD3DX12_CPU_DESCRIPTOR_HANDLE dsvHandle) { shadowMapDSVHandle = dsvHandle; }
     void SetShadowMapSRV(D3D12_GPU_DESCRIPTOR_HANDLE srvHandle) { shadowMapSRVHandle = srvHandle; }
+    void SetPCFOffsetsSRV(D3D12_GPU_DESCRIPTOR_HANDLE srvHandle) { pcfOffsetsSRVHandle = srvHandle; }
 
     virtual void Render(ComPtr<ID3D12GraphicsCommandList> commandList, const std::vector<SceneObject>& sceneObjects, UINT currentFrameBufferIndex);
 
@@ -37,6 +38,7 @@ private:
     ComPtr<ID3D12Resource> shadowMap;
     CD3DX12_CPU_DESCRIPTOR_HANDLE shadowMapDSVHandle;
     D3D12_GPU_DESCRIPTOR_HANDLE shadowMapSRVHandle;
+    D3D12_GPU_DESCRIPTOR_HANDLE pcfOffsetsSRVHandle;
 };
 
 /*
