@@ -27,7 +27,7 @@ SamplerComparisonState shadowMapSamplerBilinear : register(s2);
 
 
 // Return [0:1] value telling how much teh sample is lit (0 = in shadow, 1 = fully lit).
-float GetPCFManualFilterLitPercentage(float4 lightSpaceSamplePos, int kernelSize, float offsetScale, float samplerToUse) {
+float GetPCFManualFilterLitPercentage(float3 lightSpaceSamplePos, int kernelSize, float offsetScale, float samplerToUse) {
     // PCF shadow map - manual filtering.
     // Find texel size.
     uint width, height, numMips;
@@ -36,7 +36,7 @@ float GetPCFManualFilterLitPercentage(float4 lightSpaceSamplePos, int kernelSize
     const float dy = 1.0f / (float)height * offsetScale;
 
     float lit = 0.0f;
-    const float maxKernelSize = 11;
+    const int maxKernelSize = 11;
     float2 offsets[maxKernelSize*maxKernelSize];
     // const float2 offsets[kernelSize*kernelSize] =
     // {
@@ -99,7 +99,7 @@ float GetPCFManualFilterLitPercentage(float4 lightSpaceSamplePos, int kernelSize
     return lit;
 }
 
-float GetPCFRandomFilterLitPercentage(float4 lightSpaceSamplePos, float2 screenSpacePos, float offsetScale, float samplerToUse) {
+float GetPCFRandomFilterLitPercentage(float3 lightSpaceSamplePos, float2 screenSpacePos, float offsetScale, float samplerToUse) {
     int widthOffsets, heightOffsets, depthOffsets, numMipsOffsets;
     pcfOffsetsTex.GetDimensions(0, depthOffsets, widthOffsets, heightOffsets, numMipsOffsets);
 
@@ -207,6 +207,50 @@ float GetPCFRandomFilterLitPercentage(float4 lightSpaceSamplePos, float2 screenS
 
     return lit / (depthOffsets * 2.f);
 }
+
+float FindAverageBlockerDistance(float3 lightSpaceSamplePos, float searchSize, float2 screenSpacePos) {  
+    // Search for blockers.
+    // int BLOCKER_SAMPLES = 10; // TODO: get this from where?
+    float BLOCKER_BIAS = 0.f; // TODO: get this from where?
+    int blockersCount = 0;
+    float blockerDistance = 0.f;
+
+    int widthOffsets, heightOffsets, depthOffsets, numMipsOffsets;
+    pcfOffsetsTex.GetDimensions(0, depthOffsets, widthOffsets, heightOffsets, numMipsOffsets);
+    // Divide by texture size to get one texel per pixel.
+    float2 offsetWindowIndex = float2(screenSpacePos / (float)widthOffsets);
+    float offsetTexelSize = 1.f / (float)depthOffsets;
+    
+    [loop]
+    for(int i = 0; i < depthOffsets / 2; i++) {
+        // Get some offets.
+        float4 offsets = pcfOffsetsTex.Sample(
+            albedoSampler,
+            float3(i * offsetTexelSize, offsetWindowIndex));
+
+        offsets *= searchSize;
+
+        float depth = shadowMapTex.Sample(albedoSampler, lightSpaceSamplePos.xy + offsets.xy).x;
+        if(depth < lightSpaceSamplePos.z - BLOCKER_BIAS) {
+            blockersCount ++;
+            blockerDistance += depth;
+        }
+
+        depth = shadowMapTex.Sample(albedoSampler, lightSpaceSamplePos.xy + offsets.zw).x;
+        if(depth < lightSpaceSamplePos.z - BLOCKER_BIAS) {
+            blockersCount ++;
+            blockerDistance += depth;
+        }
+    }
+
+    // Calculate average depth.
+    if(blockersCount > 0) {
+        return blockerDistance / (float)blockersCount;
+    }
+    else {
+        return -1;
+    }
+}
  
 float4 main(PSInput input) : SV_TARGET
 {
@@ -234,7 +278,7 @@ float4 main(PSInput input) : SV_TARGET
     else if(lightConstants.lightFilterKernelScaleBias.x == 1) {
         // Manually built filter.
         litFactor = GetPCFManualFilterLitPercentage(
-            input.positionInLightSpace,
+            input.positionInLightSpace.xyz,
             lightConstants.lightFilterKernelScaleBias.y,
             lightConstants.lightFilterKernelScaleBias.z,
             lightConstants.mapAmbientSampler.y);
@@ -243,11 +287,53 @@ float4 main(PSInput input) : SV_TARGET
         // Random offset filter.
         if(diffuseStrength != 0.f) {
             litFactor = GetPCFRandomFilterLitPercentage(
-                input.positionInLightSpace,
+                input.positionInLightSpace.xyz,
                 input.position.xy,
                 lightConstants.lightFilterKernelScaleBias.z,
                 lightConstants.mapAmbientSampler.y);
         }
+    }
+    else if(lightConstants.lightFilterKernelScaleBias.x == 3) {
+        // PCSS.
+
+        // Find search size.
+        float NEAR_LIGHT_PLANE = 0.5625f; // TODO: get this from constants...
+        float LIGHT_FRUSTUM_WIDTH = 7.f; // TODO: get this from constants...
+        float worldLightSize = 1.f; // TODO: get this from light struct.
+        // Note: There are multiple issues with these implementations.
+        // 1. lightSpaceSamplePos.z is in clip space post-perspective divide, while the near plane would be in world space?
+        //    That would mean that we can't just subtract them?
+        // 2. lightSpaceSamplePos.z - NEAR_LIGHT_PLANE really makes sense if lightSpaceSamplePos is in light view space.
+        //    Otherwise I think the triangles are broken. Commented below is a formula that makes more sense to me,
+        //    in which the near plane distance is added to lightSpaceSamplePos.z, giving clip space light -> sample distance.
+        //    With this however I dont know how to get the real near distance in clip space...
+        float lightSizeInLightSpace = worldLightSize / LIGHT_FRUSTUM_WIDTH;
+        // float searchSize = lightSizeInLightSpace * (input.positionInLightSpace.z - NEAR_LIGHT_PLANE) / input.positionInLightSpace.z;
+        float searchSize = lightSizeInLightSpace * input.positionInLightSpace.z / (input.positionInLightSpace.z + NEAR_LIGHT_PLANE);
+
+        // Find occluders and avg occluder depth.
+        float avgBlockerDistance = FindAverageBlockerDistance(
+            input.positionInLightSpace.xyz,
+            searchSize,
+            input.position.xy);
+        if (avgBlockerDistance < 0.f) { // If no blockers, avgBlockerDistance will be -1.
+            // Fully lit if not blocked.
+            litFactor = 1.f;
+        }
+        else {
+            // Calculate filter width.
+            float penumbraWidth = (input.positionInLightSpace.z - avgBlockerDistance) / avgBlockerDistance;
+            // TODO: why do we use lightSizeInLightSpace below? it's not in the book.
+            float filterSize = penumbraWidth * lightSizeInLightSpace * NEAR_LIGHT_PLANE / input.positionInLightSpace.z;
+            // Use filter to get litFactor.
+            litFactor = GetPCFRandomFilterLitPercentage(
+                input.positionInLightSpace.xyz,
+                input.position.xy,
+                filterSize * lightConstants.lightFilterKernelScaleBias.z,
+                lightConstants.mapAmbientSampler.y);
+        }
+
+        
     }
     litFactor = saturate(litFactor + ambientBrightness);
 

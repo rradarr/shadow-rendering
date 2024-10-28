@@ -23,6 +23,7 @@ struct RenderingState {
         SIMPLE = 0,
         MANUAL_FILTER = 1,
         RANDOM_OFFESTS_FILTER = 2,
+        PCSS_RANDOM_OFFSETS = 3,
         NUM_PCF_MODES
     };
     PCFMode chosenPFCMode = PCFMode::SIMPLE;

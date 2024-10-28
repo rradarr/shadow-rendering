@@ -364,7 +364,7 @@ void VoyagerEngine::LoadAssets()
         // Load suzanne
         {
             std::vector<DirectX::XMFLOAT4> boundingB;
-            suzanneMesh.CreateFromFile("suzanne.obj", &boundingB);
+            suzanneMesh.CreateFromFile("cube_split.obj", &boundingB);
             suzanne = SceneObject(&suzanneMesh, boundingB);
 
             suzanne.SetAlbedoTexture(descriptorHandle);

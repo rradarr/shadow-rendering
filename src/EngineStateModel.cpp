@@ -12,7 +12,8 @@ const char* RenderingState::renderingModeNames[static_cast<int>(RenderingMode::N
 const char* RenderingState::pcfModeNames[static_cast<int>(PCFMode::NUM_PCF_MODES)]{
     "Regular shadow map",
     "Manual square filter PCF",
-    "Random offsets filter PCF"
+    "Random offsets filter PCF",
+    "PCSS with random offsets"
 };
 
 EngineStateModel* EngineStateModel::instance{ nullptr };

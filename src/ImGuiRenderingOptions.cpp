@@ -112,5 +112,12 @@ void ImGuiRenderingOptions::DisplayShadowMapOptions()
         
         ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 50.f, "%.3f", ImGuiSliderFlags_AlwaysClamp);
     }
+    if(chosenPCFMode == static_cast<int>(RenderingState::PCFMode::PCSS_RANDOM_OFFSETS)) {
+        ImGui::TextWrapped("This technique approximates soft shadows with the "
+        "penumbra size being dependant on the distance of the occluder to the "
+        "light source. It uses PCF with random offset texture.");
+        
+        ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 50.f, "%.3f"); // TODO: debug: add ImGuiSliderFlags_AlwaysClamp later
+    }
     
 }
