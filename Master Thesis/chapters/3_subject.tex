@@ -301,7 +301,8 @@ The calculation of \(s_y\) and \(o_y\) is analogous.
 
 As was implemented, the fitting focuses on an approximate convex body of \(\mathbf{L}\cap \mathbf{V}\), where \(\mathbf{L}\) stands for the light view frustum and \(\mathbf{V}\) for the viewer frustum. The shadow map is then fitted only in the clip space \(x\) and \(y\) dimensions, ignoring depth \(z\). A more robust solution would be to find the convex hull of \(\mathbf{L}\cap \mathbf{V}\cap \mathbf{S}\), with \(\mathbf{S}\) meaning the scene bounding box. Then the shadow map would only focus on areas within the viewer frustum where there exists geometry to render. The near plane of the light frustum can then be set to the upper scene extent and the far plane to the farthest viewer frustum point. The shadow map would then require no hand adjustments to its frustum and would adapt to different scenes and viewer orientations.
 
-\subsection{Some other shadow maps}
+\subsection{Filtering shadow maps with PCF}
+\label{section:pcf}
 
 % \begin{itemize}
 % \item solution to the problem proposed by the author of the thesis

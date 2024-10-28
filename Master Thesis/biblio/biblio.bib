@@ -166,6 +166,61 @@
   doi = {10.2312/EGWR/EGSR06/215-226}
 }
 
+@inproceedings{bib:proc:reeves_pcf,
+  author = {William T. Reeves and Salesin, David H. and R. L. Cook},
+  title = {Rendering antialiased shadows with depth maps},
+  year = {1987},
+  isbn = {0897912276},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/37401.37435},
+  doi = {10.1145/37401.37435},
+  booktitle = {Proceedings of the 14th Annual Conference on Computer Graphics and Interactive Techniques},
+  pages = {283–291},
+  numpages = {9},
+  series = {SIGGRAPH '87}
+}
+
+@Book{bib:book:gpu_gems_2,
+  Title                    = {GPU Gems 2: Programming Techniques For High-Performance Graphics And General-Purpose Computation},
+  Author                   = {Matt Pharr and Randima Fernando},
+  Publisher                = {Addison-Wesley Professional},
+  Year                     = {2005},
+}
+
+@inproceedings{bib:proc:donnelly_vsm,
+  author = {Donnelly, William  and Andrew Lauritzen},
+  title = {Variance shadow maps},
+  year = {2006},
+  isbn = {159593295X},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/1111411.1111440},
+  doi = {10.1145/1111411.1111440},
+  abstract = {Shadow maps are a widely used shadowing technique in real time graphics. One major drawback of their use is that they cannot be filtered in the same way as color textures, typically leading to severe aliasing. This paper introduces variance shadow maps, a new real time shadowing algorithm. Instead of storing a single depth value, we store the mean and mean squared of a distribution of depths, from which we can efficiently compute the variance over any filter region. Using the variance, we derive an upper bound on the fraction of a shaded fragment that is occluded. We show that this bound often provides a good approximation to the true occlusion, and can be used as an approximate value for rendering. Our algorithm is simple to implement on current graphics processors and solves the problem of shadow map aliasing with minimal additional storage and computation.},
+  booktitle = {Proceedings of the 2006 Symposium on Interactive 3D Graphics and Games},
+  pages = {161–165},
+  numpages = {5},
+  keywords = {graphics hardware, real-time rendering, shader programming, shadow maps},
+  location = {Redwood City, California},
+  series = {I3D '06}
+}
+
+@inproceedings{bib:proc:lauritzen_lvsm,
+  author = {Lauritzen, Andrew and Michael McCool},
+  title = {Layered variance shadow maps},
+  year = {2008},
+  isbn = {9781568814230},
+  publisher = {Canadian Information Processing Society},
+  address = {CAN},
+  abstract = {Shadow maps are commonly used in real-time rendering, but they cannot be filtered linearly like standard color, resulting in severe aliasing. Variance shadow maps resolve this problem by representing the depth distribution using moments, which can be linearly filtered. However, variance shadow maps suffer from "light bleeding" artifacts and require high-precision texture filtering hardware.We introduce layered variance shadow maps, which provide simultaneous solutions to both of these limitations. By partitioning the shadow map depth range into multiple layers, we eliminate all light bleeding between different layers. Using more layers increases the quality of the shadows at the expense of additional storage. Because each of these layers covers a reduced depth range, they can be stored in lower precision than would be required with typical variance shadow maps, enabling their use on a much wider range of graphics hardware. We also describe an iterative optimization algorithm to automatically position layers so as to maximize the utility of each.Our algorithm is easy to implement on current graphics hardware and provides an efficient, scalable solution to the problem of shadow map filtering.},
+  booktitle = {Proceedings of Graphics Interface 2008},
+  pages = {139–146},
+  numpages = {8},
+  location = {Windsor, Ontario, Canada},
+  series = {GI '08}
+}
+
 % required: authors, title, publisher and year
 @Book{bib:book,
   Title                    = {Title of a book},
