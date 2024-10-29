@@ -309,7 +309,7 @@ Possibly the simplest way to get PCF results is to use the hardware implementati
 
 Unfortunately, hardware bilinear PCF is not going to significantly improve the shadow mapping visuals. In most cases there will still be visible aliasing, which is due to the fact that the kernel used is very small, being only \(2\times 2\). A larger kernel can be built manually and used in the same manner to get smoother shadows. A simple box filter with an \(n\times n\) kernel can cover a larger area in the shadow map. The larger the kernel, the smoother the shadow and the larger the penumbra. This can be implemented by generating an array of offsets either in the shader or, to preserve computing power, on the CPU and later sent to the GPU via a uniform buffer. The offsets should be in texel-aligned increments, which is easily achieved by expressing them in multiples of \(1/s\), where \(s\) is the shadow map size. These offsets are then added to the scene sample position expressed in light space. It is important to note, that even though different texels are sampled, the initial scene sample \(z\) value remains the same. Unfortunately, the visual quality of such filtering is visibly sub-par, as pixelated banding artifacts occur as shown in \ref{fig:pcf_manual}. This is due to the fact that only \(n^2+1\) shades can be obtained in the penumbra. The kernel size could obviously be raised, but sizes even as relatively low as 11 have a significant impact on performance. Hardware PCF can be used with this method to smooth out the banding as shown in Fig. \ref{fig:pcf_manual_with_bilinear}, and an offset scale can be utilized to control the size of the penumbra regardless of the size of the kernel.
 
-A more robust and efficient approach allows using fewer samples while giving good visual results. Instead of using a box filter it creates sets of randomly jittered offsets that are used when performing PCF. Most importantly, these offsets are stored in memory in such a way that allows to decide whether a point is fully lit or fully in shadow without having to test all samples. The offsets are first generated on the CPU in a jittered grid pattern of \(n\times n\) size. Their coordinates are normalized, so all samples lie within the \([0:1]\) range in the \(x\) and \(y\) axes. Then, all the samples are moved from the grid into a disk domain using the following equations.
+A more robust and efficient approach allows using fewer samples while giving good visual results, sampling the shadow map adaptively. Instead of using a box filter it creates sets of randomly jittered offsets that are used when performing PCF. Most importantly, these offsets are stored in memory in such a way that allows to decide whether a point is fully lit or fully in shadow without having to test all samples. The offsets are first generated on the CPU in a jittered grid pattern of \(n\times n\) size. Their coordinates are normalized, so all samples lie within the \([0:1]\) range in the \(x\) and \(y\) axes. Then, all the samples are moved from the grid into a disk domain using the following equations.
 \begin{align}
 	u &= \sqrt{y} \times \cos(2\pi x)\\[10pt]
 	v &= \sqrt{y} \times \sin(2\pi x)
@@ -354,7 +354,29 @@ A substantial problem of PCF algorithms is surface acne, which gets worse the la
 
 \subsection{Implementing PCSS}
 \label{section:pcss}
-Here, percentage-closer soft shadows are described.
+Percentage-closer soft shadows, as described in section \ref{section:soft_shadow_maps}, utilize the PCF technique and the fact that the shadows created with it can have varying levels of smoothness. The smoothness, or the size of the penumbra can be controlled by the kernel size and the scale of the sample offsets. When correctly driven, varying the size of the penumbra on a per-pixel basis can create plausible soft shadows that harden when close to the occluder. To achieve that, the estimated size of the penumbra has to be computed based on information about occluders and the size of the light source.
+
+The algorithm first gathers information on the occluders that block the light source from the point of view of a point in the scene that is being shaded. For this a search radius is calculated from the following formula by projecting the base of a vision cone of the shaded point of the light source onto the shadow map.
+\begin{align}
+	s_{lv} &= \frac{s_{lw}}{s_{lf}} \label{eq:pcss_light_size} \\[10pt] 
+	r &= s_{lv} \cdot \frac{p_{vz} - n}{p_{vz}}
+\end{align}
+In equation \ref{eq:pcss_light_size} \(s_{lv}\) is the size of the light source in light view space, \(s_{lw}\) is the size in world space and \(s_{lf}\) is the size of the light frustum. A square frustum is assumed, of size \(s_{lf}\times s_{lf}\). The sampling radius \(r\) is then calculated using the \(n\) - near clipping plane and \(p_{vz}\) being the \(z\) coordinate of the scene point in light view space, as illustrated in Fig. \ref{fig:shadow_map_pcss_search}. This search radius is then used to sample the shadow map in the area defined by \(r\) around the coordinates of the initial sample position in light space.
+\begin{figure}[hb]
+    \centering
+	\includegraphics[width=0.33\textwidth]{./graf/shadow_mapping_pcss_search.pdf}
+	\caption{The scene point in light view space \(p_l\) and its view cone marked in dashed lines project the area of the light source \(l\) onto the light frustum near plane \(n\). This creates the search radius \(r\) where depth samples are taken from the depth map, marked with black dots. These are averaged to obtain the average occluder depth \(z_{avg}\).}
+	\label{fig:shadow_map_pcss_search}
+\end{figure}
+Sample offsets can be obtained in any way, as long as they are in the range \([0:1]\) and can be scaled with \(r\), for example using the sample offsets generated for adaptive PCF. The obtained depth values are averaged together and produce the average blocker depth \(z_{avg}\). Once this is known, the following formulas can be used to calculate the penumbra width, and from that the filter size.
+\begin{align}
+	s_{p} &= \frac{p_{vz} - z_{avg}}{z_{avg}}s_{lv} \label{eq:pcss_penumbra} \\[10pt] 
+	s_f &= \frac{n}{p_{vz}}s_{p}
+\end{align}
+Equation \ref{eq:pcss_penumbra} calculates the penumbra size \(s_{p}\) and is based on similar triangles. Then the filter size \(s_f\) can be derived. This can be directly used for performing PCF.
+
+The size of the penumbras is not dependent on the resolution of the shadow map thanks to equation \ref{eq:pcss_light_size}. PCSS however does have its problems. It is not practical to perform the occluder search exhaustively, so the number of samples needs to be carefully chosen to avoid undersampling and give meaningful estimates. The amount of depth map texture lookups is even higher than with PCF, which puts a strain on texture memory bandwidth. The contact-hardening shadows that it produces are not physically correct. This is in part due to the fact that the algorithm uses the average depth of occluders and assumes that the average occluder, light and receiver are planar and parallel. Additionally, shadow map samples taken for averaging often stretch beyond the shadow map area containing the actual occluders.
+
 
 % \begin{itemize}
 % \item solution to the problem proposed by the author of the thesis
