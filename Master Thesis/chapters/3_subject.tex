@@ -352,6 +352,10 @@ As an argument against this technique one could point out the fact that GPU hard
 
 A substantial problem of PCF algorithms is surface acne, which gets worse the larger the kernels and offset scales are used. This is because the sampled area of the shadow map increases and read depth values may vary more, while the depth of the scene point being shaded does not change. This can be again combated with a depth bias. An offset cone can be also used by applying higher bias the further from the original sample a point is. These however still need to be hand-tuned on a scene by scene basis. Additionally, it is important to note that, while PCF approaches do generate smooth shadows, they are not physically correct soft shadows. This is both due to the fact that the amount of smoothing is constant and that scene surface points are sampled. For an accurate shadow the area of the light source would need to be sampled for visibility from a given scene point, not the other way around.
 
+\subsection{Implementing PCSS}
+\label{section:pcss}
+Here, percentage-closer soft shadows are described.
+
 % \begin{itemize}
 % \item solution to the problem proposed by the author of the thesis
 % \item theoretical analysis of proposed solutions
