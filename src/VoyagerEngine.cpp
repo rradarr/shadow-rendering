@@ -368,7 +368,7 @@ void VoyagerEngine::LoadAssets()
         // Load suzanne
         {
             std::vector<DirectX::XMFLOAT4> boundingB;
-            suzanneMesh.CreateFromFile("cube_split.obj", &boundingB);
+            suzanneMesh.CreateFromFile("Test Resources/test_dragon/dragon.obj", &boundingB);
             suzanne = SceneObject(&suzanneMesh, boundingB);
 
             suzanne.SetAlbedoTexture(descriptorHandle);
@@ -381,8 +381,11 @@ void VoyagerEngine::LoadAssets()
                 WVPResources.push_back(resource);
             }
             suzanne.SetWVPPerFrameBufferLocations(WVPResources);
-            suzanne.scale = DirectX::XMFLOAT3(0.7f, 0.7f, 0.7f);
-            suzanne.position = DirectX::XMFLOAT4(0.f, 0.7f, 0.f, 1.f);
+            // suzanne.scale = DirectX::XMFLOAT3(0.7f, 0.7f, 0.7f);
+            // suzanne.position = DirectX::XMFLOAT4(0.f, 0.7f, 0.f, 1.f);
+            // Dragon settings \/
+            suzanne.scale = DirectX::XMFLOAT3(1.5f, 1.5f, 1.5f);
+            suzanne.position = DirectX::XMFLOAT4(0.f, 0.43f, 0.f, 1.f);
             // Sponza settings \/
             // suzanne.scale = DirectX::XMFLOAT3(0.01f, 0.01f, 0.01f);
             // suzanne.position = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
