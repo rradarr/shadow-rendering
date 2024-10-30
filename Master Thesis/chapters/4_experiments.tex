@@ -25,21 +25,269 @@ The test application allows the user to choose a rendering mode and observe the 
 As mentioned in section \ref{chapter:3_test_app}, the Tracy profiler open source library and tool was used to gather and visualize profiling data. For additional profiling and debugging RenderDoc, PIX and Nsight Graphics were used.
 
 \section{Data sets}
-The data sets consist of multiple scenes used for testing.
-% TODO: describe the scenes.
+The data sets consist of multiple scenes used for testing. Three scenes, Crytek Sponza, Power Plant and Chinese Dragon are from the Computer Graphics Archive \cite{bib:internet:test_scenes}. The Crytek Sponza scene contains 262267 triangles and 184330 vertices. The Power Plant scene contains 12759246 triangles and 10614919 vertices. The Chinese Dragon contains 871306 triangles and 438929 vertices. They were chosen because they are standard test scenes in the computer graphics community, which are freely available on the internet. They also contain highly varying amounts of vertices, with the Power Plant scene having almost sixty times more vertices than Cytek Sponza, which allows to test the influence of geometric complexity on the performance of the algorithms. The Chinese Dragon scene is much more contained and showcases small-scale shadows and self-shadowing. Additionally, a simple scene containing a unit cube positioned on a ground plane was created in Blender. This scene contains only twenty-eight vertices. Its simplicity allows to easily spot differences in the appearance of shadows in the render and highlights issues such as peter-panning.
 
 \section{Results}
 % \begin{itemize}
 % \item presentation of results, analysis and wide discussion of elaborated results, conclusions
 % \end{itemize}
 
-The results of testing each implemented shadow rendering method are presented in the following sections. Each set of results is complemented by a description and discussion, highlighting possible causes and, if appropriate, possible fixes. The techniques might undergo different tests based on their characteristic.
+The results of testing each implemented shadow rendering method are presented in the following sections. Each set of results is complemented by a description and discussion.
 
 \subsection{Planar shadow mapping}
-% TODO: do I want to even test this?
+Do I even want to test this?
+% TODO.
 
 \subsection{Basic shadow maps}
 % TODO: test them with different scenes (complexity and scale), different shadow map resolutions, different render resolutions, different biases
+The basic implementation of shadow mapping from section \ref{section:basic_mapping_impl} was tested with all four scenes at different shadow map and output resolutions. The results are shown in Fig. \ref{fig:plot:basic_results}.
+\begin{figure}[h]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+    \begin{tikzpicture}
+        \begin{semilogxaxis}[
+            small,
+            xlabel={Shadow map resolution},
+            ylabel={FPS},
+            xtick={512,1024,2048,4096},
+            xticklabels={512,1024,2048,4096},
+            % legend style={
+            %     overlay,
+            %     at={(1.25,0.5)},
+            %     anchor=center},
+            y tick label style={
+                /pgf/number format/.cd,
+                    fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                    fixed, % 1.0 zamiast 1
+                    precision=1,
+                /tikz/.cd
+            },
+            x tick label style={
+                /pgf/number format/.cd,
+                    fixed,
+                    fixed,
+                    precision=2,
+                /tikz/.cd
+            }
+            ]
+            \addplot [color=green]
+            coordinates {
+                (512,1762)(1024,1746)(2048,1713)(4096,1631)}; %\addlegendentry{720p}
+            \addplot [color=black]
+            coordinates {
+                (512,1458)(1024,1428)(2048,1402)(4096,1363)}; %\addlegendentry{1080p}
+            \addplot [color=brown]
+            coordinates {
+                (512,1243)(1024,1268)(2048,1240)(4096,1192)}; %\addlegendentry{2k}
+        \end{semilogxaxis} 
+    \end{tikzpicture}
+    \caption{Results for Chinese Dragon scene.}
+    \label{fig:plot:basic_dragon}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+    \begin{tikzpicture}
+        \begin{semilogxaxis}[
+            small,
+            xlabel={Shadow map resolution},
+            ylabel={FPS},
+            xtick={512,1024,2048,4096},
+            xticklabels={512,1024,2048,4096},
+            % legend style={
+            %     overlay,
+            %     at={(1.25,0.5)},
+            %     anchor=center},
+            y tick label style={
+                /pgf/number format/.cd,
+                    fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                    fixed, % 1.0 zamiast 1
+                    precision=1,
+                /tikz/.cd
+            },
+            x tick label style={
+                /pgf/number format/.cd,
+                    fixed,
+                    fixed,
+                    precision=2,
+                /tikz/.cd
+            }
+            ]
+            \addplot [color=green]
+            coordinates {
+                (512,2974)(1024,2983)(2048,3025)(4096,2998)}; %\addlegendentry{720p}
+            \addplot [color=black]
+            coordinates {
+                (512,3017)(1024,2978)(2048,3031)(4096,3082)}; %\addlegendentry{1080p}
+            \addplot [color=brown]
+            coordinates {
+                (512,3015)(1024,3019)(2048,3082)(4096,3092)}; %\addlegendentry{2k}
+        \end{semilogxaxis} 
+    \end{tikzpicture}
+    \caption{Results for the Cube scene.}
+    \label{fig:plot:basic_cube}
+\end{subfigure}
+
+\vspace{20pt}
+\begin{subfigure}[t]{0.48\textwidth}
+    \begin{tikzpicture}
+        \begin{semilogxaxis}[
+            small,
+            xlabel={Shadow map resolution},
+            ylabel={FPS},
+            xtick={512,1024,2048,4096},
+            xticklabels={512,1024,2048,4096},
+            % legend style={
+            %     overlay,
+            %     at={(1.25,0.5)},
+            %     anchor=center},
+            y tick label style={
+                /pgf/number format/.cd,
+                    fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                    fixed, % 1.0 zamiast 1
+                    precision=1,
+                /tikz/.cd
+            },
+            x tick label style={
+                /pgf/number format/.cd,
+                    fixed,
+                    fixed,
+                    precision=2,
+                /tikz/.cd
+            }
+            ]
+            \addplot [color=green]
+            coordinates {
+                (512,259)(1024,261)(2048,251)(4096,230)}; %\addlegendentry{720p}
+            \addplot [color=black]
+            coordinates {
+                (512,250)(1024,251)(2048,243)(4096,223)}; %\addlegendentry{1080p}
+            \addplot [color=brown]
+            coordinates {
+                (512,240)(1024,240)(2048,232)(4096,213)}; %\addlegendentry{2k}
+        \end{semilogxaxis} 
+    \end{tikzpicture}
+    \caption{Results for the Power Plant scene.}
+    \label{fig:plot:basic_power}
+\end{subfigure}
+\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+    \begin{tikzpicture}
+        \begin{semilogxaxis}[
+            small,
+            xlabel={Shadow map resolution},
+            ylabel={FPS},
+            xtick={512,1024,2048,4096},
+            xticklabels={512,1024,2048,4096},
+            % legend style={
+            %     overlay,
+            %     at={(1.25,0.5)},
+            %     anchor=center},
+            y tick label style={
+                /pgf/number format/.cd,
+                    fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                    fixed, % 1.0 zamiast 1
+                    precision=1,
+                /tikz/.cd
+            },
+            x tick label style={
+                /pgf/number format/.cd,
+                    fixed,
+                    fixed,
+                    precision=2,
+                /tikz/.cd
+            }
+            ]
+            \addplot [color=green]
+            coordinates {
+                (512,3098)(1024,3072)(2048,2986)(4096,2213)}; %\addlegendentry{720p}
+            \addplot [color=black]
+            coordinates {
+                (512,2912)(1024,2795)(2048,2467)(4096,1750)}; %\addlegendentry{1080p}
+            \addplot [color=brown]
+            coordinates {
+                (512,2116)(1024,2038)(2048,1852)(4096,1416)}; %\addlegendentry{2k}
+        \end{semilogxaxis} 
+    \end{tikzpicture}
+    \caption{Results for the Crytek Sponza scene.}
+    \label{fig:plot:basic_sponza}
+\end{subfigure}
+\caption{Frames per second for all test scenes, for different sizes of the shadow map and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\).}
+\label{fig:plot:basic_results}
+\end{figure}
+
+The test results mostly match the expectation that fewer FPS will be produced with increasing shadow map resolution and output resolution. The only exception is plot \ref{fig:plot:basic_cube} of the Cube scene results. This is however probably due to the fact that this scene is so simple, and in effect is rendered with such high FPS (highest in this test set, over 3000), that any interruptions from other programs on the machine will be visible. Inconsistencies might also be produced by hardware cores' dynamic clock rates, which can vary over the duration of the test.
+
+The basic shadow mapping algorithm is simple enough to produce high FPS. Even in the most complex scene, the Power Plant, over 210 frames are rendered at 2k output and 4k shadow map resolution.
+
+Looking at the shapes of the plots, it can be said that the basic shadow mapping algorithm is not dependent on output resolution. The lower FPS for higher output resolutions stem mostly from the sole fact that more pixel need to be rendered, because the FPS falloffs along the x-axis follow the same shape. In most cases the drop in FPS between the lowest and highest shadow map resolution is the same, regardless of the output resolution. 
+
+The plots have their x-axis in logarithmic scale. Taking that into account, it can be observed that the FPS counts fall linearly with growing shadow map resolutions.
+
+The algorithm's performance is not view-dependent. When traversing the scene the frame rates are stable. This is backed by the fact that in basic shadow mapping the same work is performed for each rendered pixel, consisting of a comparison operation with the depth value stored in the depth map.
+
+Using the Tracy profiler it can be confirmed that the renderer's performance is limited by the computations performed on the GPU, as the CPU thread spent approximately \(30\%\) of time waiting for the GPU resources to be available. Tracy also reports that approximately \(40\%\) of the frame time was spent on the shadow map render pass and \(52\%\) on the main render pass. The remaining time was spent rendering the GUI and synchronizing. This can be expected as with this simple technique the shadow map pass is almost as expensive as the main pass. The main pass is slightly more involved as it outputs pixels and performs simple shading, as well as performs the shadow mapping itself, which requires texture lookups and comparisons that add time.
+
+The rendering results for the Chinese Dragon are presented in Fig. \ref{fig:test_basic_dragon_screens} and in Fig. \ref{fig:test_basic_sponza_screens} the Crytek Sponza is presented.
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_512.png}
+        \caption{The Chinese Dragon rendered with \(512\times 512\) shadow map.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_1024.png}
+        \caption{The Chinese Dragon rendered with \(1024\times 1024\) shadow map.}
+    \end{subfigure}
+
+    \begin{subfigure}{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_2048.png}
+        \caption{The Chinese Dragon rendered with \(2048\times 2048\) shadow map.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_4096.png}
+        \caption{The Chinese Dragon rendered with \(4096\times 4096\) shadow map.}
+    \end{subfigure}
+
+    \caption{The Chinese Dragon scene rendered with different shadow map resolutions, using the basic shadow mapping algorithm.}
+    \label{fig:test_basic_dragon_screens}
+\end{figure}
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/sponza_basic_fhd_512.png}
+        \caption{The Crytek Sponza rendered with \(512\times 512\) shadow map.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/sponza_basic_fhd_1024.png}
+        \caption{The Crytek Sponza rendered with \(1024\times 1024\) shadow map.}
+    \end{subfigure}
+
+    \begin{subfigure}{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/sponza_basic_fhd_2048.png}
+        \caption{The Crytek Sponza rendered with \(2048\times 2048\) shadow map.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/sponza_basic_fhd_4096.png}
+        \caption{The Crytek Sponza rendered with \(4096\times 4096\) shadow map.}
+    \end{subfigure}
+
+    \caption{The Crytek Sponza scene rendered with different shadow map resolutions, using the basic shadow mapping algorithm.}
+    \label{fig:test_basic_sponza_screens}
+\end{figure}
+
+The Chinese Dragon results are quite good for higher resolution shadow maps, since the shadow map texels map many to one with regard to screen pixels. Aliasing is however very visible for lower resolutions. Crytek Sponza suffers from shadow acne on vertical surfaces. This is a sign of badly chosen shadow bias. It gets less visible as resolution rises, but is always present. Even at the highest resolution, shadow map texel borders are still visible, where they were not visible in the Chinese Dragon scene. This is due to the fact that the shadow map covers a larger area and each shadow map texel covers more space on the screen.
 
 \subsection{Filtered shadow maps}
 
@@ -50,6 +298,10 @@ The results of testing each implemented shadow rendering method are presented in
 \subsubsection{PCF with bilinear filtering}
 
 \subsubsection{Adaptive percentage-closer filtering}
+
+\subsection{Soft shadows with shadow maps}
+
+\subsubsection{PCSS}
 
 % \begin{table}
 % \centering

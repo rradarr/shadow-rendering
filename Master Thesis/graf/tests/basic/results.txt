@@ -1,0 +1,55 @@
+dragon:
+hd  512     1762 fps
+fhd 512     1458 fps
+2k  512     1243 fps
+hd  1024    1746 fps
+fhd 1024    1428 fps
+2k  1024    1268 fps
+hd  2048    1713 fps
+fhd 2048    1402 fps
+2k  2048    1240 fps
+hd  4096    1631 fps
+fhd 4096    1363 fps
+2k  4096    1192 fps
+
+cube:
+hd  512     2974 fps
+fhd 512     3017 fps
+2k  512     3015 fps (jumps around periodically)
+hd  1024    2983 fps
+fhd 1024    2978 fps
+2k  1024    3019 fps
+hd  2048    3025 fps
+fhd 2048    3031 fps
+2k  2048    3082 fps
+hd  4096    2998 fps
+fhd 4096    3082 fps
+2k  4096    3092 fps
+
+power:
+hd  512     259 fps
+fhd 512     250 fps
+2k  512     240 fps
+hd  1024    261 fps
+fhd 1024    251 fps
+2k  1024    240 fps
+hd  2048    251 fps
+fhd 2048    243 fps
+2k  2048    232 fps
+hd  4096    230 fps
+fhd 4096    223 fps
+2k  4096    213 fps
+
+sponza:
+hd  512     3098 fps
+fhd 512     2912 fps
+2k  512     2116 fps
+hd  1024    3072 fps
+fhd 1024    2795 fps
+2k  1024    2038 fps
+hd  2048    2986 fps
+fhd 2048    2467 fps
+2k  2048    1852 fps
+hd  4096    2213 fps
+fhd 4096    1750 fps
+2k  4096    1416 fps
