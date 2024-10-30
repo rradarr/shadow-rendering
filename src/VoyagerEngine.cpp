@@ -40,7 +40,7 @@ void VoyagerEngine::OnInit(HWND windowHandle)
 
     // Note: just override this to false if vsync is ok.
     allowsTearing = CheckTearingSupport();
-    allowsTearing = false;
+    // allowsTearing = false;
     LoadPipeline();
     LoadAssets();
     LoadScene();
@@ -158,6 +158,10 @@ void VoyagerEngine::OnUpdate()
     //Update light params
     {
         RenderingState renderState = EngineStateModel::GetInstance()->GetRenderingState();
+        lightParams.lightNearFarFrustumSize.x = 1.f;
+        lightParams.lightNearFarFrustumSize.y = 50.f;
+        lightParams.lightNearFarFrustumSize.z = 7.f;
+        lightParams.lightNearFarFrustumSize.w = renderState.worldSpaceLightSize;
         lightParams.lightFilterKernelScaleBias.x = static_cast<float>(renderState.chosenPFCMode);
         lightParams.lightFilterKernelScaleBias.y = static_cast<float>(renderState.manualPCFKernelSize);
         lightParams.lightFilterKernelScaleBias.z = renderState.pcfSampleOffset;
@@ -382,6 +386,9 @@ void VoyagerEngine::LoadAssets()
             // Sponza settings \/
             // suzanne.scale = DirectX::XMFLOAT3(0.01f, 0.01f, 0.01f);
             // suzanne.position = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
+            // Power Plant Settings \/
+            // suzanne.scale = DirectX::XMFLOAT3(0.0002f, 0.0002f, 0.0002f);
+            // suzanne.position = DirectX::XMFLOAT4(-12.f, -1.f, 9.f, 1.f);
             DirectX::XMStoreFloat4x4(&suzanne.rotation, DirectX::XMMatrixRotationY(DirectX::XMConvertToRadians(180.f)));
 
             suzanne.UpdateBoundingBox();
@@ -460,7 +467,7 @@ void VoyagerEngine::LoadAssets()
             depthOptimizedClearValue.DepthStencil.Stencil = 0;
 
             // Create the resource.
-            const unsigned int shadowMapResolution = 512U; // TODO: was 4096
+            const unsigned int shadowMapResolution = 4096U; // TODO: was 4096
             CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, shadowMapResolution, shadowMapResolution, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
             shadowMap.CreateEmpty(resourceDesc, srvDesc, D3D12_RESOURCE_STATE_GENERIC_READ, &depthOptimizedClearValue);
 
@@ -689,14 +696,14 @@ void VoyagerEngine::SetLightPosition()
 
     // Set the WVP matrices of the shadow mapping light.
     // Set the projection matrix.
-    DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 9.f, 25.f); // TODO: calculate this from the scene.
-    // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 1.f, 50.f);
+    // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 9.f, 25.f); // TODO: calculate this from the scene.
+    DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 1.f, 50.f);
     // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(50.f, 50.f, 1.f, 80.f); // <- Sponza settings.
     // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixPerspectiveLH(7.f, 7.f, 9.f, 25.f);
     DirectX::XMStoreFloat4x4(&m_shadowMapLightCamera.projMat, tmpMat);
     // Set the view matrix.
     m_shadowMapLightCamera.camPosition = DirectX::XMVECTOR{10.f, 10.f, -10.f, 1.f};
-    // shadowMapLightCamera.camPosition = DirectX::XMVECTOR{6.f, 20.f, -6.f, 1.f}; // <- Sponza settings.
+    // m_shadowMapLightCamera.camPosition = DirectX::XMVECTOR{6.f, 20.f, -6.f, 1.f}; // <- Sponza settings.
     m_shadowMapLightCamera.camTarget = DirectX::XMVECTOR{0.f, 0.f, 0.f, 1.f};
     tmpMat = DirectX::XMMatrixLookAtLH(
         m_shadowMapLightCamera.camPosition,

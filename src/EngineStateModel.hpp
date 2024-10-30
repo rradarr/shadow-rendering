@@ -30,6 +30,7 @@ struct RenderingState {
     static const char* pcfModeNames[static_cast<int>(PCFMode::NUM_PCF_MODES)];
     unsigned int manualPCFKernelSize = 3;
     float pcfSampleOffset = 1.f;
+    float worldSpaceLightSize = 0.1f;
     float inShaderDepthBias = 0.f;
     float ambientStrength = 0.02f;
     int useBilinearFiltering = 0;

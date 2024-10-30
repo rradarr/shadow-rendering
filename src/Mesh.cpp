@@ -401,13 +401,26 @@ bool Mesh::LoadModelFromFile(const std::string fileName, std::vector<Vertex>& me
             vertexZ = attrib.vertices[3 * shapes[shapeID].mesh.indices[indexID].vertex_index + 2];
 
             // Two (u, v) attrib.texcoords entries per unwrapped vertex(!)
-            vertexU = attrib.texcoords[2 * shapes[shapeID].mesh.indices[indexID].texcoord_index];
-            vertexV = attrib.texcoords[2 * shapes[shapeID].mesh.indices[indexID].texcoord_index + 1];
+            if(attrib.texcoords.size() > 0) {
+                vertexU = attrib.texcoords[2 * shapes[shapeID].mesh.indices[indexID].texcoord_index];
+                vertexV = attrib.texcoords[2 * shapes[shapeID].mesh.indices[indexID].texcoord_index + 1];
+            }
+            else {
+                vertexU = 0.f;
+                vertexV = 0.f;
+            }
 
             // Three (x, y, z) attrib.normals entries per face.
-            normalX = attrib.normals[3 * shapes[shapeID].mesh.indices[indexID].normal_index];
-            normalY = attrib.normals[3 * shapes[shapeID].mesh.indices[indexID].normal_index + 1];
-            normalZ = attrib.normals[3 * shapes[shapeID].mesh.indices[indexID].normal_index + 2];
+            if(attrib.normals.size() > 0) {
+                normalX = attrib.normals[3 * shapes[shapeID].mesh.indices[indexID].normal_index];
+                normalY = attrib.normals[3 * shapes[shapeID].mesh.indices[indexID].normal_index + 1];
+                normalZ = attrib.normals[3 * shapes[shapeID].mesh.indices[indexID].normal_index + 2];
+            }
+            else {
+                normalX = 0.f;
+                normalY = 0.f;
+                normalZ = 0.f;
+            }
 
             Vertex vertex = {
                 {vertexX, vertexY, vertexZ},

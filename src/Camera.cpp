@@ -5,7 +5,7 @@
 void Camera::InitCamera(DirectX::XMFLOAT4 cameraPosition, DirectX::XMFLOAT4 cameraTarget, float frameAspectRatio)
 {
     // build projection and view matrix
-    DirectX::XMMATRIX tmpMat = DirectX::XMMatrixPerspectiveFovLH(45.0f * (3.14f / 180.0f), frameAspectRatio, 0.1f, 20.f);
+    DirectX::XMMATRIX tmpMat = DirectX::XMMatrixPerspectiveFovLH(45.0f * (3.14f / 180.0f), frameAspectRatio, 0.1f, 100.f/*20.f*/);
     XMStoreFloat4x4(&projMat, tmpMat);
 
     // set starting camera state

@@ -7,7 +7,8 @@ struct PSInput
     float4 lightPosition_viewSpace : LIGHT;
     float4 vertexPosition_viewSpace : VERTVIEW;
     float3 normal_viewSpace : NORMVIEW;
-    float4 positionInLightSpace : LIGHTVIEWPOS;
+    float4 positionInLightView : LIGHTVIEWPOS;
+    float4 positionInLightProjection : LIGHTPROJPOS;
 };
 
 struct wvpMatrixValue
@@ -23,6 +24,7 @@ ConstantBuffer<wvpMatrixValue> lightWVP : register(b2);
 struct lightParams
 {
     float3 lightPosition;
+    float4 lightNearFarFrustumSize;
     float4 lightFilterKernelScaleBias;
     float4 mapAmbient;
 };
@@ -57,10 +59,10 @@ PSInput main(float4 position : POSITION, float4 color : COLOR, float2 uv : UV, f
     result.lightPosition_viewSpace = lightPosition_viewSpace;
 
     // Calculate position in light space.
-    result.positionInLightSpace = mul(vertexPosition_worldSpace, lightWVP.viewMatrix);
-    result.positionInLightSpace = mul(result.positionInLightSpace, lightWVP.projMatrix);
+    result.positionInLightView = mul(vertexPosition_worldSpace, lightWVP.viewMatrix);
+    result.positionInLightProjection = mul(result.positionInLightView, lightWVP.projMatrix);
     // Note: When using this offset matrix, DO NOT use the shadowMapUV transform in the pixel shader!
-    result.positionInLightSpace = mul(result.positionInLightSpace, GetShadowMapOffsetMatrix());
+    result.positionInLightProjection = mul(result.positionInLightProjection, GetShadowMapOffsetMatrix());
 
     result.color = color;
     result.texCoord = uv;

@@ -110,7 +110,7 @@ void ImGuiRenderingOptions::DisplayShadowMapOptions()
         "contains randomly jittered offsets for PCF samples. It is stored in a "
         "3D texture. The offset scale can be adjusted to control the spread of samples.");
         
-        ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 50.f, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+        ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 1.f, "%.3f", ImGuiSliderFlags_AlwaysClamp);
     }
     if(chosenPCFMode == static_cast<int>(RenderingState::PCFMode::PCSS_RANDOM_OFFSETS)) {
         ImGui::TextWrapped("This technique approximates soft shadows with the "
@@ -118,6 +118,8 @@ void ImGuiRenderingOptions::DisplayShadowMapOptions()
         "light source. It uses PCF with random offset texture.");
         
         ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 50.f, "%.3f"); // TODO: debug: add ImGuiSliderFlags_AlwaysClamp later
+    
+        ImGui::SliderFloat("Light size in world space", &engineState->GetRenderingState().worldSpaceLightSize, 0.f, 0.5f, "%.3f");
     }
     
 }

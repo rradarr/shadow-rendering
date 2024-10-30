@@ -49,11 +49,13 @@ private:
 
     struct lightParamsConstantBuffer {
         DirectX::XMFLOAT3 lightPosition; BYTE pad[4];
+        // Here we store the light near and far planes, square frustum size and world size of the light.
+        DirectX::XMFLOAT4 lightNearFarFrustumSize;
         // Here we store in a silly way the light algorithm type (eg. for shadow mapping type of PCF), kernel size, offset scale and in-shader bias.
         DirectX::XMFLOAT4 lightFilterKernelScaleBias;
         // Here only the shadow map ambient and sampler kind are stored for now.
         DirectX::XMFLOAT4 mapAmbientSampler;
-        BYTE padding[224]; // Constant buffers must be 256-byte aligned which has to do with constant reads on the GPU.
+        BYTE padding[192]; // Constant buffers must be 256-byte aligned which has to do with constant reads on the GPU.
     };
     //int ConstantBufferPerObjectAlignedSize = (sizeof(wvpConstantBuffer) + 255) & ~255;
 
