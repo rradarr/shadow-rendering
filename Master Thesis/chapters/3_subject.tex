@@ -2,10 +2,18 @@
 \label{chapter:3_subject}
 
 \section{Test application}
+\label{chapter:3_test_app}
 % TODO: describe what you wrote
+For the purpose of getting familiar with the techniques and testing them, a test application was created. It allows a user to switch between implemented rendering techniques and observe their effects in an interactive first-person scene.
+
+The application was written in the C++ programming language. It uses the Win32 platform to create windows in a Windows operating system. It uses DirectX 12 to utilize the GPU for rendering graphics. DirectX 12 was chosen because it is the newest of DirectX versions, allowing for granular control over the rendering process and boasting advanced features. It is also very widely adopted for all sorts of computer graphics tasks, making it worth specializing in. Additionally, the DirectX 12 API is much more verbose and involved as compared to, for example, OpenGL, which forces the programmer to gain more in-depth knowledge about graphics programming and all the processes involved.
+
+Two notable open-source libraries were utilized in the project. Dear ImGui is a library simplifying the creation of graphical user interfaces. It is compatible with all the major graphics programming APIs, including DX12, making it fast and easy to integrate into a project, providing am intuitive and smooth user experience at the same time. The other library is the Tracy Profiler. The instrumentation library is just a part of the Tracy ecosystem, with separate applications like the profiler to gather and analyze performance data. It is simple to incorporate into an existing project and very performant, adding almost no overhead. Code zones and frames that will be captured when profiling are marked manually by the programmer, giving them full control over what data is captured. This also improves the readability of the outputs, which stands in contrast with other profilers that automatically gather data and can easily overwhelm the user and clutter the presentation with the amount of information provided.
+
+The project uses CMake to fetch all the project dependencies and create a buildable MSVC project.
 
 \section{Implemented shadow rendering techniques}
-Below, all the shadow rendering techniques that have been implemented during work on this thesis are described, along with explanations of their algorithms.
+In the following sections, all the shadow rendering techniques that have been implemented during work on this thesis are described, along with explanations of their algorithms.
 
 \subsection{Planar shadows implementation}
 \label{section:planar_shadows_impl}
@@ -20,19 +28,14 @@ Planar shadows, as described in section \ref{section:planar_shadows}, are a very
 \end{figure}
 
 Using this geometric understanding and similar triangles, marked in Fig. \ref{fig:projection_shadow} in dashed lines, the following equations and a projection matrix can be derived. Assuming \(l\) to be the position of a light source, \(v\) to be the position of a vertex of the shadow caster and \(p\) the position of the projected shadow vertex, a projection onto the \(y=0\) plane is described by:
-
 \begin{align}
 	\frac{p_x - l_x}{v_x - l_x} = \frac{l_y}{l_y - v_y} \Longleftrightarrow p_x = \frac{l_yv_x - l_xv_y}{l_y - v_y}
 \end{align}
-
 The \(z\) component is derived in analogous way:
-
 \begin{align}
 	\frac{p_z - l_z}{v_z - l_z} = \frac{l_y}{l_y - v_y} \Longleftrightarrow p_z = \frac{l_yv_z - l_zv_y}{l_y - v_y}
 \end{align}
-
 The \(y\) component will be \(y=0\) since the projection happens onto the \(xz\) plane. From that the projection matrix can be constructed:
-
 \begin{align}
 	\mathbf{M} = 
 	\begin{pmatrix}
@@ -42,7 +45,6 @@ The \(y\) component will be \(y=0\) since the projection happens onto the \(xz\)
 		0 & -1 & 0 & l_y
 	\end{pmatrix}
 \end{align}
-
 The \(l_y - v_y\) factor in the denominator is obtained by utilizing the property of homogenous coordinates, where all components of a vector \(\mathbf{v} = \begin{bmatrix}x & y & z & w\end{bmatrix}^T\) get divided by the \(w\) component, which gives \(\mathbf{v} = \begin{bmatrix}x/w & y/w & z/w & 1\end{bmatrix}^T\).
 
 This matrix can be generalized to project points onto any plane, but this was not implemented.
@@ -69,30 +71,27 @@ In the implementation the matrix is created in the vertex shader based on the po
     \label{fig:projection_shadow_issues}
 \end{figure}
 
-\begin{figure}[h]
+Multiple issues arise with this technique. The receiver must be a flat plane, objects cannot shadow themselves, casters and receivers need separate treatment. Additionally, care needs to be taken to only render the shadow meshes on top of the geometry of a receiver. Since the shadow is a separate mesh, it could be cast beyond the actual surface of the receiver, creating an impossible shadow in the air. This is illustrated in Fig \ref{fig:projection_shadow_fighting} There is another possibility here for an impossible shadow. If the light source is between the caster and receiver, an anti-shadow will be cast as shown in Fig \ref{fig:projection_anti_shadow}. This creates another special case that needs to be checked for by the application. Soft shadows are also difficult and costly to achieve, created by projecting the caster geometry multiple times using different discrete locations sampled over the area of the light source. The shadow meshes can then be blended, producing a darker color where more shadows are present. This gives very accurate results with a high number of samples, but is not a viable option for real-time rendering. All these problems make this technique virtually unused in modern rendering engines.
+\begin{figure}[hb]
 	\centering
-	\includegraphics[width=0.3\textwidth]{./graf/projection_anti_shadow.pdf}
+	\includegraphics[width=0.35\textwidth]{./graf/projection_anti_shadow.pdf}
 	\caption{The shadow caster projected through a light source, creating an anti-shadow.}
 	\label{fig:projection_anti_shadow}
 \end{figure}
-
-Multiple issues arise with this technique. The receiver must be a flat plane, objects cannot shadow themselves, casters and receivers need separate treatment. Additionally, care needs to be taken to only render the shadow meshes on top of the geometry of a receiver. Since the shadow is a separate mesh, it could be cast beyond the actual surface of the receiver, creating an impossible shadow in the air. This is illustrated in Fig \ref{fig:projection_shadow_fighting} There is another possibility here for an impossible shadow. If the light source is between the caster and receiver, an anti-shadow will be cast as shown in Fig \ref{fig:projection_anti_shadow}. This creates another special case that needs to be checked for by the application. Soft shadows are also difficult and costly to achieve, created by projecting the caster geometry multiple times using different discrete locations sampled over the area of the light source. The shadow meshes can then be blended, producing a darker color where more shadows are present. This gives very accurate results with a high number of samples, but is not a viable option for real-time rendering. All these problems make this technique virtually unused in modern rendering engines.
 
 % TODO: add some notes on performance.
 
 \subsection{Implementation of basic shadow mapping}
 \label{section:basic_mapping_impl}
 As mentioned in chapter \ref{section:basic_mapping}, shadow mapping for a single light source is performed using two render passes. The first one generates the shadow map itself, the second and final pass renders the scene with shadows determined using the shadow map. The shadow map is a z-buffer, which means that, for each texel, it stores the values of the z coordinate of the scene surface point being rendered. These coordinates are stored after transforming the vertices of the scene into the NDC space, or normalized device coordinate space, of a given light source. This transformation is achieved in the vertex shader, by using the regular world, view, projection (WVP) transformation matrices, with the distinction that the view and projection matrices are not of the scene observer but of the light source. In truth, multiplying the vertex positions by the WVP matrix will result in clip space homogenous coordinates, which then will be transformed automatically by the pipeline into NDC during the perspective division, when the homogenous coordinates are divided by their \(w\) component. The stored depth values will then be in the \(0-1\) range, usually \(0\) being at the near clipping plane and \(1\) at the far clipping plane. This z-buffer can then be used as a texture shader resource in a pixel shader to render the final scene. To read the depth values from the shadow map, the NDC coordinates of each surface point need to be calculated again. The \(x\) any \(y\) components will then be used to access a texel in the shadow map, the \(z\) component will be compared with the contents of the shadow map. Do note that the actual Euclidean distance between the shaded point and the light source is not used, as these values would be in different coordinate spaces. When the shadow map value is accessed, it is compared with the \(z\) value of the point that is currently being shaded. If the shadow map value is greater, then the point being shaded is farther away from the light source than some other surface seen at this point from the point of view of the light. This means that it is not illuminated and is in shadow. Otherwise, the point is lit by the light source. The process is illustrated in Fig. \ref{fig:shadow_map_basic}. Fig. \ref{fig:shadow_map_screens} shows a rendered view of a scene with shadow mapping and the shadow map itself.
-
-
-\begin{figure}[hp]
+\begin{figure}[h]
 	\centering
-	\includegraphics[width=0.5\textwidth]{./graf/shadow_mapping_basic.pdf}
+	\includegraphics[width=0.6\textwidth]{./graf/shadow_mapping_basic.pdf}
 	\caption{The light source \(l\) has stored the depth value \(z_l\) in its shadow map. When rendering the scene from the viewpoint of the observer \(v\), the stored depth is compared to the depth \(z_v\). This value will be larger than the one in the shadow map, so the point will be in shadow.}
 	\label{fig:shadow_map_basic}
 \end{figure}
 
-\begin{figure}[hbp]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}{0.45\textwidth}
 		\centering
@@ -129,8 +128,7 @@ To implement this technique a resource is needed that will be used both as an ad
 When sampling the shadow map as a texture, it is important to do so with a sampler that does not perform any filtering on the texture. Typically, texture filtering helps avoid different kinds of aliasing. Regular color textures however can be filtered and interpolated as they only store color data. The shadow map, which stores depth values, cannot be filtered in the same way as the produced values would be senseless in this process. They would create non-existing apparent surfaces especially noticeable between sharp depth changes, for example between a close object and the far clipping plane.
 
 This observation brings forth one of the issues with shadow mapping: they cannot be filtered to avoid aliasing. One could also attempt to blur a shadow map to achieve soft shadows, but this is not a viable option for the same reason. Because of this basic shadow mapping can only be used to create hard shadows that suffer from aliasing issues, creating shadows that can appear blocky when up close, as in Fig. \ref{fig:shadow_mapping_blocky}. Aliasing can be mitigated by rendering the shadow map into a higher resolution target, but only to a degree. Special techniques allowing for smoothing and filtering shadows generated with shadow mapping will be presented in the following sections.
-
-\begin{figure}
+\begin{figure}[h]
     \centering
 	\includegraphics[width=0.7\textwidth]{./graf/shadow_mapping_blocky.png}
 	\caption{Aliased shadow appearance due to no filtering and low resolution of the shadow map.}
@@ -280,9 +278,9 @@ An attempt to implement LiSPSM was made, but was not successful due to poor cove
 Only a part of the algorithm was implemented, basically providing simplified fitting of the shadow map view. The shadow map camera has certain extents set up by hand for each scene, such that the whole scene fits within view. Since the entire scene is not necessarily viewed at once by the observer, only the part that is within the observer view frustum can be rendered to the shadow map. Therefore, the shadow map post-projection space can be adjusted to include the area viewed by the observer.
 
 This can be achieved by building a fitting transformation matrix \(\mathbf{F}\) that includes translation and scaling, that is applied after the light view and projection matrices, resulting in \(\mathbf{F}\mathbf{P}_L\mathbf{V}_L\). To obtain \(\mathbf{F}\), first the observer view frustum extents need to be found in world space, which can be obtained by applying the inverse of observer view and projection matrices to an NDC cuboid. This can be a cube with ranges \([-1:1]\) in \(x\), \(y\), \(z\) in APIs like OpenGL, or a cuboid with ranges \([-1:1]\) in \(x\) and \(y\), and \([0:1]\) in \(z\) in DirectX. Once the vertices of this cuboid are moved into world space, they can be multiplied by the view and projection matrices of the light source, \(\mathbf{P}_L\mathbf{V}_L\), and their components divided by \(w\) to bring them into the post-projection space of the light source. Once there, a bounding box can be found enclosing these points. To not move the contents of the shadow map beyond the original extent specified for the light source, the components of the vertices of this bounding box can be clamped to the NDC range. The whole process is shown in Fig. \ref{fig:shadow_map_fitting}.
-\begin{figure}
+\begin{figure}[hb]
     \centering
-	\includegraphics[width=0.4\textwidth]{./graf/shadow_map_focusing.pdf}
+	\includegraphics[width=0.5\textwidth]{./graf/shadow_map_focusing.pdf}
 	\caption{The steps involved in fitting the shadow map. The NDC cuboid in a) is in observer post-projection space, or clip space. It is moved to the state presented in b) using inverse matrices, resulting in a world space representation of the viewing frustum. It is them transformed into c), the light view clipping space. Finally, a clamped bounding box is found, shown in d).}
 	\label{fig:shadow_map_fitting}
 \end{figure}
@@ -318,7 +316,7 @@ The angular position of the sample on the disk is then determined by \(x\) and t
 
 Unfortunately, the problem of banding in penumbra regions observed in simple box filtered PCF still persists. Hardware PCF can again be used to smooth the results further, but there is another solution to this problem. Instead of using a single set of jittered sample offsets, \(m\times m\) such sets can be generated and stored in a three-dimensional texture. In the shader this texture is accessed using the screen pixel coordinates, to choose a set of offsets, and then the set is indexed to perform PCF. This way banding is stochastically smoothed out in the final result, as shown in Fig. \ref{fig:pcf_random}. Creating an offset set for each pixel of the final image would consume a lot of memory and not provide significant gains, so small sets, such as \(16\times 16\) are used and tiled over the whole render area. This is enough to generate sufficient noise in the penumbra areas to create a smooth appearance.
 
-\begin{figure}[t]
+\begin{figure}
     \centering
     \begin{subfigure}[t]{0.45\textwidth}
         \includegraphics[width=\textwidth]{./graf/PCF_bilinear.png}

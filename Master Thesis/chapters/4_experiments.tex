@@ -22,9 +22,7 @@ The machine used for performing measurements had the following specification:
 \subsection{Created test application}
 The test application allows the user to choose a rendering mode and observe the results in real time. It also allows to change the viewpoint and observe how the shadows behave in motion. Most rendering modes implement different shadow rendering techniques and some include debug views like wireframe mode or mesh colored by normals. The application is also instrumented with profiling commands which make it possible to connect to an external profiler and collect data in real time, as well as save and load existing profiling data.
 
-The application was written in the C++ programming language. It uses the Win32 platform to create windows in a Windows operating system. It uses DirectX 12 to utilize the GPU for rendering graphics. DirectX 12 was chosen because it is the newest of DirectX versions, allowing for granular control over the rendering process and boasting advanced features. It is also very widely adopted for all sorts of computer graphics tasks, making it worth specializing in. Additionally, the DirectX 12 API is much more verbose and involved as compared to, for example, OpenGL, which forces the programmer to gain more in-depth knowledge about graphics programming and all the processes involved.
-
-Two notable open-source libraries were utilized in the project. Dear ImGui is a library simplifying the creation of graphical user interfaces. It is compatible with all the major graphics programming APIs, including DX12, making it fast and easy to integrate into a project, providing am intuitive and smooth user experience at the same time. The other library is the Tracy Profiler. The instrumentation library is just a part of the Tracy ecosystem, with separate applications like the profiler to gather and analyze performance data. It is simple to incorporate into an existing project and very performant, adding almost no overhead. Code zones and frames that will be captured when profiling are marked manually by the programmer, giving them full control over what data is captured. This also improves the readability of the outputs, which stands in contrast with other profilers that automatically gather data and can easily overwhelm the user and clutter the presentation with the amount of information provided.
+As mentioned in section \ref{chapter:3_test_app}, the Tracy profiler open source library and tool was used to gather and visualize profiling data. For additional profiling and debugging RenderDoc, PIX and Nsight Graphics were used.
 
 \section{Data sets}
 The data sets consist of multiple scenes used for testing.
@@ -41,7 +39,17 @@ The results of testing each implemented shadow rendering method are presented in
 % TODO: do I want to even test this?
 
 \subsection{Basic shadow maps}
-% TODO: test them with different scenes (complexity and scale), different shadow map resolutions, different biases
+% TODO: test them with different scenes (complexity and scale), different shadow map resolutions, different render resolutions, different biases
+
+\subsection{Filtered shadow maps}
+
+\subsubsection{Hardware bilinear filtering}
+
+\subsubsection{Percentage-closer filtering}
+
+\subsubsection{PCF with bilinear filtering}
+
+\subsubsection{Adaptive percentage-closer filtering}
 
 % \begin{table}
 % \centering
