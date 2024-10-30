@@ -1,11 +1,41 @@
 \chapter{Introduction}
 
-\begin{itemize}
-\item introduction into the problem domain
-\item settling of the problem in the domain
-\item objective of the thesis
-\item scope of the thesis
-\item short description of chapters
-\item clear description of contribution of the thesis's author
-\end{itemize}
+\section{The task of rendering}
+
+In this thesis, rendering is understood as the process of obtaining an image from a description of a three-dimensional scene. A scene can be rendered in a multitude of ways, with differences both in the specifics of the initial scene description and the rendered result. The rendered visuals can range from stylized to photorealistic. Rendering happens everywhere where a computer-generated imagery (CGI) is created for a viewer to see.
+
+The wide spectrum of possible rendering results hints at the many ways in which rendering itself is performed. There are various techniques employed during the rendering process, which can be utilized together to create a desired look and fit within performance constraints. In more complex processes, there are many techniques used to render a scene, each responsible for modeling the visual aspects of different real-life phenomena or artificial effects. A renderer could be capable of adding stylized edge detection and cell-shading to an image, rendering glossy and rough surfaces, simulating shadows, reflections, caustics and refraction, dealing with hair and fur or volumetric participating media such as fog, smoke and clouds. Each of the mentioned effects can be rendered using one of many techniques, and many of them are being actively improved upon and researched.
+
+The fact that there are many techniques currently in use to render a single type of effect creates and advantageous situation, where the techniques used can be chosen for each application depending on its characteristic. Two main factors can be discerned as defining the needs of an application: the performance requirements and the desired visual style.
+
+The desired visual style is partially just a matter of preference defined by the style of the project. More importantly however it is a matter of clearly and efficiently conveying visual information, in a way that is consistent with the rest of the application and with what the end user expects. This means that realism, often touted the pinnacle and goal of computer graphics, is not necessarily always the best approach. A CAD (computer-aided design) application or a 3D modelling tool would be made less useful by including realistic reflections, highly contrasting full shadows and motion blur in the rendered viewport. These programs need to clearly convey information about the shape and design of 3D objects, without distractions and obstructions. On the other hand, when a player starts a modern action-adventure game, they expect a level of realism in the game's graphics that allows for immersion in the presented world. The intricate visuals also make for a more engaging experience and can mean a better reception of a game. At the same time, design choices should be made to ensure that the realism or intricacy of the presented graphics do not get in the way of enjoying the gameplay, which in the end should be the main attribute of a video game.
+
+The performance requirements, or performance constraints, are usually better defined and divide rendering into two general categories: real-time rendering and offline rendering. When designing an offline renderer the performance constraints would most likely concern memory usage and possibly general time, or energy, efficiency, as with offline rendering the time it takes to render an image is of small importance. Most important are image quality and fidelity, often also realism. Techniques used in this context can spend as much time performing calculations as is necessary for the desired output. Offline rendering work can also easily be distributed between many machines, so-called render farms. Real-time rendering on the other hand works with very strict and small time budgets. Because a real-time application needs to be responsive to user inputs and give the illusion of continuous motion it is expected to render at least 30 frames per second (FPS), giving the time budget for a single frame of at most 0.03 seconds. This time cannot all be spent on rendering, as user inputs need to be handled and application logic performed in the same time frame. Because of that, real-time applications need to balance visual complexity and performance. They are also often created for more casual consumers than offline rendering programs, so the hardware on which the application will run is expected to be moderately powerful.
+
+\section{Objective}
+
+It is apparent that the choice of rendering techniques is complex and requires in-depth knowledge about each of them as early as the design stages of an application. This thesis aims to provide a guide through the rendering techniques used to render cast shadows in scenes, focusing on those applicable in real-time contexts. Some of the chosen techniques are the most widely adopted techniques, but some, while possibly less popular, are  still noteworthy due to their improved performance or visual quality. This thesis introduces the techniques, gives detailed explanations of their algorithms for a number of them, shows exemplary implementations and compares them in a series of tests. The comparison is made based on measures of performance (execution time), memory consumption and visual fidelity.
+
+To that end a test application is written, giving the ability to test different shadow rendering techniques and interact with the scene in real time. This not only allows to test the techniques in practice, but also improves the understanding of each technique and allows to give more detailed explanations.
+
+\section{Chapter contents}
+In chapter \ref{section:chapter_2}, first the rationale behind the importance of shadows in computer generated images is described, followed by descriptions of specific shadow rendering techniques and their pros and cons. They are introduced in the context of the original publications that describe them and the techniques that came before them.
+
+In chapter \ref{chapter:3_subject} the subject of the thesis is described, being the created test application and implementations of selected shadow rendering algorithms. Implementation details and author's observations from the implementation process are detailed.
+
+Chapter \ref{section:chapter_4} contains the experiments that were performed and their results. Tested are mainly the performance of each technique and the visual results obtained. The tests are carried out using few different scenes to observe how scene complexity impacts the performance. All experiments are accompanied by a discussion of the results and additional observations, for example based on profiling data.
+
+Finally, chapter\ref{section:chapter_5} gives a summary of the work performed within the scope of this thesis, reviews the test results and conclusions from them and proposes possible future research directions.
+
+\section{Author's contribution}
+The author of this thesis is the sole author of its contents, including text, figures, drawings, renders and data, unless specifically stated otherwise. All materials not created by the author are appropriately referenced, including information and knowledge that is utilized thought the thesis. Within the scope of this thesis the author also created a test application with the use of open-source or third party software that is utilized in accordance with respective licenses. 
+
+% \begin{itemize}
+% \item introduction into the problem domain
+% \item settling of the problem in the domain
+% \item objective of the thesis
+% \item scope of the thesis
+% \item short description of chapters
+% \item clear description of contribution of the thesis's author
+% \end{itemize}
 
