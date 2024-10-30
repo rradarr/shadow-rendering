@@ -5,6 +5,8 @@
 #include "ShadowMapMainMaterial.hpp"
 #include "ResourceManager.hpp"
 
+#include "TracyD3D12.hpp"
+
 using Microsoft::WRL::ComPtr;
 
 class ShadowMapRenderer : public Renderer
@@ -23,6 +25,8 @@ public:
     void SetShadowMapSRV(D3D12_GPU_DESCRIPTOR_HANDLE srvHandle) { shadowMapSRVHandle = srvHandle; }
     void SetPCFOffsetsSRV(D3D12_GPU_DESCRIPTOR_HANDLE srvHandle) { pcfOffsetsSRVHandle = srvHandle; }
 
+    void SetTracyContext(TracyD3D12Ctx* tracyContext) { tracyCtx = tracyContext; }
+
     virtual void Render(ComPtr<ID3D12GraphicsCommandList> commandList, const std::vector<SceneObject>& sceneObjects, UINT currentFrameBufferIndex);
 
 private:
@@ -39,6 +43,8 @@ private:
     CD3DX12_CPU_DESCRIPTOR_HANDLE shadowMapDSVHandle;
     D3D12_GPU_DESCRIPTOR_HANDLE shadowMapSRVHandle;
     D3D12_GPU_DESCRIPTOR_HANDLE pcfOffsetsSRVHandle;
+
+    TracyD3D12Ctx* tracyCtx;
 };
 
 /*

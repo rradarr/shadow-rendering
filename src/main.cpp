@@ -14,7 +14,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     std::cout << "Starting application..." << std::endl;
 
-    VoyagerEngine voyager(1500, 1000, "Shadow Rendering");
+    // Screen resolutions: (default: 1500, 1000)
+    // 1280, 720
+    // 1920, 1080
+    // 2560, 1440
+    VoyagerEngine voyager(1920, 1080, "Shadow Rendering");
     int returnCode = WindowsApplication::Run(&voyager, hInstance, nCmdShow);
 
     return returnCode;
