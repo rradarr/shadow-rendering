@@ -295,6 +295,7 @@ The memory usage is wholly dependent on the resolution of the shadow map. If mem
 The following sections present experiments and their results performed using the implementations of different filtering techniques for shadow maps, which were described in sections \ref{section:filtering_shadow_maps} and \ref{section:pcf}.
 
 \subsubsection{Hardware bilinear filtering}
+\label{section:test_bilinear}
 Hardware bilinear filtering is considered a simple filtering method that can improve appearance of shadows generated with shadow maps with practically no performance cost. This is tested for different output and shadow map resolutions in different test scenes and the results are presented in Fig. \ref{fig:plot:bilinear_results}.
 
 \begin{figure}[h]
@@ -488,7 +489,6 @@ The effect on the final rendered result is on the other hand very significant, e
         \includegraphics[width=\textwidth]{./graf/tests/bilinear/cropped/dragon_bilinear_fhd_512.png}
         \caption{The Chinese Dragon rendered with a \(512\times 512\) shadow map with bilinear filtering.}
     \end{subfigure}
-
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_4096.png}
@@ -508,8 +508,264 @@ The effect on the final rendered result is on the other hand very significant, e
 Unfortunately, this filtering means that biasing has to be adjusted, as samples will be taken around the original position. This results in visible shadow acne, especially at lower shadow map resolutions, where shadow map texels cover a larger area on screen. It's noteworthy that, while there will be more pixels that erroneously self-shadow, the contrast of such artifacts will be smaller. This can help hide them at higher shadow map resolutions.
 
 \subsubsection{Percentage-closer filtering}
+PCF is another filtering technique that allows for the creation of arbitrarily sized filter kernels used to filter the results of shadow computations. For the performance tests, the shadow map resolution will be kept constant to measure how kernel size and output resolution affect the FPS counts. Shadow map resolution does not impact the results in the context of this technique, apart from the performance degradation with higher shadow map resolutions observed in previous tests. The results for all scenes, for different square filter kernel sizes and output resolutions are presented in Fig. \ref{fig:plot:pcf_results}.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={3,5,7,9,11},
+                xticklabels={3,5,7,9,11},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (3,1087)(5,410)(7,220)(9,139)(11,96)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (3,654)(5,228)(7,118)(9,73)(11,50)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (3,443)(5,144)(7,74)(9,46)(11,31)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for Chinese Dragon scene.}
+        \label{fig:plot:pcf_dragon}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={3,5,7,9,11},
+                xticklabels={3,5,7,9,11},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (3,2783)(5,980)(7,498)(9,300)(11,203)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (3,1610)(5,462)(7,228)(9,137)(11,93)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (3,945)(5,260)(7,128)(9,78)(11,52)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Cube scene.}
+        \label{fig:plot:pcf_cube}
+    \end{subfigure}
 
-\subsubsection{PCF with bilinear filtering}
+    \vspace{20pt}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={3,5,7,9,11},
+                xticklabels={3,5,7,9,11},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (3,223)(5,153)(7,100)(9,70)(11,51)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (3,188)(5,102)(7,61)(9,40)(11,28)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (3,155)(5,72)(7,40)(9,25)(11,18)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Power Plant scene.}
+        \label{fig:plot:pcf_power}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={3,5,7,9,11},
+                xticklabels={3,5,7,9,11},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (3,920)(5,311)(7,160)(9,98)(11,67)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (3,500)(5,156)(7,79)(9,48)(11,34)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (3,306)(5,94)(7,47)(9,29)(11,19)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Crytek Sponza scene.}
+        \label{fig:plot:pcf_sponza}
+    \end{subfigure}
+    \caption{Frames per second for all test scenes, for different sizes of the filter kernel and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the basic shadow mapping technique with PCF at constant shadow map size \(1024\times 1024\).}
+    \label{fig:plot:pcf_results}
+\end{figure}
+
+The results show performance dropping exponentially with regard to increasing filter kernel size. This is expected, as for a kernel of size \(n\) there are \(n^2\) depth comparisons performed. This fact makes high kernel sizes impractical and limits the usability of the approach. A larger smoothing effect is better achieved by using a scale factor to scale the sample offsets within the filter kernel than by increasing the kernel size.
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_3x3.png}
+        \caption{The shadow of the Chinese Dragon filtered with a \(3\times 3\) kernel.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_11x11.png}
+        \caption{The shadow of the Chinese Dragon filtered with an \(11\times 11\) kernel.}
+    \end{subfigure}
+
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_3x3_offset05.png}
+        \caption{The shadow of the Chinese Dragon filtered with a \(3\times 3\) kernel and a scale of \(0.5\) applied to each kernel offset.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_11x11_offset05.png}
+        \caption{The shadow of the Chinese Dragon filtered with an \(11\times 11\) kernel and a scale of \(0.5\) applied to each kernel offset.}
+    \end{subfigure}
+
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_3x3_offset3.png}
+        \caption{The shadow of the Chinese Dragon filtered with a \(3\times 3\) kernel and a scale of \(3\) applied to each kernel offset.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_11x11_offset3.png}
+        \caption{The shadow of the Chinese Dragon filtered with an \(11\times 11\) kernel and a scale of \(3\) applied to each kernel offset.}
+    \end{subfigure}    
+
+    \caption{The Chinese Dragon rendered with \(3\times 3\) and \(11\times 11\) kernels with different offset scales.}
+    \label{fig:test_pcf_dragon_screens}
+\end{figure}
+
+During testing interesting behavior was observed. In all tests, when the application was running with its initial kernel parameter unchanged, the frame rate would be much higher than at the same kernel size after any change to it was made. This difference in some cases was as large as the entire FPS value after a change, meaning the loss of half the frame rate. The reason for this is not known, because default initialization and optimization of the code path is unlikely, as neither the shader code nor the compiler know of the initial settings that will be used for the kernel size. All results shown in Fig. \ref{fig:plot:pcf_results} present FPS values after the initial change was made.
+
+The appearance of shadows rendered with different sizes of kernels and offsets is presented in Fig. \ref{fig:test_pcf_dragon_screens}.
+Banding is very much visible in the smoothed areas of the shadows, even with the largest kernel. This is because of the limited range of shades that can be produced in these transitional areas. A transition that appears smoother can be achieved by setting a smaller than 1 offset scale, but that limits the size of the smoothed shadow areas. Additionally, texel boundaries are always visible with this method.
+
+The usage of even the smallest \(3\times 3\) kernel requires adjusting the depth bias to get clean results. The larger the kernel, the more bias is needed. This could be partially alleviated by using the distance from the kernel center to scale a bias that is added before the comparison happens, but overall bias would still depend on receiver orientations and would need to be adjusted per-scene.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_512_3x3.png}
+        \caption{The Chinese Dragon rendered with basic \(3\times 3\) PCF.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_512_3x3_bilinear.png}
+        \caption{The Chinese Dragon rendered with \(3\times 3\) PCF enhanced by bilinear filtering.}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_512_11x11.png}
+        \caption{The Chinese Dragon rendered with basic \(11\times 11\) PCF.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_512_11x11_bilinear.png}
+        \caption{The Chinese Dragon rendered with \(11\times 11\) PCF enhanced by bilinear filtering.}
+    \end{subfigure}
+
+    \caption{The Chinese Dragon rendered with PCF and with and without additional bilinear comparison filtering, using a \(512\times 512\) shadow map resolution.}
+    \label{fig:test_pfc_bilinear_dragon_screens}
+\end{figure}
+
+The performance cost and underwhelming results make this technique mainly a stepping stone for more robust approaches. It is not practical to use it in real applications that need to run in real time. There is however one adjustment that can be made to significantly improve the shadow's appearance produced by PCF. As established in section \ref{section:test_bilinear}, hardware bilinear comparison filtering comes at virtually no performance cost. It can be applied to PCF, the results of which are shown in Fig. \ref{fig:test_pfc_bilinear_dragon_screens}
+
+These results show that bilinear comparison filtering combined with PCF can lead to a great improvement of the visuals, even at kernel sizes as small as \(3\times 3\). Additionally, the shadow map used there has only \(512\times 512\) resolution, making it a very performant option. The impractical kernel size \(11\times 11\), when combined with bilinear filtering gives very smooth results, without any banding, hiding the texel boundaries very well, especially considering the low resolution of the shadow map.
 
 \subsubsection{Adaptive percentage-closer filtering}
 
