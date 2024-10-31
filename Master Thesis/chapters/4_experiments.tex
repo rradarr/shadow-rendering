@@ -211,7 +211,7 @@ The basic implementation of shadow mapping from section \ref{section:basic_mappi
     \caption{Results for the Crytek Sponza scene.}
     \label{fig:plot:basic_sponza}
 \end{subfigure}
-\caption{Frames per second for all test scenes, for different sizes of the shadow map and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\).}
+\caption{Frames per second for all test scenes, for different sizes of the shadow map and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the basic shadow map implementation.}
 \label{fig:plot:basic_results}
 \end{figure}
 
@@ -257,7 +257,7 @@ The rendering results for the Chinese Dragon are presented in Fig. \ref{fig:test
     \caption{The Chinese Dragon scene rendered with different shadow map resolutions, using the basic shadow mapping algorithm.}
     \label{fig:test_basic_dragon_screens}
 \end{figure}
-\begin{figure}
+\begin{figure}[t]
     \centering
     \begin{subfigure}{0.48\textwidth}
 		\centering
@@ -289,9 +289,223 @@ The rendering results for the Chinese Dragon are presented in Fig. \ref{fig:test
 
 The Chinese Dragon results are quite good for higher resolution shadow maps, since the shadow map texels map many to one with regard to screen pixels. Aliasing is however very visible for lower resolutions. Crytek Sponza suffers from shadow acne on vertical surfaces. This is a sign of badly chosen shadow bias. It gets less visible as resolution rises, but is always present. Even at the highest resolution, shadow map texel borders are still visible, where they were not visible in the Chinese Dragon scene. This is due to the fact that the shadow map covers a larger area and each shadow map texel covers more space on the screen.
 
+The memory usage is wholly dependent on the resolution of the shadow map. If memory is very scarce a depth buffer of lower precision can be used, but that is unlikely on modern graphics hardware to be the case. The depth map in this case was created to store the depth in 24 bits, plus additional 8 bits for the stencil buffer, totaling 32 bits per shadow map texel.
+
 \subsection{Filtered shadow maps}
+The following sections present experiments and their results performed using the implementations of different filtering techniques for shadow maps, which were described in sections \ref{section:filtering_shadow_maps} and \ref{section:pcf}.
 
 \subsubsection{Hardware bilinear filtering}
+Hardware bilinear filtering is considered a simple filtering method that can improve appearance of shadows generated with shadow maps with practically no performance cost. This is tested for different output and shadow map resolutions in different test scenes and the results are presented in Fig. \ref{fig:plot:bilinear_results}.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{semilogxaxis}[
+                small,
+                xlabel={Shadow map resolution},
+                ylabel={FPS},
+                xtick={512,1024,2048,4096},
+                xticklabels={512,1024,2048,4096},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (512,1765)(1024,1722)(2048,1695)(4096,1612)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (512,1426)(1024,1416)(2048,1392)(4096,1334)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (512,1267)(1024,1258)(2048,1244)(4096,1201)}; %\addlegendentry{2k}
+            \end{semilogxaxis} 
+        \end{tikzpicture}
+        \caption{Results for Chinese Dragon scene.}
+        \label{fig:plot:bilinear_dragon}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{semilogxaxis}[
+                small,
+                xlabel={Shadow map resolution},
+                ylabel={FPS},
+                xtick={512,1024,2048,4096},
+                xticklabels={512,1024,2048,4096},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (512,2932)(1024,2973)(2048,3027)(4096,2904)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (512,2912)(1024,2861)(2048,2923)(4096,3027)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (512,2987)(1024,3063)(2048,2948)(4096,3072)}; %\addlegendentry{2k}
+            \end{semilogxaxis} 
+        \end{tikzpicture}
+        \caption{Results for the Cube scene.}
+        \label{fig:plot:bilinear_cube}
+    \end{subfigure}
+    
+    \vspace{20pt}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{semilogxaxis}[
+                small,
+                xlabel={Shadow map resolution},
+                ylabel={FPS},
+                xtick={512,1024,2048,4096},
+                xticklabels={512,1024,2048,4096},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (512,257)(1024,258)(2048,251)(4096,228)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (512,251)(1024,250)(2048,243)(4096,223)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (512,239)(1024,239)(2048,233)(4096,212)}; %\addlegendentry{2k}
+            \end{semilogxaxis} 
+        \end{tikzpicture}
+        \caption{Results for the Power Plant scene.}
+        \label{fig:plot:bilinear_power}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{semilogxaxis}[
+                small,
+                xlabel={Shadow map resolution},
+                ylabel={FPS},
+                xtick={512,1024,2048,4096},
+                xticklabels={512,1024,2048,4096},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (512,2884)(1024,3021)(2048,2854)(4096,2162)}; %\addlegendentry{720p} here at 4k drpos <10 fps visible
+                \addplot [color=black]
+                coordinates {
+                    (512,2825)(1024,2736)(2048,2414)(4096,1726)}; %at 4k shadow map, visible difference of few fps, sometimes... %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (512,2075)(1024,2022)(2048,1836)(4096,1411)}; %\addlegendentry{2k}
+            \end{semilogxaxis} 
+        \end{tikzpicture}
+        \caption{Results for the Crytek Sponza scene.}
+        \label{fig:plot:bilinear_sponza}
+    \end{subfigure}
+    \caption{Frames per second for all test scenes, for different sizes of the shadow map and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the basic shadow mapping technique with bilinear filtering enabled.}
+    \label{fig:plot:bilinear_results}
+\end{figure}
+
+The results are very similar, with no immediately visible drop in performance. Taking the Power Plant scene as an example, the FPS range measured at Full HD output resolution is \([251:223]\). In the shadow mapping without filtering test the FPS range was \([250:223]\). The results are the same when accounting for instabilities caused by other software and dynamic clock rates. This is interesting when compared to results of Crytek Sponza tests, where the Full HD range was \([2825:1726]\) with bilinear filtering and  \([2912:1750]\) without. Here, a significant drop in performance can be seen when using bilinear filtering. This might be caused by the fact FPS measurements are more sensitive in higher rages, as 1 FPS difference at 250 FPS is equal to 0.016ms, while 1 FPS difference at 2800 FPS is equal to only 0,000127ms. This is somewhat visible in the Crytek Sponza FPS ranges, as the upper ends have a higher difference between them than lower ends. Additionally, since the Power Plant is a much heavier scene performance-wise, the GPU has much more work to perform and the slowdown from using bilinear filtering can get masked better. When toggling bilinear filtering on and off during testing, the FPS readout would most of the time stay stable within reasonable FPS ranges. It seems that the cost of hardware bilinear filtering is indeed insignificant in realistic scenarios, where the GPU is fully utilized.
+
+The effect on the final rendered result is on the other hand very significant, especially at lower shadow map resolutions, as presented in figure \ref{fig:test_bilinear_dragon_screens}. The shadow boundaries get smoother, which improves the visuals even at low shadow map resolutions. The texels are less noticeable and the shape is more easily readable as a shadow.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_512.png}
+        \caption{The Chinese Dragon rendered with a \(512\times 512\) shadow map with no filtering.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/bilinear/cropped/dragon_bilinear_fhd_512.png}
+        \caption{The Chinese Dragon rendered with a \(512\times 512\) shadow map with bilinear filtering.}
+    \end{subfigure}
+
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_4096.png}
+        \caption{The Chinese Dragon rendered with a \(4096\times 4096\) shadow map with no filtering.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/bilinear/cropped/dragon_bilinear_fhd_4096.png}
+        \caption{The Chinese Dragon rendered with a \(4096\times 4096\) shadow map with bilinear filtering.}
+    \end{subfigure}
+
+    \caption{The Chinese Dragon rendered with and without bilinear comparison filtering.}
+    \label{fig:test_bilinear_dragon_screens}
+\end{figure}
+
+Unfortunately, this filtering means that biasing has to be adjusted, as samples will be taken around the original position. This results in visible shadow acne, especially at lower shadow map resolutions, where shadow map texels cover a larger area on screen. It's noteworthy that, while there will be more pixels that erroneously self-shadow, the contrast of such artifacts will be smaller. This can help hide them at higher shadow map resolutions.
 
 \subsubsection{Percentage-closer filtering}
 
