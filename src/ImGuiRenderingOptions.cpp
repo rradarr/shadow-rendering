@@ -81,13 +81,6 @@ void ImGuiRenderingOptions::DisplayShadowMapOptions()
         ImGui::TextWrapped("This filtering mode performs no filtering of the "
         "shadows. It evaluates the shadow exactly once per screen pixel.");
     }
-    // if(chosenPCFMode == static_cast<int>(RenderingState::PCFMode::BILINEAR_FILTER)) {
-    //     ImGui::TextWrapped("This filtering mode performs filtering using the "
-    //     "API built-in bilinear filtering. This is specified with the comparison "
-    //     "filter, meaning that the results of comparisons are filtered, not compared "
-    //     "values themselves. This makes it ideal for hardware-enabled PCF");
-    //     ImGui::TextWrapped("TODO: NOT IMPLEMENTED!");
-    // }
     if(chosenPCFMode == static_cast<int>(RenderingState::PCFMode::MANUAL_FILTER)) {
         ImGui::TextWrapped("This filtering mode performs filtering of the shadows "
         "using a filter kernel created in-shader. The kernel contains offsets "
@@ -102,7 +95,7 @@ void ImGuiRenderingOptions::DisplayShadowMapOptions()
                 engineState->GetRenderingState().manualPCFKernelSize = kernelSize;
         }
         
-        ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 50.f, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+        ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 50.f, "%.3f");
     }
     if(chosenPCFMode == static_cast<int>(RenderingState::PCFMode::RANDOM_OFFESTS_FILTER)) {
         ImGui::TextWrapped("This filtering mode performs filtering of the shadows "
@@ -110,14 +103,14 @@ void ImGuiRenderingOptions::DisplayShadowMapOptions()
         "contains randomly jittered offsets for PCF samples. It is stored in a "
         "3D texture. The offset scale can be adjusted to control the spread of samples.");
         
-        ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 1.f, "%.3f", ImGuiSliderFlags_AlwaysClamp);
+        ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 50.f, "%.3f");
     }
     if(chosenPCFMode == static_cast<int>(RenderingState::PCFMode::PCSS_RANDOM_OFFSETS)) {
         ImGui::TextWrapped("This technique approximates soft shadows with the "
         "penumbra size being dependant on the distance of the occluder to the "
         "light source. It uses PCF with random offset texture.");
         
-        ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 50.f, "%.3f"); // TODO: debug: add ImGuiSliderFlags_AlwaysClamp later
+        ImGui::SliderFloat("Kernel sample offset scale", &engineState->GetRenderingState().pcfSampleOffset, 0.f, 5.f, "%.3f");
     
         ImGui::SliderFloat("Light size in world space", &engineState->GetRenderingState().worldSpaceLightSize, 0.f, 0.5f, "%.3f");
     }

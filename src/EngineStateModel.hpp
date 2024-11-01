@@ -26,14 +26,12 @@ struct RenderingState {
         PCSS_RANDOM_OFFSETS = 3,
         NUM_PCF_MODES
     };
-    // PCFMode chosenPFCMode = PCFMode::SIMPLE;
-    PCFMode chosenPFCMode = PCFMode::PCSS_RANDOM_OFFSETS;
+    PCFMode chosenPFCMode = PCFMode::SIMPLE;
     static const char* pcfModeNames[static_cast<int>(PCFMode::NUM_PCF_MODES)];
     unsigned int manualPCFKernelSize = 3;
     float pcfSampleOffset = 1.f;
     float worldSpaceLightSize = 0.1f;
-    // float inShaderDepthBias = 0.f;
-    float inShaderDepthBias = -0.003f;
+    float inShaderDepthBias = 0.f;
     float ambientStrength = 0.02f;
     int useBilinearFiltering = 0;
 };

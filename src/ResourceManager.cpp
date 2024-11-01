@@ -24,6 +24,7 @@ D3D12_GPU_VIRTUAL_ADDRESS MappedResourceLocation::GetGPUResourceVirtualAddress()
 ResourceManager::~ResourceManager()
 {
     // TODO: unmap the memory?
+    // Doesn't seem to need to be unmapped
 }
 
 MappedResourceLocation ResourceManager::AddMappedUploadResource(void *data, size_t dataSize)

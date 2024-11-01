@@ -368,7 +368,7 @@ void VoyagerEngine::LoadAssets()
         // Load suzanne
         {
             std::vector<DirectX::XMFLOAT4> boundingB;
-            suzanneMesh.CreateFromFile("Test Resources/sponza.obj", &boundingB);
+            suzanneMesh.CreateFromFile("cube_split.obj", &boundingB);
             suzanne = SceneObject(&suzanneMesh, boundingB);
 
             suzanne.SetAlbedoTexture(descriptorHandle);
@@ -381,14 +381,14 @@ void VoyagerEngine::LoadAssets()
                 WVPResources.push_back(resource);
             }
             suzanne.SetWVPPerFrameBufferLocations(WVPResources);
-            // suzanne.scale = DirectX::XMFLOAT3(0.7f, 0.7f, 0.7f);
-            // suzanne.position = DirectX::XMFLOAT4(0.f, 0.7f, 0.f, 1.f);
+            suzanne.scale = DirectX::XMFLOAT3(0.7f, 0.7f, 0.7f);
+            suzanne.position = DirectX::XMFLOAT4(0.f, 0.7f, 0.f, 1.f);
             // Dragon settings \/
             // suzanne.scale = DirectX::XMFLOAT3(1.5f, 1.5f, 1.5f);
             // suzanne.position = DirectX::XMFLOAT4(0.f, 0.43f, 0.f, 1.f);
             // Sponza settings \/
-            suzanne.scale = DirectX::XMFLOAT3(0.01f, 0.01f, 0.01f);
-            suzanne.position = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
+            // suzanne.scale = DirectX::XMFLOAT3(0.01f, 0.01f, 0.01f);
+            // suzanne.position = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
             // Power Plant Settings \/
             // suzanne.scale = DirectX::XMFLOAT3(0.0002f, 0.0002f, 0.0002f);
             // suzanne.position = DirectX::XMFLOAT4(-12.f, -1.f, 9.f, 1.f);
@@ -475,7 +475,7 @@ void VoyagerEngine::LoadAssets()
             // 1024
             // 2048
             // 4096
-            const unsigned int shadowMapResolution = 4096U; // TODO: was 4096
+            const unsigned int shadowMapResolution = 2048U;
             CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, shadowMapResolution, shadowMapResolution, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
             shadowMap.CreateEmpty(resourceDesc, srvDesc, D3D12_RESOURCE_STATE_GENERIC_READ, &depthOptimizedClearValue);
 
@@ -569,13 +569,13 @@ void VoyagerEngine::LoadScene()
     // m_mainCamera.InitCamera(DirectX::XMFLOAT4(1.5f, 1.f, 1.5f, 0.f), DirectX::XMFLOAT4(-1.f, 0.f, 0.2f, 0.f), aspectRatio);
 
     // Cube camera position.
-    // m_mainCamera.InitCamera(DirectX::XMFLOAT4(-2.f, 2.f, -2.5f, 0.f), DirectX::XMFLOAT4(-0.3f, 0.4f, 0.5f, 0.f), aspectRatio);
+    m_mainCamera.InitCamera(DirectX::XMFLOAT4(-2.f, 2.f, -2.5f, 0.f), DirectX::XMFLOAT4(-0.3f, 0.4f, 0.5f, 0.f), aspectRatio);
 
     // Power Plant camera position.
     // m_mainCamera.InitCamera(DirectX::XMFLOAT4(18.f, 7.f, -12.f, 0.f), DirectX::XMFLOAT4(0.f, 5.f, 2.f, 0.f), aspectRatio);
 
     // Sponza camera position.
-    m_mainCamera.InitCamera(DirectX::XMFLOAT4(11.f, 6.7f, -1.f, 0.f), DirectX::XMFLOAT4(0.f, 5.9f, 2.2f, 0.f), aspectRatio);
+    // m_mainCamera.InitCamera(DirectX::XMFLOAT4(11.f, 6.7f, -1.f, 0.f), DirectX::XMFLOAT4(0.f, 5.9f, 2.2f, 0.f), aspectRatio);
 
     UpdateLightFitting();
 }
@@ -709,8 +709,8 @@ bool VoyagerEngine::CheckTearingSupport()
 
 void VoyagerEngine::SetLightPosition()
 {
-    // lightParams.lightPosition = { 10, 10, -10 };
-    lightParams.lightPosition = { 6, 20, -6 }; // <- Good for sponza.
+    lightParams.lightPosition = { 10, 10, -10 };
+    // lightParams.lightPosition = { 6, 20, -6 }; // <- Good for sponza.
 
     // Copy our ConstantBuffer instance to the mapped constant buffer resource.
     memcpy(lightingParamsBuffer[0].GetMappedResourceAddress(), &lightParams.lightPosition, sizeof(lightParams.lightPosition));
@@ -718,13 +718,13 @@ void VoyagerEngine::SetLightPosition()
     // Set the WVP matrices of the shadow mapping light.
     // Set the projection matrix.
     // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 9.f, 25.f); // TODO: calculate this from the scene.
-    // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 1.f, 50.f);
-    DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(50.f, 50.f, 1.f, 80.f); // <- Sponza settings.
+    DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(7.f, 7.f, 1.f, 50.f);
+    // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixOrthographicLH(50.f, 50.f, 1.f, 80.f); // <- Sponza settings.
     // DirectX::XMMATRIX tmpMat = DirectX::XMMatrixPerspectiveLH(7.f, 7.f, 9.f, 25.f);
     DirectX::XMStoreFloat4x4(&m_shadowMapLightCamera.projMat, tmpMat);
     // Set the view matrix.
-    // m_shadowMapLightCamera.camPosition = DirectX::XMVECTOR{10.f, 10.f, -10.f, 1.f};
-    m_shadowMapLightCamera.camPosition = DirectX::XMVECTOR{6.f, 20.f, -6.f, 1.f}; // <- Sponza settings.
+    m_shadowMapLightCamera.camPosition = DirectX::XMVECTOR{10.f, 10.f, -10.f, 1.f};
+    // m_shadowMapLightCamera.camPosition = DirectX::XMVECTOR{6.f, 20.f, -6.f, 1.f}; // <- Sponza settings.
     m_shadowMapLightCamera.camTarget = DirectX::XMVECTOR{0.f, 0.f, 0.f, 1.f};
     tmpMat = DirectX::XMMatrixLookAtLH(
         m_shadowMapLightCamera.camPosition,
@@ -844,7 +844,7 @@ void VoyagerEngine::UpdateLightFitting()
     memcpy(shadowMapWVPBuffers[m_frameBufferIndex].GetMappedResourceAddress(), &shadowMapLightWVP, sizeof(shadowMapLightWVP));
 
     // Find z scene extents in light space.
-    // TODO: god damn, can't be boothered with this, we will use hand-adjusted
+    // TODO: god, can't be boothered with this, we will use hand-adjusted
     // near and far planes...
     // std::vector<DirectX::XMFLOAT4> sceneBoungingBox = FindSceneExtents();
 
