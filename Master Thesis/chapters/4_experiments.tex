@@ -768,10 +768,430 @@ The performance cost and underwhelming results make this technique mainly a step
 These results show that bilinear comparison filtering combined with PCF can lead to a great improvement of the visuals, even at kernel sizes as small as \(3\times 3\). Additionally, the shadow map used there has only \(512\times 512\) resolution, making it a very performant option. The impractical kernel size \(11\times 11\), when combined with bilinear filtering gives very smooth results, without any banding, hiding the texel boundaries very well, especially considering the low resolution of the shadow map.
 
 \subsubsection{Adaptive percentage-closer filtering}
+Adaptive PCF aims to improve the performance of regular PCF by allowing only some of the kernel samples to be processed when the shaded pixel in not in a penumbra region. It also improves the control over the penumbra size while maintaining visual quality. This is tested in this section, beginning with the results of performance testing presented in Fig. \ref{fig:plot:pcf_adaptive_results}.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={4,6,8,10},
+                xticklabels={4,6,8,10},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (4,1441)(6,1241)(8,951)(10,757)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (4,1026)(6,801)(8,585)(10,447)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (4,748)(6,553)(8,394)(10,295)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for Chinese Dragon scene.}
+        \label{fig:plot:pcf_adaptive_dragon}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={4,6,8,10},
+                xticklabels={4,6,8,10},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (4,3012)(6,2983)(8,2847)(10,2753)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (4,2776)(6,2191)(8,1764)(10,1463)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (4,1690)(6,1314)(8,1048)(10,865)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Cube scene.}
+        \label{fig:plot:pcf_adaptive_cube}
+    \end{subfigure}
+
+    \vspace{20pt}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={4,6,8,10},
+                xticklabels={4,6,8,10},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (4,241)(6,227)(8,205)(10,185)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (4,218)(6,194)(8,163)(10,138)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (4,190)(6,161)(8,126)(10,102)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Power Plant scene.}
+        \label{fig:plot:pcf_adaptive_power}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={4,6,8,10},
+                xticklabels={4,6,8,10},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (4,1805)(6,1289)(8,831)(10,639)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (4,1021)(6,710)(8,453)(10,343)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (4,642)(6,439)(8,277)(10,207)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Crytek Sponza scene.}
+        \label{fig:plot:pcf_adaptive_sponza}
+    \end{subfigure}
+    \caption{Frames per second for all test scenes, for different sizes of the filter kernel and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the basic shadow mapping technique with adaptive PCF at constant shadow map size \(1024\times 1024\).}
+    \label{fig:plot:pcf_adaptive_results}
+\end{figure}
+
+The produced graphs show that the technique does indeed improve performance in a significant way. Not only are the FPS higher, giving for the smallest kernel sizes \(15\%\) up to \(104\%\) more FPS depending on the scene, but the frame rate also falls off less rapidly with increasing kernel size, giving between \(392\%\) up to \(1473\%\) more FPS for the largest kernel sizes. This is a very meaningful performance boost, making this technique capable of real time performance. This is owed to the fact that small kernels are used to determine if a position is in the penumbra region which needs to be smoothed, and filtering stops if it is not.
+% for max kernel:
+%     regular:
+%         34 (sponza)
+%         28
+%         93
+%         50 (dragon)
+%     adaptive:
+%         343 = 908% more fps
+%         138 = 392% more fps
+%         1463 = 1473
+%         447 = 794
+
+% for min kernel:
+% regular:
+%     500
+%     188
+%     1610
+%     654
+% adaptive:
+%     1021 = 104% more
+%     218 = 15% more
+%     2776 = 72% more
+%     1026 = 56% more
+
+Because this optimization technique is adaptive, its performance is view dependent. More kernel samples will be used if the view contains large penumbra regions than when it only contains fully lit or fully shadowed surfaces. The FPS difference can be even that of \(50\%\). It can also vary depending on the scene for the same reason, so actual performance gains will vary. Performance will also be directly dependent on the sample offset scale, since with higher offsets larger penumbras are produced. This technique however will always give better or equal performance as basic PCF of the same kernel size.
+
+As observed in previous tests, the bias has to be adjusted carefully when using filtering. In the case of adaptive PCF, a bad bias will not only result in degradation of the produced visuals but also degradation of performance, as more surface points will utilize the full kernel size when in the penumbra of an erroneous shadow.
+
+Adaptive PCF in this implementation uses \(m\times m\) sets of randomized kernels. A specific kernel is chosen per-pixel based on screen coordinates. This is to minimize banding by introducing noise into penumbra areas, which is treated by the eye as a smoothed shadow boundary. Figure \ref{fig:test_adaptive_sets_dragon_screens} presents results rendered with different amounts of kernels for a large offset scale.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/adaptive/cropped/dragon_adaptive_fhd_1024_2x2_8x8_offset5.png}
+        \caption{The Chinese Dragon rendered with \(2\times 2\) set of kernels with adaptive PCF.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/adaptive/cropped/dragon_adaptive_fhd_1024_6x6_8x8_offset5.png}
+        \caption{The Chinese Dragon rendered with \(6\times 6\) set of kernels with adaptive PCF.}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.45\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/adaptive/cropped/dragon_adaptive_fhd_1024_14x14_8x8_offset5.png}
+        \caption{The Chinese Dragon rendered with \(14\times 14\) set of kernels with adaptive PCF.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/adaptive/cropped/dragon_adaptive_fhd_1024_24x24_8x8_offset5.png}
+        \caption{The Chinese Dragon rendered with \(24\times 24\) set of kernels with adaptive PCF.}
+    \end{subfigure}
+
+    \caption{The Chinese Dragon rendered with adaptive PCF, using a \(1024\times 1024\) shadow map resolution, kernel size of \(8\times 8\), kernel offset scale of \(5\) and varying counts of kernel sets.}
+    \label{fig:test_adaptive_sets_dragon_screens}
+\end{figure}
+
+Testing shows no real performance cost of increasing the filter sets count in this range. The kernels are stored in a 3D texture of dimensions \(m\times m \times (n^2/2) \), which is itself generated once on application startup on the CPU, so the cost of generating a large set does not affect FPS. Additionally, accessing a set is simple and efficient, as each output fragment coordinate is simply divided by \(m\) to sample the 3D texture. The sampler is set to wrap the UV addresses, so the filter sets repeat in each direction on screen every \(m\) pixels.
+
+The effect of kernel set count on the visuals is small. For the smallest \(2\times 2\) set there is visible repetition in the structure of the penumbra in the mouth of the dragon or in the shadow near its head. Higher counts provide improvements to the apparent smoothness of the shadow. The difference is a bit more noticeable in movement, where too few sets cause visible repeating patterns in the penumbra regions, that are overlaid on the shadow effect. These artifacts tend to disappear at sizes higher than \(14\times 14\).
+
+As it was mentioned, the 3D texture used to store the kernel offsets has dimensions \(m\times m \times n^2/2\). This means that memory requirements of this technique grow exponentially both with the dimension \(m\) and \(n\). The size is slightly reduced by using a texture with four, \(32\)-bit channels, and storing each \(xy\) offset into two of the channels. This means that two kernel offsets can be stored in a single texel of the texture.
+
+It is worth noting a caveat of this technique that is visible in the results in Fig. \ref{fig:test_adaptive_sets_dragon_screens}. High contrast noise appears in lit areas that are surrounded by shadow, such as in between the neck and back of the dragon's shadow. These erroneous areas stem from the optimization technique. Since the samples farthest away from the kernel center determine if the point is in shadow or not, such areas can get incorrectly classified as shadowed. This issue could be alleviated by using weights when averaging the filter samples, that decrease with the distance from the kernel center.
+
+Overall, the performance and visual results of adaptive PCF make it a very practical solution to filtering shadow maps. The shadows look smooth, and their penumbras are easily controlled with the offset scale.
 
 \subsection{Soft shadows with shadow maps}
 
 \subsubsection{PCSS}
+Implementation of percentage-closer soft shadows was presented in section \ref{section:pcss}. This section presents the results of testing this technique. Figure \ref{fig:plot:pcss_results} shows FPS measurements for all test scenes with different light source sizes, which define the size of the penumbra and impact overall performance.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={0.1,0.4,0.7,1.0},
+                xticklabels={0.1,0.4,0.7,1.0},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (0.1,660)(0.4,330)(0.7,294)(1.0,268)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (0.1,373)(0.4,170)(0.7,149)(1.0,136)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (0.1,244)(0.4,102)(0.7,93)(1.0,83)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for Chinese Dragon scene.}
+        \label{fig:plot:pcss_dragon}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={0.1,0.4,0.7,1.0},
+                xticklabels={0.1,0.4,0.7,1.0},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (0.1,1401)(0.4,575)(0.7,514)(1.0,474)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (0.1,695)(0.4,267)(0.7,241)(1.0,221)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (0.1,404)(0.4,151)(0.7,136)(1.0,125)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Cube scene.}
+        \label{fig:plot:pcss_cube}
+    \end{subfigure}
+
+    \vspace{20pt}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={0.1,0.4,0.7,1.0},
+                xticklabels={0.1,0.4,0.7,1.0},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (0.1,155)(0.4,134)(0.7,124)(1.0,115)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (0.1,99)(0.4,84)(0.7,77)(1.0,69)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (0.1,69)(0.4,57)(0.7,52)(1.0,46)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Power Plant scene.}
+        \label{fig:plot:pss_power}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={0.1,0.4,0.7,1.0},
+                xticklabels={0.1,0.4,0.7,1.0},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (0.1,273)(0.4,197)(0.7,174)(1.0,157)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (0.1,142)(0.4,99)(0.7,87)(1.0,79)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (0.1,83)(0.4,60)(0.7,52)(1.0,47)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Crytek Sponza scene.}
+        \label{fig:plot:pcss_sponza}
+    \end{subfigure}
+    \caption{Frames per second for all test scenes, for different sizes of the light source and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with shadow mapping with PCSS at constant shadow map size \(1024\times 1024\) and \(16\times 16\) \(8\times 8\) kernels.}
+    \label{fig:plot:pcss_results}
+\end{figure}
 
 % \begin{table}
 % \centering
