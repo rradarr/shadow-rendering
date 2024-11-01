@@ -35,8 +35,8 @@ The data sets consist of multiple scenes used for testing. Three scenes, Crytek 
 
 The results of testing each implemented shadow rendering method are presented in the following sections. Each set of results is complemented by a description and discussion.
 
-\subsection{Planar shadow mapping}
-Should I even test this?
+% \subsection{Planar shadow mapping}
+% Should I even test this?
 % TODO.
 
 \subsection{Basic shadow maps}
@@ -1017,7 +1017,7 @@ Overall, the performance and visual results of adaptive PCF make it a very pract
 \subsection{Soft shadows with shadow maps}
 
 \subsubsection{PCSS}
-Implementation of percentage-closer soft shadows was presented in section \ref{section:pcss}. This section presents the results of testing this technique. Figure \ref{fig:plot:pcss_results} shows FPS measurements for all test scenes with different light source sizes, which define the size of the penumbra and impact overall performance.
+Implementation of percentage-closer soft shadows was presented in section \ref{section:pcss}. This section presents the results of testing this technique. Figure \ref{fig:plot:pcss_results} shows FPS measurements for all test scenes with different light source sizes, which define the size of the penumbra and impact overall performance. PCSS is implemented here using adaptive techniques for both finding the average occluder depth and filtering.
 
 \begin{figure}[h]
     \centering
@@ -1025,7 +1025,7 @@ Implementation of percentage-closer soft shadows was presented in section \ref{s
         \begin{tikzpicture}
             \begin{axis}[
                 small,
-                xlabel={Filter kernel size},
+                xlabel={Light source size},
                 ylabel={FPS},
                 xtick={0.1,0.4,0.7,1.0},
                 xticklabels={0.1,0.4,0.7,1.0},
@@ -1067,7 +1067,7 @@ Implementation of percentage-closer soft shadows was presented in section \ref{s
         \begin{tikzpicture}
             \begin{axis}[
                 small,
-                xlabel={Filter kernel size},
+                xlabel={Light source size},
                 ylabel={FPS},
                 xtick={0.1,0.4,0.7,1.0},
                 xticklabels={0.1,0.4,0.7,1.0},
@@ -1110,7 +1110,7 @@ Implementation of percentage-closer soft shadows was presented in section \ref{s
         \begin{tikzpicture}
             \begin{axis}[
                 small,
-                xlabel={Filter kernel size},
+                xlabel={Light source size},
                 ylabel={FPS},
                 xtick={0.1,0.4,0.7,1.0},
                 xticklabels={0.1,0.4,0.7,1.0},
@@ -1152,7 +1152,7 @@ Implementation of percentage-closer soft shadows was presented in section \ref{s
         \begin{tikzpicture}
             \begin{axis}[
                 small,
-                xlabel={Filter kernel size},
+                xlabel={Light source size},
                 ylabel={FPS},
                 xtick={0.1,0.4,0.7,1.0},
                 xticklabels={0.1,0.4,0.7,1.0},
@@ -1192,6 +1192,50 @@ Implementation of percentage-closer soft shadows was presented in section \ref{s
     \caption{Frames per second for all test scenes, for different sizes of the light source and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with shadow mapping with PCSS at constant shadow map size \(1024\times 1024\) and \(16\times 16\) \(8\times 8\) kernels.}
     \label{fig:plot:pcss_results}
 \end{figure}
+
+Performance is affected more negatively than with adaptive PCF. This decrease happens because PCSS basically performs two adaptive filtering-like steps per pixel. It first has to sample the shadow map to find the average occluder depth and then again for PCF with a calculated size. For simpler scenes however, as the size of the light source increases, there seems to be a threshold value beyond which the performance degradation slows down. This is probably because in the case of a simple scene like the Chinese Dragon or the Cube, once the light source is large enough almost all surfaces will be evaluated as if in a penumbra. Additionally, very high light source sizes produce unpleasant results and should not be used in a real application anyway.
+
+The light size needs to be carefully tuned on a per-scene basis to get plausible results. Additionally, bias has to be adjusted to account for wider kernels. Images rendered with PCSS are presented in Fig \ref{fig:test_pcss_screens}.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcss/cropped/cube_pcss_1.png}
+        \caption{The Cube scene showing smooth shadow penumbra falloff with changing distance between shadow caster and receiver.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcss/cropped/dragon_pcss_1.png}
+        \caption{The Chinese Dragon showcasing contact hardening shadows.}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.49\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcss/cropped/sponza_pcss_1.png}
+        \caption{PCSS shadows in Crytek Sponza, creating soft shadows cast by the rooftop above and harder shadows cast by the hanging bowl.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/pcss/cropped/sponza_pcss_2.png}
+        \caption{Shadows hardening with changing distance to occluder in Crytek Sponza.}
+    \end{subfigure}
+
+    \caption{The results of PCSS in different scenes, rendered with \(4096\times 4096\) shadow map resolution.}
+    \label{fig:test_pcss_screens}
+\end{figure}
+
+PCSS has its performance cost, but the results it produces can certainly elevate the graphical presentation of a real time application.
+
+\section{Summary and conclusions}
+
+Basic shadow mapping lays the foundation on which more advanced techniques can be built. It has a performance cost that is slightly smaller than double the main render pass. On its own it requires very high resolution to get pleasant results, so that aliasing it eliminated.
+
+It can be enhanced with various filtering methods. Bilinear comparison filtering is implemented within GPU hardware, so it can be very fast. It can be used to blur the edges of shadows for almost no performance cost. This helps separate hard shadows from actual geometry. Percentage-closer filtering allows control over the strength and quality of the shadow smoothing effect. It uses a square filter kernel to average shadow function results. The performance drops very rapidly with increase in the filer size and the results feature quite severe banding and visible shadow map texel borders. This can be greatly improved by combining PCF with hardware bilinear filtering. Then, even a very small shadow map and a modestly sized kernel can produce very pleasant shadows. The last filtering method, adaptive PCF, improves both performance and visual results. By using sets of filter kernels stored in a 3D texture, the algorithm can quit filtering early where further samples are not required. The blurring gives very smooth results, hiding any banding or texel boundaries and is easily controllable. Adaptive PCF increases the memory consumption by \(m\times m\times (n^2 / 2)\). It can also unfortunately introdce high-contrast noise in specific areas of the shadows.
+
+Finally, percentage-closer soft shadows can be used to render contact-hardening shadows. This technique gives the most robust visuals, but requires careful hand tuning of the parameters such as bias and light size. It gives realistic looking results, which are however not physically correct, and are only an approximation. The performance is approximately half of adaptive PCF on its own.
+
+If the visuals are of the highest importance and the application has a lot of frame time budget available, PCSS is the best choice. Otherwise, a balance between shadow map resolution, kernel size and kernel offset scale should be found within adaptive PCF. Basic PCF should probably be avoided, unless combining a small kernel size with hardware bilinear filtering and high shadow map resolution for basic antialiasing of shadows.
 
 % \begin{table}
 % \centering
