@@ -21,7 +21,7 @@ The machine used for performing measurements had the following specification:
 \end{itemize}
 
 \subsection{Created test application}
-The test application allows the user to choose a rendering mode and observe the results in real time. It also allows to change the viewpoint and observe how the shadows behave in motion. Most rendering modes implement different shadow rendering techniques and some include debug views like wireframe mode or mesh colored by normals. The application is also instrumented with profiling commands which make it possible to connect to an external profiler and collect data in real time, as well as save and load existing profiling data.
+The test application allows the user to choose a rendering mode and observe the results in real-time. It also allows to change the viewpoint and observe how the shadows behave in motion. Most rendering modes implement different shadow rendering techniques and some include debug views like wireframe mode or mesh colored by normals. The application is also instrumented with profiling commands which make it possible to connect to an external profiler and collect data in real-time, as well as save and load existing profiling data.
 
 As mentioned in section \ref{chapter:3_test_app}, the Tracy profiler open source library and tool was used to gather and visualize profiling data. For additional profiling and debugging RenderDoc, PIX and Nsight Graphics were used.
 
@@ -763,7 +763,7 @@ The usage of even the smallest \(3\times 3\) kernel requires adjusting the depth
     \label{fig:test_pfc_bilinear_dragon_screens}
 \end{figure}
 
-The performance cost and underwhelming results make this technique mainly a stepping stone for more robust approaches. It is not practical to use it in real applications that need to run in real time. There is however one adjustment that can be made to significantly improve the shadow's appearance produced by PCF. As established in section \ref{section:test_bilinear}, hardware bilinear comparison filtering comes at virtually no performance cost. It can be applied to PCF, the results of which are shown in Fig. \ref{fig:test_pfc_bilinear_dragon_screens}
+The performance cost and underwhelming results make this technique mainly a stepping stone for more robust approaches. It is not practical to use it in real applications that need to run in real-time. There is however one adjustment that can be made to significantly improve the shadow's appearance produced by PCF. As established in section \ref{section:test_bilinear}, hardware bilinear comparison filtering comes at virtually no performance cost. It can be applied to PCF, the results of which are shown in Fig. \ref{fig:test_pfc_bilinear_dragon_screens}
 
 These results show that bilinear comparison filtering combined with PCF can lead to a great improvement of the visuals, even at kernel sizes as small as \(3\times 3\). Additionally, the shadow map used there has only \(512\times 512\) resolution, making it a very performant option. The impractical kernel size \(11\times 11\), when combined with bilinear filtering gives very smooth results, without any banding, hiding the texel boundaries very well, especially considering the low resolution of the shadow map.
 
@@ -944,7 +944,7 @@ Adaptive PCF aims to improve the performance of regular PCF by allowing only som
     \label{fig:plot:pcf_adaptive_results}
 \end{figure}
 
-The produced graphs show that the technique does indeed improve performance in a significant way. Not only are the FPS higher, giving for the smallest kernel sizes \(15\%\) up to \(104\%\) more FPS depending on the scene, but the frame rate also falls off less rapidly with increasing kernel size, giving between \(392\%\) up to \(1473\%\) more FPS for the largest kernel sizes. This is a very meaningful performance boost, making this technique capable of real time performance. This is owed to the fact that small kernels are used to determine if a position is in the penumbra region which needs to be smoothed, and filtering stops if it is not.
+The produced graphs show that the technique does indeed improve performance in a significant way. Not only are the FPS higher, giving for the smallest kernel sizes \(15\%\) up to \(104\%\) more FPS depending on the scene, but the frame rate also falls off less rapidly with increasing kernel size, giving between \(392\%\) up to \(1473\%\) more FPS for the largest kernel sizes. This is a very meaningful performance boost, making this technique capable of real-time performance. This is owed to the fact that small kernels are used to determine if a position is in the penumbra region which needs to be smoothed, and filtering stops if it is not.
 % for max kernel:
 %     regular:
 %         34 (sponza)
@@ -1225,7 +1225,7 @@ The light size needs to be carefully tuned on a per-scene basis to get plausible
     \label{fig:test_pcss_screens}
 \end{figure}
 
-PCSS has its performance cost, but the results it produces can certainly elevate the graphical presentation of a real time application.
+PCSS has its performance cost, but the results it produces can certainly elevate the graphical presentation of a real-time application.
 
 \section{Summary and conclusions}
 

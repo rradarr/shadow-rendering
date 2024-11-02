@@ -197,7 +197,6 @@
   address = {New York, NY, USA},
   url = {https://doi.org/10.1145/1111411.1111440},
   doi = {10.1145/1111411.1111440},
-  abstract = {Shadow maps are a widely used shadowing technique in real time graphics. One major drawback of their use is that they cannot be filtered in the same way as color textures, typically leading to severe aliasing. This paper introduces variance shadow maps, a new real time shadowing algorithm. Instead of storing a single depth value, we store the mean and mean squared of a distribution of depths, from which we can efficiently compute the variance over any filter region. Using the variance, we derive an upper bound on the fraction of a shaded fragment that is occluded. We show that this bound often provides a good approximation to the true occlusion, and can be used as an approximate value for rendering. Our algorithm is simple to implement on current graphics processors and solves the problem of shadow map aliasing with minimal additional storage and computation.},
   booktitle = {Proceedings of the 2006 Symposium on Interactive 3D Graphics and Games},
   pages = {161–165},
   numpages = {5},
@@ -261,6 +260,57 @@
   url = {https://casual-effects.com/data},
   urldate = {2024-10-23}
 }
+
+@inproceedings{bib:proc:peters_msm,
+  author = {Peters, Christoph and Klein, Reinhard},
+  title = {Moment shadow mapping},
+  year = {2015},
+  isbn = {9781450333924},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/2699276.2699277},
+  doi = {10.1145/2699276.2699277},
+  booktitle = {Proceedings of the 19th Symposium on Interactive 3D Graphics and Games},
+  pages = {7–14},
+  numpages = {8},
+  location = {San Francisco, California},
+  series = {i3D '15}
+}
+
+@inproceedings{bib:proc:macedo_revectorization_sm,
+  title={Revectorization-Based Shadow Mapping},
+  author={M{\'a}rcio C. F. Macedo and Ant{\^o}nio Lopes Apolinario},
+  booktitle={Graphics Interface},
+  year={2016},
+  url={https://api.semanticscholar.org/CorpusID:33053694}
+}
+
+@article{bib:article:macedo_revectorization_ssm,
+author = {M{\'a}rcio C. F. Macedo and Apolinário Jr., A. L. and Agüero, K. A.},
+title = {Revectorization-Based Soft Shadow Mapping},
+journal = {Computer Graphics Forum},
+volume = {39},
+number = {1},
+pages = {389-404},
+doi = {https://doi.org/10.1111/cgf.13810},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/cgf.13810},
+year = {2020}
+}
+
+@inbook{bib:inbook:lokovic_deep_shadow_maps,
+  author = {Lokovic, Tom and Veach, Eric},
+  title = {Deep Shadow Maps},
+  year = {2023},
+  isbn = {9798400708978},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  edition = {1},
+  url = {https://doi.org/10.1145/3596711.3596746},
+  booktitle = {Seminal Graphics Papers: Pushing the Boundaries, Volume 2},
+  articleno = {34},
+  numpages = {8}
+}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Examples
