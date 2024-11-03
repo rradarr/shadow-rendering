@@ -166,8 +166,9 @@ void VoyagerEngine::OnUpdate()
         lightParams.lightFilterKernelScaleBias.y = static_cast<float>(renderState.manualPCFKernelSize);
         lightParams.lightFilterKernelScaleBias.z = renderState.pcfSampleOffset;
         lightParams.lightFilterKernelScaleBias.w = renderState.inShaderDepthBias;
-        lightParams.mapAmbientSampler.x = renderState.ambientStrength;
-        lightParams.mapAmbientSampler.y = static_cast<float>(renderState.useBilinearFiltering);
+        lightParams.mapAmbientSamplerBleed.x = renderState.ambientStrength;
+        lightParams.mapAmbientSamplerBleed.y = static_cast<float>(renderState.useBilinearFiltering);
+        lightParams.mapAmbientSamplerBleed.z = renderState.vsmBleedingReduction;
         memcpy(lightingParamsBuffer[m_frameBufferIndex].GetMappedResourceAddress(), &lightParams, sizeof(lightParams));
     }
 
@@ -270,7 +271,6 @@ void VoyagerEngine::LoadPipeline()
 
     // This sample does not support fullscreen transitions.
     ThrowIfFailed(DXContext::getFactory().Get()->MakeWindowAssociation(WindowsApplication::GetHwnd(), DXGI_MWA_NO_ALT_ENTER));
-
     // Ensure fullscreen is not on (for tearing).
     m_swapChain->SetFullscreenState(false, NULL);
 
@@ -280,7 +280,7 @@ void VoyagerEngine::LoadPipeline()
     {
         // Describe and create a render target view (RTV) descriptor heap.
         D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-        rtvHeapDesc.NumDescriptors = mc_frameBufferCount;
+        rtvHeapDesc.NumDescriptors = mc_frameBufferCount + mc_frameBufferCount; // Note: the additional mc_frameBufferCount is for variance shadow mapping RTV texture.
         rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
         rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
         ThrowIfFailed(DXContext::getDevice().Get()->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_RTVHeap)));
@@ -313,9 +313,9 @@ void VoyagerEngine::LoadPipeline()
     std::cout << "Pipeline loaded." << std::endl;
 
     // Single WVP CBV per frame for one object, plus a texture, light info buffer,
-    // shadow map texture and WVP for shadow mapping.
+    // shadow map texture and WVP for shadow mapping + variance shadow map SRVs.
     // TODO: how many do we really need?
-    CbvSrvDescriptorHeapManager::CreateHeap(mc_frameBufferCount + 4);
+    CbvSrvDescriptorHeapManager::CreateHeap(mc_frameBufferCount + 4 + mc_frameBufferCount);
 
     // Initialize the DepthStencilView heap increment size.
     m_dsvHeapIncrement = DXContext::getDevice().Get()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
@@ -451,6 +451,13 @@ void VoyagerEngine::LoadAssets()
             DXContext::getDevice().Get()->CreateDepthStencilView(m_depthStencilBuffer.Get(), &depthStencilDesc, m_dsHeap->GetCPUDescriptorHandleForHeapStart());
         }
 
+        // Shdaow map resolutions:
+        // 512
+        // 1024
+        // 2048
+        // 4096
+        const unsigned int shadowMapResolution = 2048U;
+
         // Create the shadow map depth buffer / depth texture.
         {
             // For the shadow map we need additional space on the DSV and SRV heaps.
@@ -501,6 +508,58 @@ void VoyagerEngine::LoadAssets()
                 ZeroMemory(&m_wvpPerObject, sizeof(m_wvpPerObject));
                 MappedResourceLocation resource = resourceManager.AddMappedUploadResource(&m_wvpPerObject, sizeof(m_wvpPerObject));
                 shadowMapWVPBuffers.push_back(resource);
+            }
+        }
+
+        // Create the variance shadow map render target
+        {
+            // Since variance shadow mapping will store two values into shadow map
+            // pass result, we cannot just use the depth map without a main render
+            // target. We could create a depth map + render target, but I think we
+            // can also use the dsv from basic shadow mapping for this. So we create
+            // only the render target. We need addiational space in the RTV and SRV heaps.
+
+            // Create the shadow map texture view descriptor (for use in the Texture class).
+            D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+            srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+            srvDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+            srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+            srvDesc.Texture2D.MipLevels = 1;
+
+            D3D12_CLEAR_VALUE optimizedClearValue = {};
+            optimizedClearValue.Format = DXGI_FORMAT_R32G32_FLOAT;
+            optimizedClearValue.Color[0] = 1.f;
+            optimizedClearValue.Color[1] = 1.f;
+            optimizedClearValue.Color[2] = 1.f;
+            optimizedClearValue.Color[3] = 1.f;
+
+            // Create the resources.
+            varianceShadowMaps.resize(mc_frameBufferCount);
+            for(int i = 0; i < mc_frameBufferCount; i++) {
+                CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R32G32_FLOAT, shadowMapResolution, shadowMapResolution, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+                varianceShadowMaps[i].CreateEmpty(resourceDesc, srvDesc, D3D12_RESOURCE_STATE_GENERIC_READ, &optimizedClearValue);
+            }
+            
+
+            // Set the viewport to be used when rendering into the shadow map, it will be passed to the shadowMapRenderer.
+            varianceShadowMapViewport = CD3DX12_VIEWPORT{0.0f, 0.0f, static_cast<float>(shadowMapResolution), static_cast<float>(shadowMapResolution)};
+
+            // Create the RTVs.
+            D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+            rtvDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+            rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+            
+            CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTVHeap->GetCPUDescriptorHandleForHeapStart());
+            rtvHandle.Offset(mc_frameBufferCount, m_rtvDescriptorSize); // First 3 taken up by the main pass RTVs.
+
+            for (UINT n = 0; n < mc_frameBufferCount; n++)
+            {
+                DXContext::getDevice().Get()->CreateRenderTargetView(
+                    varianceShadowMaps[n].GetTextureResource().Get(),
+                    &rtvDesc,
+                    rtvHandle);
+                varianceShadowMapRTVHeapLocations.push_back(rtvHandle);
+                rtvHandle.Offset(1, m_rtvDescriptorSize);
             }
         }
     }
@@ -556,6 +615,31 @@ void VoyagerEngine::LoadMaterials()
     offsetsSRV = offsetsSRV.Offset(pcfOffsetsTexture.GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize()); // TODO: Move getting the SRV desc. handle into a Texture method.
     shadowMapRenderer.SetPCFOffsetsSRV(offsetsSRV);
     shadowMapRenderer.SetTracyContext(&tracyCtx);
+
+    materialVarianceMapDepth.SetShaders("VertexShader_variance_shadow_mapping_depth.hlsl", "PixelShader_variance_shadow_mapping_depth.hlsl");
+    materialVarianceMapDepth.CreateMaterial();
+    materialVearianceMapMain.SetShaders("VertexShader_variance_shadow_mapping.hlsl", "PixelShader_variance_shadow_mapping.hlsl");
+    materialVearianceMapMain.CreateMaterial();
+    varianceRenderer.SetDSV(dsvHandle);
+    varianceRenderer.SetViewport(m_viewport);
+    varianceRenderer.SetMainMaterial(&materialVearianceMapMain);
+    varianceRenderer.SetDepthPassMaterial(&materialVarianceMapDepth);
+    varianceRenderer.SetDepthPassDSV(shadowMapDSVHeapLocation);
+    varianceRenderer.SetDepthPassDepthResource(shadowMap.GetTextureResource());
+    // varianceRenderer.SetShadowMapResource(varianceShadowMap.GetTextureResource());
+    // shadowMapSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
+    // shadowMapSRV = shadowMapSRV.Offset(varianceShadowMap.GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize()); // TODO: Move getting the SRV desc. handle into a Texture method.
+    // varianceRenderer.SetShadowMapSRV(shadowMapSRV);
+    varianceRenderer.SetShadowPassViewport(shadowMapViewport);
+    varianceRenderer.SetTracyContext(&tracyCtx);
+    // Following properties set per frame:
+    // - SetLightingParametersBuffer
+    // - SetLightWVPBuffer
+    // - SetRTV
+    // - SetShadowMapRTV
+    // - SetShadowMapSRV
+    // - SetShadowMapResource
+
 }
 
 void VoyagerEngine::LoadScene()
@@ -643,6 +727,18 @@ void VoyagerEngine::PopulateCommandList()
             shadowMapRenderer.SetLightWVPBuffer(shadowMapWVPBuffers[m_frameBufferIndex]);
             shadowMapRenderer.SetRTV(rtvHandle);
             shadowMapRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
+        }
+        else if (chosenRenderingMode == RenderingState::RenderingMode::VARIANCE_SHADOW_MAP) {
+            varianceRenderer.SetLightingParametersBuffer(lightingParamsBuffer[m_frameBufferIndex]);
+            varianceRenderer.SetLightWVPBuffer(shadowMapWVPBuffers[m_frameBufferIndex]);
+            varianceRenderer.SetRTV(rtvHandle);
+            varianceRenderer.SetShadowMapRTV(varianceShadowMapRTVHeapLocations[0]); // TODO: it seems like we don't need per-frame maps?
+            CD3DX12_GPU_DESCRIPTOR_HANDLE shadowMapSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
+            shadowMapSRV = shadowMapSRV.Offset(varianceShadowMaps[0].GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize());
+            varianceRenderer.SetShadowMapSRV(shadowMapSRV);
+            varianceRenderer.SetShadowMapSRV(shadowMapSRV);
+            varianceRenderer.SetShadowMapResource(varianceShadowMaps[0].GetTextureResource());
+            varianceRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
         }
         else {
             // Render scene objects with the default renderer.
@@ -842,6 +938,8 @@ void VoyagerEngine::UpdateLightFitting()
     DirectX::XMStoreFloat4x4(&shadowMapLightWVP.viewMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&m_shadowMapLightCamera.viewMat)));
     DirectX::XMStoreFloat4x4(&shadowMapLightWVP.projectionMat, DirectX::XMMatrixTranspose(cameraProjection));
     memcpy(shadowMapWVPBuffers[m_frameBufferIndex].GetMappedResourceAddress(), &shadowMapLightWVP, sizeof(shadowMapLightWVP));
+
+    return;
 
     // Find z scene extents in light space.
     // TODO: god, can't be boothered with this, we will use hand-adjusted

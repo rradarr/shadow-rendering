@@ -50,6 +50,12 @@ void ImGuiRenderingOptions::Display()
 
         DisplayShadowMapOptions();
     }
+    else if(renderingModeId == static_cast<int>(RenderingState::RenderingMode::VARIANCE_SHADOW_MAP)) {
+        ImGui::TextWrapped("This rendering mode uses variance shadow mapping "
+        "to render shadows.");
+
+        DisplayVarianceShadowMapOptions();
+    }
 }
 
 void ImGuiRenderingOptions::DisplayShadowMapOptions()
@@ -115,4 +121,17 @@ void ImGuiRenderingOptions::DisplayShadowMapOptions()
         ImGui::SliderFloat("Light size in world space", &engineState->GetRenderingState().worldSpaceLightSize, 0.f, 0.5f, "%.3f");
     }
     
+}
+
+void ImGuiRenderingOptions::DisplayVarianceShadowMapOptions()
+{
+    EngineStateModel* engineState = EngineStateModel::GetInstance();
+
+    // General settings.
+    ImGui::SliderFloat("Shadow map ambient", &engineState->GetRenderingState().ambientStrength, 0.f, 1.f);
+    ImGui::SliderFloat("VSM light leeding reduction", &engineState->GetRenderingState().vsmBleedingReduction, 0.f, 1.f);
+    bool useBilinear = static_cast<bool>(engineState->GetRenderingState().useBilinearFiltering);
+    if(ImGui::Checkbox("Use hardware bilinear filtering", &useBilinear)) {
+        engineState->GetRenderingState().useBilinearFiltering = static_cast<int>(useBilinear);
+    }
 }

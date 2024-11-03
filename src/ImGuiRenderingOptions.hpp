@@ -14,4 +14,5 @@ public:
 
 private:
     void DisplayShadowMapOptions();
+    void DisplayVarianceShadowMapOptions();
 };

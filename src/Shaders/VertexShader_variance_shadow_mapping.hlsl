@@ -7,7 +7,6 @@ struct PSInput
     float4 lightPosition_viewSpace : LIGHT;
     float4 vertexPosition_viewSpace : VERTVIEW;
     float3 normal_viewSpace : NORMVIEW;
-    float4 positionInLightView : LIGHTVIEWPOS;
     float4 positionInLightProjection : LIGHTPROJPOS;
 };
 
@@ -59,8 +58,8 @@ PSInput main(float4 position : POSITION, float4 color : COLOR, float2 uv : UV, f
     result.lightPosition_viewSpace = lightPosition_viewSpace;
 
     // Calculate position in light space.
-    result.positionInLightView = mul(vertexPosition_worldSpace, lightWVP.viewMatrix);
-    result.positionInLightProjection = mul(result.positionInLightView, lightWVP.projMatrix);
+    result.positionInLightProjection = mul(vertexPosition_worldSpace, lightWVP.viewMatrix);
+    result.positionInLightProjection = mul(result.positionInLightProjection, lightWVP.projMatrix);
     // Note: When using this offset matrix, DO NOT use the shadowMapUV transform in the pixel shader!
     result.positionInLightProjection = mul(result.positionInLightProjection, GetShadowMapOffsetMatrix());
 

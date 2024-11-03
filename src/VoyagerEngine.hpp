@@ -11,6 +11,7 @@
 #include "NormalsDebugRenderer.hpp"
 #include "ProjectionShadowRenderer.hpp"
 #include "ShadowMapRenderer.hpp"
+#include "VarianceShadowMapRenderer.hpp"
 
 #include "TracyD3D12.hpp"
 
@@ -53,8 +54,8 @@ private:
         DirectX::XMFLOAT4 lightNearFarFrustumSize;
         // Here we store in a silly way the light algorithm type (eg. for shadow mapping type of PCF), kernel size, offset scale and in-shader bias.
         DirectX::XMFLOAT4 lightFilterKernelScaleBias;
-        // Here only the shadow map ambient and sampler kind are stored for now.
-        DirectX::XMFLOAT4 mapAmbientSampler;
+        // Here the shadow map ambient, sampler kind and vsm bleeding reduction are stored.
+        DirectX::XMFLOAT4 mapAmbientSamplerBleed;
         BYTE padding[192]; // Constant buffers must be 256-byte aligned which has to do with constant reads on the GPU.
     };
     //int ConstantBufferPerObjectAlignedSize = (sizeof(wvpConstantBuffer) + 255) & ~255;
@@ -83,6 +84,9 @@ private:
     CD3DX12_CPU_DESCRIPTOR_HANDLE shadowMapDSVHeapLocation;
     CD3DX12_VIEWPORT shadowMapViewport;
     Texture pcfOffsetsTexture;
+    std::vector<Texture> varianceShadowMaps; // Per-frame (like render targets).
+    std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> varianceShadowMapRTVHeapLocations; // TODO: is this needed?
+    CD3DX12_VIEWPORT varianceShadowMapViewport;
     // Materials.
     DefaultTexturedMaterial materialTextured;
     Material materialNoTex;
@@ -92,11 +96,14 @@ private:
     ProjectionShadowMaterial materialProjectionShadow;
     ShadowMapDepthMaterial materialShadowMapDepth;
     ShadowMapMainMaterial materialShadowMapMain;
+    VarianceShadowMapDepthMaterial materialVarianceMapDepth;
+    VarianceShadowMapMainMaterial materialVearianceMapMain;
     // Renderers.
     WireframeRenderer wireframeRenderer;
     NormalsDebugRenderer normalsDebugRenderer;
     ProjectionShadowRenderer projectionShadowRenderer;
     ShadowMapRenderer shadowMapRenderer;
+    VarianceShadowMapRenderer varianceRenderer;
 
     // Meshes and SceneObjects.
     Mesh suzanneMesh;
@@ -117,7 +124,7 @@ private:
     lightParamsConstantBuffer lightParams;
     // They will be influenced by GUI so we need per-buffer data.
     std::vector<MappedResourceLocation> lightingParamsBuffer;
-    // Since we update the shadow view each frame we need per-frame buffers.
+    // Since we update the shadow projection each frame (fitting) we need per-frame buffers.
     // MappedResourceLocation shadowMapWVPBuffer;
     std::vector<MappedResourceLocation> shadowMapWVPBuffers;
 

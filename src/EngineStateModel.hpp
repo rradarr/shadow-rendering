@@ -9,6 +9,7 @@ struct RenderingState {
         NORMALS_DEBUG = 2,
         SHADOW_PROJECTION = 3,
         SHADOW_MAP = 4,
+        VARIANCE_SHADOW_MAP = 5,
         NUM_RENDERING_MODES
     };
     RenderingMode chosenRenderingMode = RenderingMode::DEFAULT;
@@ -34,6 +35,7 @@ struct RenderingState {
     float inShaderDepthBias = 0.f;
     float ambientStrength = 0.02f;
     int useBilinearFiltering = 0;
+    float vsmBleedingReduction = 0.2f;
 };
 
 struct InputState {

@@ -42,6 +42,9 @@ StandardMaterial.cpp
 Texture.cpp
 TextureLoader.cpp
 Timer.cpp
+VarianceShadowMapDepthMaterial.cpp
+VarianceShadowMapMainMaterial.cpp
+VarianceShadowMapRenderer.cpp
 VoyagerEngine.cpp
 WindowsApplication.cpp
 WireframeMaterial.cpp

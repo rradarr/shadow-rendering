@@ -6,7 +6,8 @@ const char* RenderingState::renderingModeNames[static_cast<int>(RenderingMode::N
     "Wireframe",
     "Normals Debug",
     "Shadows - projection shadows",
-    "Shadows - simple shadow mapping"
+    "Shadows - shadow mapping",
+    "Shadows - variance shadow mapping"
  };
 
 const char* RenderingState::pcfModeNames[static_cast<int>(PCFMode::NUM_PCF_MODES)]{

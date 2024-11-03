@@ -16,7 +16,7 @@ struct lightParams
     float3 lightPosition;
     float4 lightNearFarFrustumSize;
     float4 lightFilterKernelScaleBias;
-    float4 mapAmbientSampler;
+    float4 mapAmbientSamplerBleed;
 };
 ConstantBuffer<lightParams> lightConstants : register(b1);
 
@@ -284,7 +284,7 @@ float FindAverageBlockerDistance(float3 lightSpaceSamplePos, float searchSize, f
 float4 main(PSInput input) : SV_TARGET
 {
     const float2 screenSize = float2(1500.f, 1000.f);
-    const float ambientBrightness = lightConstants.mapAmbientSampler.x; // The shadows will not get darker than this.
+    const float ambientBrightness = lightConstants.mapAmbientSamplerBleed.x; // The shadows will not get darker than this.
 
     float3 lightDirection_viewSpace = normalize((input.lightPosition_viewSpace - input.vertexPosition_viewSpace).xyz);
     float diffuseStrength = saturate(dot(input.normal_viewSpace.xyz, lightDirection_viewSpace));
@@ -302,7 +302,7 @@ float4 main(PSInput input) : SV_TARGET
 
     if(lightConstants.lightFilterKernelScaleBias.x == 0) {
         // No filtering.
-        if(lightConstants.mapAmbientSampler.y == 0.f) {
+        if(lightConstants.mapAmbientSamplerBleed.y == 0.f) {
             litFactor = saturate(shadowMapTex.SampleCmpLevelZero(shadowMapSamplerPoint, shadowMapUV, input.positionInLightProjection.z).x);
         }
         else {
@@ -315,7 +315,7 @@ float4 main(PSInput input) : SV_TARGET
             input.positionInLightProjection.xyz,
             lightConstants.lightFilterKernelScaleBias.y,
             lightConstants.lightFilterKernelScaleBias.z,
-            lightConstants.mapAmbientSampler.y);
+            lightConstants.mapAmbientSamplerBleed.y);
     }
     else if(lightConstants.lightFilterKernelScaleBias.x == 2) {
         // Random offset filter.
@@ -328,7 +328,7 @@ float4 main(PSInput input) : SV_TARGET
                 input.positionInLightProjection.xyz,
                 input.position.xy,
                 lightConstants.lightFilterKernelScaleBias.z * mapTexelSize.x,
-                lightConstants.mapAmbientSampler.y);
+                lightConstants.mapAmbientSamplerBleed.y);
         }
     }
     else if(lightConstants.lightFilterKernelScaleBias.x == 3) {
@@ -362,7 +362,7 @@ float4 main(PSInput input) : SV_TARGET
                     input.positionInLightProjection.xyz,
                     input.position.xy,
                     filterSize * lightConstants.lightFilterKernelScaleBias.z,
-                    lightConstants.mapAmbientSampler.y);
+                    lightConstants.mapAmbientSamplerBleed.y);
             }
         }
     }
