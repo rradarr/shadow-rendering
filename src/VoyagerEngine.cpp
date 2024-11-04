@@ -155,9 +155,9 @@ void VoyagerEngine::OnUpdate()
     
     UpdateLightFitting();
 
+    RenderingState renderState = EngineStateModel::GetInstance()->GetRenderingState();
     //Update light params
     {
-        RenderingState renderState = EngineStateModel::GetInstance()->GetRenderingState();
         lightParams.lightNearFarFrustumSize.x = 1.f;
         lightParams.lightNearFarFrustumSize.y = 50.f;
         lightParams.lightNearFarFrustumSize.z = 7.f;
@@ -170,6 +170,14 @@ void VoyagerEngine::OnUpdate()
         lightParams.mapAmbientSamplerBleed.y = static_cast<float>(renderState.useBilinearFiltering);
         lightParams.mapAmbientSamplerBleed.z = renderState.vsmBleedingReduction;
         memcpy(lightingParamsBuffer[m_frameBufferIndex].GetMappedResourceAddress(), &lightParams, sizeof(lightParams));
+    }
+    // And filter params
+    {
+        GaussianBlurParamsConstantBuffer blurParams;
+        blurParams.blurOffsetKernelVariance.x = renderState.gaussianBlurSampleOffset;
+        blurParams.blurOffsetKernelVariance.y = static_cast<float>(renderState.gaussianFilterSize);
+        blurParams.blurOffsetKernelVariance.z = renderState.gaussianBlurVariance;
+        memcpy(filterParamsBuffers[m_frameBufferIndex].GetMappedResourceAddress(), &blurParams, sizeof(blurParams));
     }
 
     // std::cout << "Updated" << std::endl;
@@ -424,6 +432,28 @@ void VoyagerEngine::LoadAssets()
             groundPlane.UpdateBoundingBox();
         }
 
+        // Load the full screen quad.
+        {
+            std::vector<Vertex> vertices;
+            std::vector<DWORD> indices;
+            Mesh::CreatePlane(vertices, indices);
+
+            // Transform so it has [-1:1] in xy ...
+            for(int i = 0; i < vertices.size(); i++) {
+                vertices[i].position.y = vertices[i].position.z;
+                vertices[i].position.z = 0.f;
+                DirectX::XMVECTOR pos = DirectX::XMLoadFloat3(&vertices[i].position);
+                pos = DirectX::XMVectorScale(pos, 2.f);
+                DirectX::XMStoreFloat3(&vertices[i].position, pos);
+            }
+
+            plane = Mesh(vertices, indices);
+
+            std::vector<DirectX::XMFLOAT4> boundingB = Mesh::GetBoundingBox(vertices);
+            fullscreenQuad = SceneObject(&plane, boundingB);
+
+        }
+
         // Create the depth/stencil heap and buffer.
         {
             BufferMemoryManager buffMng;
@@ -456,7 +486,7 @@ void VoyagerEngine::LoadAssets()
         // 1024
         // 2048
         // 4096
-        const unsigned int shadowMapResolution = 2048U;
+        const unsigned int shadowMapResolution = 512U;
 
         // Create the shadow map depth buffer / depth texture.
         {
@@ -477,12 +507,6 @@ void VoyagerEngine::LoadAssets()
             depthOptimizedClearValue.DepthStencil.Stencil = 0;
 
             // Create the resource.
-            // Shdaow map resolutions:
-            // 512
-            // 1024
-            // 2048
-            // 4096
-            const unsigned int shadowMapResolution = 2048U;
             CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R24G8_TYPELESS, shadowMapResolution, shadowMapResolution, 1, 1, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
             shadowMap.CreateEmpty(resourceDesc, srvDesc, D3D12_RESOURCE_STATE_GENERIC_READ, &depthOptimizedClearValue);
 
@@ -561,6 +585,14 @@ void VoyagerEngine::LoadAssets()
                 varianceShadowMapRTVHeapLocations.push_back(rtvHandle);
                 rtvHandle.Offset(1, m_rtvDescriptorSize);
             }
+
+            // Additinally create the filter parameters bufers (one per frame).
+            GaussianBlurParamsConstantBuffer blurParams;
+            for(int i = 0; i < mc_frameBufferCount; i++){
+                ZeroMemory(&blurParams, sizeof(blurParams));
+                MappedResourceLocation resource = resourceManager.AddMappedUploadResource(&blurParams, sizeof(blurParams));
+                filterParamsBuffers.push_back(resource);
+            }  
         }
     }
 
@@ -620,16 +652,26 @@ void VoyagerEngine::LoadMaterials()
     materialVarianceMapDepth.CreateMaterial();
     materialVearianceMapMain.SetShaders("VertexShader_variance_shadow_mapping.hlsl", "PixelShader_variance_shadow_mapping.hlsl");
     materialVearianceMapMain.CreateMaterial();
+    materialGaussianBlur.SetShaders("VertexShader_gaussian_blur.hlsl", "PixelShader_gaussian_blur.hlsl");
+    materialGaussianBlur.CreateMaterial();
     varianceRenderer.SetDSV(dsvHandle);
     varianceRenderer.SetViewport(m_viewport);
     varianceRenderer.SetMainMaterial(&materialVearianceMapMain);
     varianceRenderer.SetDepthPassMaterial(&materialVarianceMapDepth);
+    varianceRenderer.SetBlurMaterial(&materialGaussianBlur);
+    varianceRenderer.SetBlurRTV(varianceShadowMapRTVHeapLocations[1]); // Note: we dont use them per-frame, we use 0 for rendering and 1 for blur!
+    shadowMapSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
+    shadowMapSRV = shadowMapSRV.Offset(varianceShadowMaps[1].GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize());
+    varianceRenderer.SetBlurSRV(shadowMapSRV);
+    varianceRenderer.SetBlurResource(varianceShadowMaps[1].GetTextureResource());
     varianceRenderer.SetDepthPassDSV(shadowMapDSVHeapLocation);
     varianceRenderer.SetDepthPassDepthResource(shadowMap.GetTextureResource());
-    // varianceRenderer.SetShadowMapResource(varianceShadowMap.GetTextureResource());
-    // shadowMapSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
-    // shadowMapSRV = shadowMapSRV.Offset(varianceShadowMap.GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize()); // TODO: Move getting the SRV desc. handle into a Texture method.
-    // varianceRenderer.SetShadowMapSRV(shadowMapSRV);
+    varianceRenderer.SetShadowMapRTV(varianceShadowMapRTVHeapLocations[0]); // TODO: it seems like we don't need per-frame maps?
+    shadowMapSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
+    shadowMapSRV = shadowMapSRV.Offset(varianceShadowMaps[0].GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize());
+    varianceRenderer.SetShadowMapSRV(shadowMapSRV);
+    varianceRenderer.SetFullScreenQuad(fullscreenQuad);
+    varianceRenderer.SetShadowMapResource(varianceShadowMaps[0].GetTextureResource());
     varianceRenderer.SetShadowPassViewport(shadowMapViewport);
     varianceRenderer.SetTracyContext(&tracyCtx);
     // Following properties set per frame:
@@ -731,13 +773,8 @@ void VoyagerEngine::PopulateCommandList()
         else if (chosenRenderingMode == RenderingState::RenderingMode::VARIANCE_SHADOW_MAP) {
             varianceRenderer.SetLightingParametersBuffer(lightingParamsBuffer[m_frameBufferIndex]);
             varianceRenderer.SetLightWVPBuffer(shadowMapWVPBuffers[m_frameBufferIndex]);
+            varianceRenderer.SetBlurParametersBufer(filterParamsBuffers[m_frameBufferIndex]);
             varianceRenderer.SetRTV(rtvHandle);
-            varianceRenderer.SetShadowMapRTV(varianceShadowMapRTVHeapLocations[0]); // TODO: it seems like we don't need per-frame maps?
-            CD3DX12_GPU_DESCRIPTOR_HANDLE shadowMapSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(CbvSrvDescriptorHeapManager::GetHeap()->GetGPUDescriptorHandleForHeapStart());
-            shadowMapSRV = shadowMapSRV.Offset(varianceShadowMaps[0].GetOffsetInHeap(), CbvSrvDescriptorHeapManager::GetDescriptorSize());
-            varianceRenderer.SetShadowMapSRV(shadowMapSRV);
-            varianceRenderer.SetShadowMapSRV(shadowMapSRV);
-            varianceRenderer.SetShadowMapResource(varianceShadowMaps[0].GetTextureResource());
             varianceRenderer.Render(m_commandList, sceneObjects, m_frameBufferIndex);
         }
         else {

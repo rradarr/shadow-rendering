@@ -60,6 +60,11 @@ private:
     };
     //int ConstantBufferPerObjectAlignedSize = (sizeof(wvpConstantBuffer) + 255) & ~255;
 
+    struct GaussianBlurParamsConstantBuffer {
+        // Sample offset is stored here.
+        DirectX::XMFLOAT4 blurOffsetKernelVariance;
+    };
+
     // Pipeline objects.
     CD3DX12_VIEWPORT m_viewport; // Area that the view-space (rasterizer outputt, between 0,1) will be streched to (and make up the screen-space).
     CD3DX12_RECT m_scissorRect; // Area in cscreen-space that will be drawn.
@@ -84,7 +89,7 @@ private:
     CD3DX12_CPU_DESCRIPTOR_HANDLE shadowMapDSVHeapLocation;
     CD3DX12_VIEWPORT shadowMapViewport;
     Texture pcfOffsetsTexture;
-    std::vector<Texture> varianceShadowMaps; // Per-frame (like render targets).
+    std::vector<Texture> varianceShadowMaps; // Per-frame (like render targets). Well, or not...
     std::vector<CD3DX12_CPU_DESCRIPTOR_HANDLE> varianceShadowMapRTVHeapLocations; // TODO: is this needed?
     CD3DX12_VIEWPORT varianceShadowMapViewport;
     // Materials.
@@ -98,6 +103,7 @@ private:
     ShadowMapMainMaterial materialShadowMapMain;
     VarianceShadowMapDepthMaterial materialVarianceMapDepth;
     VarianceShadowMapMainMaterial materialVearianceMapMain;
+    GaussianBlurMaterial materialGaussianBlur;
     // Renderers.
     WireframeRenderer wireframeRenderer;
     NormalsDebugRenderer normalsDebugRenderer;
@@ -110,6 +116,10 @@ private:
     Mesh groundPlaneMesh;
     SceneObject suzanne;
     SceneObject groundPlane;
+
+    // Misc objects.
+    Mesh plane;
+    SceneObject fullscreenQuad;
 
     std::vector<SceneObject> sceneObjects;
 
@@ -127,6 +137,7 @@ private:
     // Since we update the shadow projection each frame (fitting) we need per-frame buffers.
     // MappedResourceLocation shadowMapWVPBuffer;
     std::vector<MappedResourceLocation> shadowMapWVPBuffers;
+    std::vector<MappedResourceLocation> filterParamsBuffers;
 
     // Synchronization objects.
     UINT m_frameBufferIndex;

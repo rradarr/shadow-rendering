@@ -35,7 +35,12 @@ struct RenderingState {
     float inShaderDepthBias = 0.f;
     float ambientStrength = 0.02f;
     int useBilinearFiltering = 0;
+    
     float vsmBleedingReduction = 0.2f;
+    bool useGaussianBlurOnVSM = false;
+    int gaussianFilterSize = 3;
+    float gaussianBlurVariance = 1.f;
+    float gaussianBlurSampleOffset = 1.f;
 };
 
 struct InputState {

@@ -134,4 +134,19 @@ void ImGuiRenderingOptions::DisplayVarianceShadowMapOptions()
     if(ImGui::Checkbox("Use hardware bilinear filtering", &useBilinear)) {
         engineState->GetRenderingState().useBilinearFiltering = static_cast<int>(useBilinear);
     }
+
+    bool useBlur = static_cast<bool>(engineState->GetRenderingState().useGaussianBlurOnVSM);
+    if(ImGui::Checkbox("Filter VSM with Gaussian blur", &useBlur)) {
+        engineState->GetRenderingState().useGaussianBlurOnVSM = static_cast<int>(useBlur);
+    }
+
+    int filterSize = engineState->GetRenderingState().gaussianFilterSize;
+    if(ImGui::InputInt("Kernel size (odd)", &filterSize, 2, 4, ImGuiSliderFlags_AlwaysClamp)) {
+        // If even just hack it and just dont update...
+        if(filterSize % 2 != 0 && filterSize > 0 && filterSize < 24)
+            engineState->GetRenderingState().gaussianFilterSize = filterSize;
+    }
+
+    ImGui::SliderFloat("VSM Gaussian blur offset", &engineState->GetRenderingState().gaussianBlurSampleOffset, 0.f, 30.f);
+    ImGui::SliderFloat("VSM Gaussian blur variance", &engineState->GetRenderingState().gaussianBlurVariance, 0.f, 10.f);
 }

@@ -2,7 +2,7 @@
 #include "VarianceShadowMapRenderer.hpp"
 
 #include <cassert>
-#include "SceneObject.hpp"
+// #include "SceneObject.hpp"
 
 #include "Tracy.hpp"
 
@@ -75,6 +75,90 @@ void VarianceShadowMapRenderer::Render(ComPtr<ID3D12GraphicsCommandList> command
             CD3DX12_RESOURCE_BARRIER::Transition(
                 shadowMapDepthStencilResource.Get(),
                 D3D12_RESOURCE_STATE_DEPTH_WRITE,
+                D3D12_RESOURCE_STATE_GENERIC_READ)
+        };
+        commandList->ResourceBarrier(static_cast<UINT>(barriers.size()), barriers.data());
+    }
+
+    if(engineState->GetRenderingState().useGaussianBlurOnVSM)
+    {
+        // Transition the resources to be usable here.
+        std::vector<CD3DX12_RESOURCE_BARRIER> barriers {
+            CD3DX12_RESOURCE_BARRIER::Transition(
+                tmpShadowMap.Get(),
+                D3D12_RESOURCE_STATE_GENERIC_READ,
+                D3D12_RESOURCE_STATE_RENDER_TARGET)
+        };
+        commandList->ResourceBarrier(static_cast<UINT>(barriers.size()), barriers.data());
+
+        // Perform filtering.
+        commandList->OMSetRenderTargets(1, &tmpShadowMapRTVHandle, FALSE, nullptr);
+
+        commandList->RSSetViewports(1, &shadowPassViewport);
+        commandList->RSSetScissorRects(1, &shadowPassScissor);
+        const float clearColor[] = { 1.f, 1.f, 1.f, 1.0f };
+        commandList->ClearRenderTargetView(tmpShadowMapRTVHandle, clearColor, 0, nullptr);
+
+        commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+        commandList->SetPipelineState(blurPassMaterial->GetPSO().Get());
+        commandList->SetGraphicsRootSignature(blurPassMaterial->GetRootSignature().Get());
+
+        commandList->SetGraphicsRoot32BitConstant(
+            GaussianBlurMaterial::CONSTANT_FILTER_DIRECTION,
+            0U, 0U); // Blur direction on X.
+        commandList->SetGraphicsRootConstantBufferView(
+                GaussianBlurMaterial::CBV_FILTER_PARAMS,
+                blurringParametersBuffer.GetGPUResourceVirtualAddress());
+        commandList->SetGraphicsRootDescriptorTable(
+            GaussianBlurMaterial::TABLE_TEXTURE_INPUT,
+            shadowMapSRVHandle);
+
+        fullScreenQuad.Draw(commandList);
+
+        // Swap the transition.
+        barriers = {
+            CD3DX12_RESOURCE_BARRIER::Transition(
+                shadowMap.Get(),
+                D3D12_RESOURCE_STATE_GENERIC_READ,
+                D3D12_RESOURCE_STATE_RENDER_TARGET),
+            CD3DX12_RESOURCE_BARRIER::Transition(
+                tmpShadowMap.Get(),
+                D3D12_RESOURCE_STATE_RENDER_TARGET,
+                D3D12_RESOURCE_STATE_GENERIC_READ)
+        };
+        commandList->ResourceBarrier(static_cast<UINT>(barriers.size()), barriers.data());
+
+        // Render Y blurring into the shadow map.
+        commandList->OMSetRenderTargets(1, &shadowMapRTVHandle, FALSE, nullptr);
+
+        commandList->RSSetViewports(1, &shadowPassViewport);
+        commandList->RSSetScissorRects(1, &shadowPassScissor);
+        // const float clearColor[] = { 1.f, 1.f, 1.f, 1.0f };
+        commandList->ClearRenderTargetView(shadowMapRTVHandle, clearColor, 0, nullptr);
+
+        commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+        commandList->SetPipelineState(blurPassMaterial->GetPSO().Get());
+        commandList->SetGraphicsRootSignature(blurPassMaterial->GetRootSignature().Get());
+
+        commandList->SetGraphicsRoot32BitConstant(
+            GaussianBlurMaterial::CONSTANT_FILTER_DIRECTION,
+            1U, 0U); // Blur direction on Y.
+        commandList->SetGraphicsRootConstantBufferView(
+                GaussianBlurMaterial::CBV_FILTER_PARAMS,
+                blurringParametersBuffer.GetGPUResourceVirtualAddress());
+        commandList->SetGraphicsRootDescriptorTable(
+            GaussianBlurMaterial::TABLE_TEXTURE_INPUT,
+            tmpShadowMapSRVHandle);
+
+        fullScreenQuad.Draw(commandList);
+
+        // Transision shadow map back to SRV.
+        barriers = {
+            CD3DX12_RESOURCE_BARRIER::Transition(
+                shadowMap.Get(),
+                D3D12_RESOURCE_STATE_RENDER_TARGET,
                 D3D12_RESOURCE_STATE_GENERIC_READ)
         };
         commandList->ResourceBarrier(static_cast<UINT>(barriers.size()), barriers.data());

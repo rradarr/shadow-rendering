@@ -20,6 +20,7 @@ DXContext.cpp
 Engine.cpp
 EngineHelpers.cpp
 EngineStateModel.cpp
+GaussianBlurMaterial.cpp
 ImGuiController.cpp
 ImGuiPerformanceWindow.cpp
 ImGuiRenderingOptions.cpp

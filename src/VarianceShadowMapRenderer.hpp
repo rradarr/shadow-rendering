@@ -3,7 +3,10 @@
 
 #include "VarianceShadowMapMainMaterial.hpp"
 #include "VarianceShadowMapDepthMaterial.hpp"
+#include "GaussianBlurMaterial.hpp"
 #include "ResourceManager.hpp"
+#include "SceneObject.hpp"
+#include "EngineStateModel.hpp"
 
 #include "TracyD3D12.hpp"
 
@@ -12,7 +15,7 @@ using Microsoft::WRL::ComPtr;
 class VarianceShadowMapRenderer : public Renderer
 {
 public:
-    VarianceShadowMapRenderer() {};
+    VarianceShadowMapRenderer() { engineState = EngineStateModel::GetInstance(); };
     ~VarianceShadowMapRenderer() {};
 
     void SetShadowPassViewport(CD3DX12_VIEWPORT viewport);
@@ -25,6 +28,12 @@ public:
     void SetDepthPassDepthResource(ComPtr<ID3D12Resource> shadowMapDepthResource) { shadowMapDepthStencilResource = shadowMapDepthResource; }
     void SetShadowMapSRV(D3D12_GPU_DESCRIPTOR_HANDLE srvHandle) { shadowMapSRVHandle = srvHandle; }
     void SetShadowMapRTV(CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle) { shadowMapRTVHandle = rtvHandle; }
+    void SetBlurMaterial(GaussianBlurMaterial* blurMaterial) { blurPassMaterial = blurMaterial; }
+    void SetBlurResource(ComPtr<ID3D12Resource> blurTmpResource) { tmpShadowMap = blurTmpResource; }
+    void SetBlurSRV(D3D12_GPU_DESCRIPTOR_HANDLE srvHandle) { tmpShadowMapSRVHandle = srvHandle; }
+    void SetBlurRTV(CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle) { tmpShadowMapRTVHandle = rtvHandle; }
+    void SetBlurParametersBufer(MappedResourceLocation blurParameters) { blurringParametersBuffer = blurParameters; }
+    void SetFullScreenQuad(SceneObject fullscreenQuad) { fullScreenQuad = fullscreenQuad; }
     // void SetPCFOffsetsSRV(D3D12_GPU_DESCRIPTOR_HANDLE srvHandle) { pcfOffsetsSRVHandle = srvHandle; }
 
     void SetTracyContext(TracyD3D12Ctx* tracyContext) { tracyCtx = tracyContext; }
@@ -37,7 +46,7 @@ private:
 
     VarianceShadowMapMainMaterial* mainMaterial = nullptr;
     VarianceShadowMapDepthMaterial* depthPassMaterial = nullptr;
-    // TODO VarianceShadowMapBlurMaterial* blurPassMaterial = nullptr;
+    GaussianBlurMaterial* blurPassMaterial = nullptr;
 
     MappedResourceLocation lightWVPBuffer;
     MappedResourceLocation lightingParametersBuffer;
@@ -49,7 +58,12 @@ private:
     D3D12_GPU_DESCRIPTOR_HANDLE shadowMapSRVHandle;
     ComPtr<ID3D12Resource> tmpShadowMap; // Used for filtering
     D3D12_GPU_DESCRIPTOR_HANDLE tmpShadowMapSRVHandle;
-    D3D12_GPU_DESCRIPTOR_HANDLE pcfOffsetsSRVHandle;
+    CD3DX12_CPU_DESCRIPTOR_HANDLE tmpShadowMapRTVHandle;
+    MappedResourceLocation blurringParametersBuffer;
+    SceneObject fullScreenQuad;
+    // D3D12_GPU_DESCRIPTOR_HANDLE pcfOffsetsSRVHandle;
+
+    EngineStateModel* engineState = nullptr;
 
     TracyD3D12Ctx* tracyCtx;
 };
