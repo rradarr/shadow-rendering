@@ -33,9 +33,9 @@ void VarianceShadowMapDepthMaterial::CustomizePipelineStateObjectDescription(D3D
     psoDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
     // Bias settings
-    psoDesc.RasterizerState.DepthBias = 0;
-    psoDesc.RasterizerState.SlopeScaledDepthBias = 0.f;
-    psoDesc.RasterizerState.DepthBiasClamp = 0.f;
+    psoDesc.RasterizerState.DepthBias = 1;
+    psoDesc.RasterizerState.SlopeScaledDepthBias = 1.f;
+    psoDesc.RasterizerState.DepthBiasClamp = 10.f;
 
     // Good sponza settings \/
     // psoDesc.RasterizerState.DepthBias = 2;

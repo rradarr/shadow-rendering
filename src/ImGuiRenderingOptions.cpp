@@ -147,6 +147,6 @@ void ImGuiRenderingOptions::DisplayVarianceShadowMapOptions()
             engineState->GetRenderingState().gaussianFilterSize = filterSize;
     }
 
-    ImGui::SliderFloat("VSM Gaussian blur offset", &engineState->GetRenderingState().gaussianBlurSampleOffset, 0.f, 30.f);
-    ImGui::SliderFloat("VSM Gaussian blur variance", &engineState->GetRenderingState().gaussianBlurVariance, 0.f, 10.f);
+    ImGui::SliderFloat("VSM box blur offset", &engineState->GetRenderingState().gaussianBlurSampleOffset, 0.f, 30.f);
+    // ImGui::SliderFloat("VSM Gaussian blur variance", &engineState->GetRenderingState().gaussianBlurVariance, 0.f, 10.f);
 }

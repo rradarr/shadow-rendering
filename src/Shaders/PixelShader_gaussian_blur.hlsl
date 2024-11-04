@@ -41,16 +41,29 @@ float4 main(PSInput input) : SV_TARGET
     // color += sourceTex.Sample(baseSampler, uvCoords + (1.0.xx / (float)width * offset))  * (15.f / 64.f);
     // color += sourceTex.Sample(baseSampler, uvCoords + (2.0.xx / (float)width * offset))  * (6.f / 64.f);
     // color += sourceTex.Sample(baseSampler, uvCoords + (3.0.xx / (float)width * offset))  * (1.f / 64.f);
-    float baseOffset = (filterConstants.blurOffsetKernelVariance.y - 1) / -2.f;
-    float coord = baseOffset;
-    float variance2 = filterConstants.blurOffsetKernelVariance.z * filterConstants.blurOffsetKernelVariance.z;
+
+    // float baseOffset = (filterConstants.blurOffsetKernelVariance.y - 1) / -2.f;
+    // float coord = baseOffset;
+    // float variance2 = filterConstants.blurOffsetKernelVariance.z * filterConstants.blurOffsetKernelVariance.z;
+    // [loop]
+    // for(int i = coord; i <= -coord; i++) {
+    //     float2 sampleOffset = baseOffset.xx / (float)width * offset;
+    //     float weight = 1.f / (sqrt(2 * 3.14 * variance2)) * exp(i * i / (-2.f * variance2));
+    //     color += sourceTex.Sample(baseSampler, uvCoords + sampleOffset) * weight;
+    //     baseOffset ++;
+    // }
+    float dy = 1.f / width;
+    float dx = dy;
+    const int kernelSize = filterConstants.blurOffsetKernelVariance.y;
+    float2 sampleOffset = float2(dx * (kernelSize - 1) / -2.f, dy * (kernelSize - 1) / -2.f);
     [loop]
-    for(int i = coord; i <= -coord; i++) {
-        float2 sampleOffset = baseOffset.xx / (float)width * offset;
-        float weight = 1.f / (sqrt(2 * 3.14 * variance2)) * exp(i * i / (-2.f * variance2));
-        color += sourceTex.Sample(baseSampler, uvCoords + sampleOffset) * weight;
-        baseOffset ++;
+    for(int r = 0; r < kernelSize; r++) {
+        sampleOffset *= offset;
+        color += sourceTex.Sample(baseSampler, uvCoords + sampleOffset * filterConstants.blurOffsetKernelVariance.x);
+        sampleOffset += float2(dx, dy);
     }
+    
+    color /= kernelSize;
 
     return color;
 }
