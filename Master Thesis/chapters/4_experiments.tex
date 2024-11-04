@@ -1014,6 +1014,220 @@ It is worth noting a caveat of this technique that is visible in the results in 
 
 Overall, the performance and visual results of adaptive PCF make it a very practical solution to filtering shadow maps. The shadows look smooth, and their penumbras are easily controlled with the offset scale.
 
+\subsubsection{Variance shadow maps}
+Variance shadow maps were implemented with a separable box filter for blurring of shadows, as explained in section \ref{section:impl_vsm}. This is expected to bring significant performance improvements in comparison to PCF. Below, in Fig. \ref{fig:plot:vsm_results}, are the results of experiments with all the test scenes with different sizes of the filter kernel and for different output resolutions.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={3,7,11,15,19,23},
+                xticklabels={3,7,11,15,19,23},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (3,1563)(7,1445)(11,1380)(15,1317)(19,1255)(23,1208)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (3,1309)(7,1242)(11,1192)(15,1132)(19,1091)(23,1051)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (3,1164)(7,1112)(11,1065)(15,1025)(19,990)(23,958)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for Chinese Dragon scene.}
+        \label{fig:plot:vsm_dragon}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={3,7,11,15,19,23},
+                xticklabels={3,7,11,15,19,23},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (3,2925)(7,2916)(11,2905)(15,2907)(19,2808)(23,2759)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (3,2912)(7,2921)(11,2888)(15,2785)(19,2773)(23,2661)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (3,2947)(7,2851)(11,2836)(15,2776)(19,2565)(23,2362)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Cube scene.}
+        \label{fig:plot:vsm_cube}
+    \end{subfigure}
+
+    \vspace{20pt}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={3,7,11,15,19,23},
+                xticklabels={3,7,11,15,19,23},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (3,252)(7,249)(11,246)(15,244)(19,242)(23,240)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (3,247)(7,243)(11,241)(15,239)(19,235)(23,233)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (3,234)(7,232)(11,230)(15,228)(19,226)(23,224)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Power Plant scene.}
+        \label{fig:plot:vsm_power}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{tikzpicture}
+            \begin{axis}[
+                small,
+                xlabel={Filter kernel size},
+                ylabel={FPS},
+                xtick={3,7,11,15,19,23},
+                xticklabels={3,7,11,15,19,23},
+                % legend style={
+                %     overlay,
+                %     at={(1.25,0.5)},
+                %     anchor=center},
+                y tick label style={
+                    /pgf/number format/.cd,
+                        fixed,   % po zakomentowaniu os rzednych jest indeksowana wykladniczo
+                        fixed, % 1.0 zamiast 1
+                        precision=1,
+                    /tikz/.cd
+                },
+                x tick label style={
+                    /pgf/number format/.cd,
+                        fixed,
+                        fixed,
+                        precision=2,
+                    /tikz/.cd
+                }
+                ]
+                \addplot [color=green]
+                coordinates {
+                    (3,2658)(7,2418)(11,2214)(15,2038)(19,1893)(23,1767)}; %\addlegendentry{720p}
+                \addplot [color=black]
+                coordinates {
+                    (3,2120)(7,1939)(11,1800)(15,1683)(19,1582)(23,1494)}; %\addlegendentry{1080p}
+                \addplot [color=brown]
+                coordinates {
+                    (3,1669)(7,1548)(11,1460)(15,1382)(19,1315)(23,1248)}; %\addlegendentry{2k}
+            \end{axis} 
+        \end{tikzpicture}
+        \caption{Results for the Crytek Sponza scene.}
+        \label{fig:plot:vsm_sponza}
+    \end{subfigure}
+    \caption{Frames per second for all test scenes, for different sizes of the filter kernel and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the variance shadow mapping technique with box filtering, at constant shadow map size \(1024\times 1024\).}
+    \label{fig:plot:vsm_results}
+\end{figure}
+
+The results are exceptionally good, showing performance much better than PCF and even adaptive PCF. The tests were performed with twice as large filter kernels as in the case of PCF and FPS never dropped below 224 in the worst case. The performance degradation, if extrapolated from these plots, also seems to be slowing down, which hints that even larger kernel sizes are within reach with this technique.
+
+During testing comparisons of regular shadow mapping and VSM without any filtering were performed, and VSM usually scored just up to 5 FPS worse. If it is intended to be used with any kind of filtering, then this cost of the pure VSM algorithm is well worth it.
+
+Variance shadow maps introduce higher memory requirements which has to be taken into account when working with particularly restrictive memory budgets. VSM in itself requires a texture with two-channels, each 32-bit to avoid numeric issues. In addition, a separate depth buffer has to be used, which adds another 32-bit resource. This is three times the memory consumption of a basic shadow mapping implementation. If filtering is to be utilized, another resource of same size and format as the VSM is needed to perform separable filtering.
+
+Visually, VSM is very good at anti-aliasing and smoothing shadows. Large filter kernels can be used with great performance. When combined with standard bilinear texture filtering the results are perfectly smooth. Unfortunately this technique tends to lose detail in the shadows. It also suffers from light leaks that need to be tweaked by hand to disappear and artifacts can occur in places where occluders overlap. On the other hand it is mostly free of shadow acne, even at highest filter sizes. Results of rendering with VSM, including its pitfalls, are presented in Fig. \ref{fig:test_vsm_screens}.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/vsm/cropped/dragon_vsm_512_23_smooth.png}
+        \caption{The Chinese Dragon rendered with \(11\times 11\) kernel with bilinear filtering and low resolution \(512\times 512\) shadow map. The shadow is very smooth, but has lost some detail.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/vsm/cropped/sponza_vsm_4096_23.png}
+        \caption{The Crytek Sponza scene rendered with VSM producing very pleasant shadows.}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.49\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/vsm/cropped/sponza_vsm_4096_23_badsetup.png}
+        \caption{The Crytek Sponza scene rendered with VSM exhibiting light leaking due to wrong selection of parameters.}
+    \end{subfigure}
+	\hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+		\centering
+        \includegraphics[width=\textwidth]{./graf/tests/vsm/cropped/sponza_vsm_4096_23_leaks.png}
+        \caption{The Crytek Sponza scene rendered with VSM with visible light leaks due to incorrect parameters.}
+    \end{subfigure}
+
+    \caption{Test scenes showcasing pros and cons of VSM.}
+    \label{fig:test_vsm_screens}
+\end{figure}
+
 \subsection{Soft shadows with shadow maps}
 
 \subsubsection{PCSS}
@@ -1231,11 +1445,11 @@ PCSS has its performance cost, but the results it produces can certainly elevate
 
 Basic shadow mapping lays the foundation on which more advanced techniques can be built. It has a performance cost that is slightly smaller than double the main render pass. On its own it requires very high resolution to get pleasant results, so that aliasing it eliminated.
 
-It can be enhanced with various filtering methods. Bilinear comparison filtering is implemented within GPU hardware, so it can be very fast. It can be used to blur the edges of shadows for almost no performance cost. This helps separate hard shadows from actual geometry. Percentage-closer filtering allows control over the strength and quality of the shadow smoothing effect. It uses a square filter kernel to average shadow function results. The performance drops very rapidly with increase in the filer size and the results feature quite severe banding and visible shadow map texel borders. This can be greatly improved by combining PCF with hardware bilinear filtering. Then, even a very small shadow map and a modestly sized kernel can produce very pleasant shadows. The last filtering method, adaptive PCF, improves both performance and visual results. By using sets of filter kernels stored in a 3D texture, the algorithm can quit filtering early where further samples are not required. The blurring gives very smooth results, hiding any banding or texel boundaries and is easily controllable. Adaptive PCF increases the memory consumption by \(m\times m\times (n^2 / 2)\). It can also unfortunately introdce high-contrast noise in specific areas of the shadows.
+It can be enhanced with various filtering methods. Bilinear comparison filtering is implemented within GPU hardware, so it can be very fast. It can be used to blur the edges of shadows for almost no performance cost. This helps separate hard shadows from actual geometry. Percentage-closer filtering allows control over the strength and quality of the shadow smoothing effect. It uses a square filter kernel to average shadow function results. The performance drops very rapidly with increase in the filer size and the results feature quite severe banding and visible shadow map texel borders. This can be greatly improved by combining PCF with hardware bilinear filtering. Then, even a very small shadow map and a modestly sized kernel can produce very pleasant shadows. The last filtering method, adaptive PCF, improves both performance and visual results. By using sets of filter kernels stored in a 3D texture, the algorithm can quit filtering early where further samples are not required. The blurring gives very smooth results, hiding any banding or texel boundaries and is easily controllable. Adaptive PCF increases the memory consumption by \(m\times m\times (n^2 / 2)\). It can also unfortunately introduce high-contrast noise in specific areas of the shadows. VSM offers outstanding performance by enabling the use of typical texture filtering operations and separable manual filtering. It does not suffer from shadow acne, but has its own issues with light leaks. It produces very pleasant shadows that exhibit certain softness, but at the same time they can lack in detail. Additionally, VSM requires up to five times more memory than regular shadow mapping.
 
 Finally, percentage-closer soft shadows can be used to render contact-hardening shadows. This technique gives the most robust visuals, but requires careful hand tuning of the parameters such as bias and light size. It gives realistic looking results, which are however not physically correct, and are only an approximation. The performance is approximately half of adaptive PCF on its own.
 
-If the visuals are of the highest importance and the application has a lot of frame time budget available, PCSS is the best choice. Otherwise, a balance between shadow map resolution, kernel size and kernel offset scale should be found within adaptive PCF. Basic PCF should probably be avoided, unless combining a small kernel size with hardware bilinear filtering and high shadow map resolution for basic antialiasing of shadows.
+If the visuals are of the highest importance and the application has a lot of frame time budget available, PCSS is the best choice. VSM is both very performant and gives very smooth shadows, but should be reconsidered if shadow detail is important. In other cases, a balance between shadow map resolution, kernel size and kernel offset scale should be found within adaptive PCF. Basic PCF should probably be avoided, unless combining a small kernel size with hardware bilinear filtering and high shadow map resolution for basic anti-aliasing of shadows.
 
 % \begin{table}
 % \centering
