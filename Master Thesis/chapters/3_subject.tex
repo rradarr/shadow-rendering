@@ -349,6 +349,31 @@ As an argument against this technique one could point out the fact that GPU hard
 
 A substantial problem of PCF algorithms is surface acne, which gets worse the larger the kernels and offset scales are used. This is because the sampled area of the shadow map increases and read depth values may vary more, while the depth of the scene point being shaded does not change. This can be again combated with a depth bias. An offset cone can be also used by applying higher bias the further from the original sample a point is. These however still need to be hand-tuned on a scene by scene basis. Additionally, it is important to note that, while PCF approaches do generate smooth shadows, they are not physically correct soft shadows. This is both due to the fact that the amount of smoothing is constant and that scene surface points are sampled. For an accurate shadow the area of the light source would need to be sampled for visibility from a given scene point, not the other way around.
 
+\subsection{Variance shadow maps}
+\label{section:impl_vsm}
+As introduced in section \ref{section:filtering_shadow_maps}, variance shadow maps take a different, more robust approach to shadow mapping. Two moments of depth values, \(M_1 = E(x)\) and \(M_2 = E(x^2)\), being the depth and depth squared, possibly averaged over an area, are used to compute the mean and variance squared. Those are in turn used to calculate the upper bound that a given point is occluded using the Chebyshev inequality. The equations below show the calculation of the Chebyshev inequality \(p_{max}\).
+\begin{align}
+    \label{eq:Chebyshev}
+    \mu &= E(x) = M_1 \\
+    \sigma^2 &= E(x^2) - E(x)^2 = M_2 - M_1^2 \\
+    P(x \ge z)\le p_{max}(z) &= \frac{\sigma^2}{\sigma^2 + (z-\mu)^2}
+\end{align}
+The value of \(p_{max}\) can be directly used in a shader as determining the percentage by which a point is not in shadow.
+
+To actually render a VSM the regular shadow mapping algorithm requires a few modifications. The shadow pass will now have to use a color render target, as each moment will be stored in a single channel of the shadow map. It is best to use 32-bit per channel, two-channel format to avoid numeric stability problems. This shadow map texture can then be used in a modified main-pass fragment shader to perform the calculations from \ref{eq:Chebyshev}. Additionally, it is good practice to clamp the minimum variance to some very small floating-point number, for example \(0.00002\). This again serves to avoid numeric stability issues and can also help with shadow acne and self-shadowing.
+
+Another method to avoid erroneous self shadowing is to use the second moment of the VSM to introduce dynamic biasing using the following formula.
+\begin{align}
+    M_2 = \mu^2 + \frac{1}{4}\left(\left(\frac{\partial f}{\partial x}\right)^2+\left(\frac{\partial f}{\partial y}\right)^2\right)
+\end{align}
+The partial derivative values can be easily obtained in-shader using built in partial derivative keywords. This addition basically removes the need for additional biasing, the hand tuning of which was a major issue for techniques utilizing regular shadow maps.
+
+Variance shadow maps like this would be usable, but could suffer from light leaking near object edges, where the variance is too large and causes pixels that should be in shadow to receive light. This situation can be improved with another modification, by simply remapping the obtained \(p_{max}\) to a range \([a:1]\), where \(a\) is some hand-picked value that suits the needs of a particular scene.
+
+The most interesting difference of VSM for a graphics programmer as compared to shadow mapping is the fact that the depth moments can be filtered like regular color data. This fact allows to utilize the entire arsenal of techniques available for dealing with aliasing problems in regular color textures like mipmapping, anisotropic filtering and even ordinary blurring. When a separable blur is chosen, like a Gaussian blur or a simple box filter, the operation can be performed very efficiently by blurring the VSM first horizontally and then vertically. For this another temporary texture has to be used, of same size and format as the shadow map, thus increasing the memory footprint of the algorithm. This cost however is comparatively not great on modern hardware and in most cases is worth paying for the performance gain. Filtering with a PCF filter can take \(M^2\times N^2\) operations, where \(M\) is the texture size and \(N\) the filter size. A separable filter brings this cost down to \(2\times N \times M^2\). To improve the shadow appearance even further, a VSM can be rendered using multisample anti-aliasing.
+
+To further improve the filtering of VSM, the usage of summed-area tables is proposed \cite{bib:book:gpu_gems_3}. They allow the sum of values in any rectangular area in the shadow map to be obtained in constant time with only four texture lookups. This means that filtering with kernels of arbitrary sizes can be carried out in a time less than even a \(3\times 3\) PCF operation. This is a very significant speedup and can be used to generate soft shadows by dynamically querying information filtered by different kernel sizes that depend on the contents of the scene.
+
 \subsection{Implementing PCSS}
 \label{section:pcss}
 Percentage-closer soft shadows, as described in section \ref{section:soft_shadow_maps}, utilize the PCF technique and the fact that the shadows created with it can have varying levels of smoothness. The smoothness, or the size of the penumbra can be controlled by the kernel size and the scale of the sample offsets. When correctly driven, varying the size of the penumbra on a per-pixel basis can create plausible soft shadows that harden when close to the occluder. To achieve that, the estimated size of the penumbra has to be computed based on information about occluders and the size of the light source.
