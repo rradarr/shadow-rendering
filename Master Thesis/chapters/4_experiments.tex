@@ -8,25 +8,25 @@
 % \item description of methodology of experiments
 % \item description of experimental framework (description of user interface of research applications – move to an appendix)
 % \end{itemize}
-One of the objectives of the thesis was to compare multiple shadow rendering methods both in a qualitative and quantitative ways. To achieve this a test renderer application was created, which implements the rendering techniques and allows a user to observe their results as well as profile the performance the program.
+One of the objectives of the thesis was to compare multiple shadow rendering methods both in qualitative and quantitative ways. To achieve this a test renderer application was created, which implements the rendering techniques and allows a user to observe their results as well as profile the performance the program.
 
-The tests were performed in a semi-controlled environment. Care was taken to avoid other processes interrupting and affecting the test results, but their impact could not be entirely eliminated in. Results of repeated tests at different moments in time or on different machines with the same hardware will differ, but that difference should not be large enough to impact the overall comparison results. 
+The tests were performed in a semi-controlled environment. Care was taken to avoid other processes interrupting and affecting the test results, but their impact could not be entirely eliminated. Results of repeated tests at different moments in time or on different machines with the same hardware will differ, but that difference should not be large enough to impact the overall comparison results. 
 % TODO: if you use two machines, mention it here.
 The machine used for performing measurements had the following specification:
 \begin{itemize}
-    \item OS: Windows 10, 22H2
-    \item CPU: AMD Ryzen 5 1600
-    \item GPU: Nvidia GTX 1080, 8 GB VRAM
+    \item OS: \textit{Windows 10}, 22H2
+    \item CPU: \textit{AMD Ryzen 5 1600}
+    \item GPU: \textit{Nvidia GTX 1080}, 8 GB VRAM
     \item RAM: 16 GB
 \end{itemize}
 
 \subsection{Created test application}
 The test application allows the user to choose a rendering mode and observe the results in real-time. It also allows to change the viewpoint and observe how the shadows behave in motion. Most rendering modes implement different shadow rendering techniques and some include debug views like wireframe mode or mesh colored by normals. The application is also instrumented with profiling commands which make it possible to connect to an external profiler and collect data in real-time, as well as save and load existing profiling data.
 
-As mentioned in section \ref{chapter:3_test_app}, the Tracy profiler open source library and tool was used to gather and visualize profiling data. For additional profiling and debugging RenderDoc, PIX and Nsight Graphics were used.
+As mentioned in section \ref{chapter:3_test_app}, the \textit{Tracy profiler} open source library and tool was used to gather and visualize profiling data. For additional profiling and debugging \textit{RenderDoc}, \textit{PIX} and \textit{Nsight Graphics} were used.
 
 \section{Data sets}
-The data sets consist of multiple scenes used for testing. Three scenes, Crytek Sponza, Power Plant and Chinese Dragon are from the Computer Graphics Archive \cite{bib:internet:test_scenes}. The Crytek Sponza scene contains 262267 triangles and 184330 vertices. The Power Plant scene contains 12759246 triangles and 10614919 vertices. The Chinese Dragon contains 871306 triangles and 438929 vertices. They were chosen because they are standard test scenes in the computer graphics community, which are freely available on the internet. They also contain highly varying amounts of vertices, with the Power Plant scene having almost sixty times more vertices than Cytek Sponza, which allows to test the influence of geometric complexity on the performance of the algorithms. The Chinese Dragon scene is much more contained and showcases small-scale shadows and self-shadowing. Additionally, a simple scene containing a unit cube positioned on a ground plane was created in Blender. This scene contains only twenty-eight vertices. Its simplicity allows to easily spot differences in the appearance of shadows in the render and highlights issues such as peter-panning.
+The data sets consist of multiple scenes used for testing. Three scenes, \textit{Crytek Sponza}, \textit{Power Plant} and \textit{Chinese Dragon} are from the \textit{Computer Graphics Archive} \cite{bib:internet:test_scenes}. The \textit{Crytek Sponza} scene contains 262267 triangles and 184330 vertices. The \textit{Power Plant} scene contains 12759246 triangles and 10614919 vertices. The \textit{Chinese Dragon} contains 871306 triangles and 438929 vertices. They were chosen because they are standard test scenes in the computer graphics community, which are freely available on the internet. They also contain highly varying amounts of vertices, with the \textit{Power Plant} scene having almost sixty times more vertices than \textit{Cytek Sponza}, which allows to test the influence of geometric complexity on the performance of the algorithms. The \textit{Chinese Dragon} scene is much more contained and showcases small-scale shadows and self-shadowing. Additionally, a simple scene containing a unit cube positioned on a ground plane was created in \textit{Blender}. This scene contains only twenty-eight vertices. Its simplicity allows to easily spot differences in the appearance of shadows in the render and highlights issues such as peter panning.
 
 \section{Results}
 % \begin{itemize}
@@ -81,7 +81,7 @@ The basic implementation of shadow mapping from section \ref{section:basic_mappi
                 (512,1243)(1024,1268)(2048,1240)(4096,1192)}; %\addlegendentry{2k}
         \end{semilogxaxis} 
     \end{tikzpicture}
-    \caption{Results for Chinese Dragon scene.}
+    \caption{Results for the \textit{\textit{Chinese Dragon}} scene.}
     \label{fig:plot:basic_dragon}
 \end{subfigure}
 \hfill
@@ -123,7 +123,7 @@ The basic implementation of shadow mapping from section \ref{section:basic_mappi
                 (512,3015)(1024,3019)(2048,3082)(4096,3092)}; %\addlegendentry{2k}
         \end{semilogxaxis} 
     \end{tikzpicture}
-    \caption{Results for the Cube scene.}
+    \caption{Results for the \textit{Cube} scene.}
     \label{fig:plot:basic_cube}
 \end{subfigure}
 
@@ -166,7 +166,7 @@ The basic implementation of shadow mapping from section \ref{section:basic_mappi
                 (512,240)(1024,240)(2048,232)(4096,213)}; %\addlegendentry{2k}
         \end{semilogxaxis} 
     \end{tikzpicture}
-    \caption{Results for the Power Plant scene.}
+    \caption{Results for the \textit{Power Plant} scene.}
     \label{fig:plot:basic_power}
 \end{subfigure}
 \hfill
@@ -208,53 +208,53 @@ The basic implementation of shadow mapping from section \ref{section:basic_mappi
                 (512,2116)(1024,2038)(2048,1852)(4096,1416)}; %\addlegendentry{2k}
         \end{semilogxaxis} 
     \end{tikzpicture}
-    \caption{Results for the Crytek Sponza scene.}
+    \caption{Results for the \textit{Crytek Sponza} scene.}
     \label{fig:plot:basic_sponza}
 \end{subfigure}
 \caption{Frames per second for all test scenes, for different sizes of the shadow map and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the basic shadow map implementation.}
 \label{fig:plot:basic_results}
 \end{figure}
 
-The test results mostly match the expectation that fewer FPS will be produced with increasing shadow map resolution and output resolution. The only exception is plot \ref{fig:plot:basic_cube} of the Cube scene results. This is however probably due to the fact that this scene is so simple, and in effect is rendered with such high FPS (highest in this test set, over 3000), that any interruptions from other programs on the machine will be visible. Inconsistencies might also be produced by hardware cores' dynamic clock rates, which can vary over the duration of the test.
+The test results mostly match the expectation that fewer FPS will be produced with increasing shadow map resolution and output resolution. The only exception is plot \ref{fig:plot:basic_cube} of the \textit{Cube} scene results. This is however probably due to the fact that this scene is so simple, and in effect is rendered with such high FPS (highest in this test set, over 3000), that any interruptions from other programs on the machine will be visible. Inconsistencies might also be produced by hardware cores' dynamic clock rates, which can vary over the duration of the test.
 
-The basic shadow mapping algorithm is simple enough to produce high FPS. Even in the most complex scene, the Power Plant, over 210 frames are rendered at 2k output and 4k shadow map resolution.
+The basic shadow mapping algorithm is simple enough to produce high FPS. Even in the most complex scene, the \textit{Power Plant}, over 210 frames are rendered at 2k output and 4k shadow map resolution.
 
-Looking at the shapes of the plots, it can be said that the basic shadow mapping algorithm is not dependent on output resolution. The lower FPS for higher output resolutions stem mostly from the sole fact that more pixel need to be rendered, because the FPS falloffs along the x-axis follow the same shape. In most cases the drop in FPS between the lowest and highest shadow map resolution is the same, regardless of the output resolution. 
+Looking at the shapes of the plots, it can be said that the basic shadow mapping algorithm is not dependent on output resolution. The lower FPS for higher output resolutions stems mostly from the sole fact that more pixels need to be rendered, because the FPS falloffs along the x-axis follow the same shape for different output resolutions. In most cases the drop in FPS between the lowest and highest shadow map resolution is the same, regardless of the output resolution. 
 
 The plots have their x-axis in logarithmic scale. Taking that into account, it can be observed that the FPS counts fall linearly with growing shadow map resolutions.
 
 The algorithm's performance is not view-dependent. When traversing the scene the frame rates are stable. This is backed by the fact that in basic shadow mapping the same work is performed for each rendered pixel, consisting of a comparison operation with the depth value stored in the depth map. This however would not be true if shadow map fitting was used. In such case, the performance will become view dependent as more or less geometry will be rendered into the shadow map. This can provide a useful performance boost in large scenes.
 
-Using the Tracy profiler it can be confirmed that the renderer's performance is limited by the computations performed on the GPU, as the CPU thread spent approximately \(30\%\) of time waiting for the GPU resources to be available. Tracy also reports that approximately \(40\%\) of the frame time was spent on the shadow map render pass and \(52\%\) on the main render pass. The remaining time was spent rendering the GUI and synchronizing. This can be expected as with this simple technique the shadow map pass is almost as expensive as the main pass. The main pass is slightly more involved as it outputs pixels and performs simple shading, as well as performs the shadow mapping itself, which requires texture lookups and comparisons that add time.
+Using the \textit{Tracy profiler} it can be confirmed that the renderer's performance is limited by the computations performed on the GPU, as the CPU thread spent approximately \(30\%\) of time waiting for the GPU resources to be available. \textit{Tracy} also reports that approximately \(40\%\) of the frame time was spent on the shadow map render pass and \(52\%\) on the main render pass. The remaining time was spent rendering the GUI and synchronizing. This can be expected as with this simple technique the shadow map pass is almost as expensive as the main pass. The main pass is slightly more involved as it outputs pixels and performs simple shading, as well as performs the shadow mapping itself, which requires texture lookups and comparisons that add time.
 
-The rendering results for the Chinese Dragon are presented in Fig. \ref{fig:test_basic_dragon_screens} and in Fig. \ref{fig:test_basic_sponza_screens} the Crytek Sponza is presented.
+The rendering results for the \textit{Chinese Dragon} are presented in Fig. \ref{fig:test_basic_dragon_screens} and in Fig. \ref{fig:test_basic_sponza_screens} the \textit{Crytek Sponza} is presented.
 \begin{figure}
     \centering
     \begin{subfigure}{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_512.png}
-        \caption{The Chinese Dragon rendered with \(512\times 512\) shadow map.}
+        \caption{The \textit{Chinese Dragon} rendered with \(512\times 512\) shadow map.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_1024.png}
-        \caption{The Chinese Dragon rendered with \(1024\times 1024\) shadow map.}
+        \caption{The \textit{Chinese Dragon} rendered with \(1024\times 1024\) shadow map.}
     \end{subfigure}
 
     \begin{subfigure}{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_2048.png}
-        \caption{The Chinese Dragon rendered with \(2048\times 2048\) shadow map.}
+        \caption{The \textit{Chinese Dragon} rendered with \(2048\times 2048\) shadow map.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_4096.png}
-        \caption{The Chinese Dragon rendered with \(4096\times 4096\) shadow map.}
+        \caption{The \textit{Chinese Dragon} rendered with \(4096\times 4096\) shadow map.}
     \end{subfigure}
 
-    \caption{The Chinese Dragon scene rendered with different shadow map resolutions, using the basic shadow mapping algorithm.}
+    \caption{The \textit{Chinese Dragon} scene rendered with different shadow map resolutions, using the basic shadow mapping algorithm.}
     \label{fig:test_basic_dragon_screens}
 \end{figure}
 \begin{figure}[t]
@@ -262,32 +262,32 @@ The rendering results for the Chinese Dragon are presented in Fig. \ref{fig:test
     \begin{subfigure}{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/sponza_basic_fhd_512.png}
-        \caption{The Crytek Sponza rendered with \(512\times 512\) shadow map.}
+        \caption{The \textit{Crytek Sponza} rendered with \(512\times 512\) shadow map.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/sponza_basic_fhd_1024.png}
-        \caption{The Crytek Sponza rendered with \(1024\times 1024\) shadow map.}
+        \caption{The \textit{\textit{Crytek Sponza}} rendered with \(1024\times 1024\) shadow map.}
     \end{subfigure}
 
     \begin{subfigure}{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/sponza_basic_fhd_2048.png}
-        \caption{The Crytek Sponza rendered with \(2048\times 2048\) shadow map.}
+        \caption{The \textit{Crytek Sponza} rendered with \(2048\times 2048\) shadow map.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/sponza_basic_fhd_4096.png}
-        \caption{The Crytek Sponza rendered with \(4096\times 4096\) shadow map.}
+        \caption{The \textit{Crytek Sponza} rendered with \(4096\times 4096\) shadow map.}
     \end{subfigure}
 
-    \caption{The Crytek Sponza scene rendered with different shadow map resolutions, using the basic shadow mapping algorithm.}
+    \caption{The \textit{Crytek Sponza} scene rendered with different shadow map resolutions, using the basic shadow mapping algorithm.}
     \label{fig:test_basic_sponza_screens}
 \end{figure}
 
-The Chinese Dragon results are quite good for higher resolution shadow maps, since the shadow map texels map many to one with regard to screen pixels. Aliasing is however very visible for lower resolutions. Crytek Sponza suffers from shadow acne on vertical surfaces. This is a sign of badly chosen shadow bias. It gets less visible as resolution rises, but is always present. Even at the highest resolution, shadow map texel borders are still visible, where they were not visible in the Chinese Dragon scene. This is due to the fact that the shadow map covers a larger area and each shadow map texel covers more space on the screen.
+The \textit{Chinese Dragon} results are quite good for higher resolution shadow maps, since the shadow map texels map many to one with regard to screen pixels. Aliasing is however very visible for lower resolutions. \textit{Crytek Sponza} suffers from shadow acne on vertical surfaces. This is a sign of badly chosen shadow bias. It gets less visible as resolution rises, but is always present. Even at the highest resolution, shadow map texel borders are still visible, where they were not visible in the \textit{Chinese Dragon} scene. This is due to the fact that the shadow map covers a larger area and each shadow map texel covers more space on the screen.
 
 The memory usage is wholly dependent on the resolution of the shadow map. If memory is very scarce a depth buffer of lower precision can be used, but that is unlikely on modern graphics hardware to be the case. The depth map in this case was created to store the depth in 24 bits, plus additional 8 bits for the stencil buffer, totaling 32 bits per shadow map texel.
 
@@ -338,7 +338,7 @@ Hardware bilinear filtering is considered a simple filtering method that can imp
                     (512,1267)(1024,1258)(2048,1244)(4096,1201)}; %\addlegendentry{2k}
             \end{semilogxaxis} 
         \end{tikzpicture}
-        \caption{Results for Chinese Dragon scene.}
+        \caption{Results for the \textit{Chinese Dragon} scene.}
         \label{fig:plot:bilinear_dragon}
     \end{subfigure}
     \hfill
@@ -380,7 +380,7 @@ Hardware bilinear filtering is considered a simple filtering method that can imp
                     (512,2987)(1024,3063)(2048,2948)(4096,3072)}; %\addlegendentry{2k}
             \end{semilogxaxis} 
         \end{tikzpicture}
-        \caption{Results for the Cube scene.}
+        \caption{Results for the \textit{Cube} scene.}
         \label{fig:plot:bilinear_cube}
     \end{subfigure}
     
@@ -423,7 +423,7 @@ Hardware bilinear filtering is considered a simple filtering method that can imp
                     (512,239)(1024,239)(2048,233)(4096,212)}; %\addlegendentry{2k}
             \end{semilogxaxis} 
         \end{tikzpicture}
-        \caption{Results for the Power Plant scene.}
+        \caption{Results for the \textit{\textit{Power Plant}} scene.}
         \label{fig:plot:bilinear_power}
     \end{subfigure}
     \hfill
@@ -465,14 +465,14 @@ Hardware bilinear filtering is considered a simple filtering method that can imp
                     (512,2075)(1024,2022)(2048,1836)(4096,1411)}; %\addlegendentry{2k}
             \end{semilogxaxis} 
         \end{tikzpicture}
-        \caption{Results for the Crytek Sponza scene.}
+        \caption{Results for the \textit{Crytek Sponza} scene.}
         \label{fig:plot:bilinear_sponza}
     \end{subfigure}
     \caption{Frames per second for all test scenes, for different sizes of the shadow map and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the basic shadow mapping technique with bilinear filtering enabled.}
     \label{fig:plot:bilinear_results}
 \end{figure}
 
-The results are very similar, with no immediately visible drop in performance. Taking the Power Plant scene as an example, the FPS range measured at Full HD output resolution is \([251:223]\). In the shadow mapping without filtering test the FPS range was \([250:223]\). The results are the same when accounting for instabilities caused by other software and dynamic clock rates. This is interesting when compared to results of Crytek Sponza tests, where the Full HD range was \([2825:1726]\) with bilinear filtering and  \([2912:1750]\) without. Here, a significant drop in performance can be seen when using bilinear filtering. This might be caused by the fact FPS measurements are more sensitive in higher rages, as 1 FPS difference at 250 FPS is equal to 0.016ms, while 1 FPS difference at 2800 FPS is equal to only 0,000127ms. This is somewhat visible in the Crytek Sponza FPS ranges, as the upper ends have a higher difference between them than lower ends. Additionally, since the Power Plant is a much heavier scene performance-wise, the GPU has much more work to perform and the slowdown from using bilinear filtering can get masked better. When toggling bilinear filtering on and off during testing, the FPS readout would most of the time stay stable within reasonable FPS ranges. It seems that the cost of hardware bilinear filtering is indeed insignificant in realistic scenarios, where the GPU is fully utilized.
+The results are very similar, with no immediately visible drop in performance. Taking the \textit{\textit{Power Plant}} scene as an example, the FPS range measured at Full HD output resolution is \([251:223]\). In the shadow mapping without filtering test the FPS range was \([250:223]\). The results are the same when accounting for instabilities caused by other software and dynamic clock rates. This is interesting when compared to results of \textit{Crytek Sponza} tests, where the Full HD range was \([2825:1726]\) with bilinear filtering and  \([2912:1750]\) without. Here, a significant drop in performance can be seen when using bilinear filtering. This might be caused by the fact FPS measurements are more sensitive in higher rages, as 1 FPS difference at 250 FPS is equal to 0.016ms, while 1 FPS difference at 2800 FPS is equal to only 0,000127ms. This is somewhat visible in the \textit{Crytek Sponza} FPS ranges, as the upper ends have a higher difference between them than lower ends. Additionally, since the \textit{Power Plant} is a much heavier scene performance-wise, the GPU has much more work to perform and the slowdown from using bilinear filtering can get masked better. When toggling bilinear filtering on and off during testing, the FPS readout would most of the time stay stable within reasonable FPS ranges. It seems that the cost of hardware bilinear filtering is indeed insignificant in realistic scenarios, where the GPU is fully utilized.
 
 The effect on the final rendered result is on the other hand very significant, especially at lower shadow map resolutions, as presented in figure \ref{fig:test_bilinear_dragon_screens}. The shadow boundaries get smoother, which improves the visuals even at low shadow map resolutions. The texels are less noticeable and the shape is more easily readable as a shadow.
 
@@ -481,27 +481,27 @@ The effect on the final rendered result is on the other hand very significant, e
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_512.png}
-        \caption{The Chinese Dragon rendered with a \(512\times 512\) shadow map with no filtering.}
+        \caption{The \textit{Chinese Dragon} rendered with a \(512\times 512\) shadow map with no filtering.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/bilinear/cropped/dragon_bilinear_fhd_512.png}
-        \caption{The Chinese Dragon rendered with a \(512\times 512\) shadow map with bilinear filtering.}
+        \caption{The \textit{Chinese Dragon} rendered with a \(512\times 512\) shadow map with bilinear filtering.}
     \end{subfigure}
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/basic/cropped/dragon_basic_fhd_4096.png}
-        \caption{The Chinese Dragon rendered with a \(4096\times 4096\) shadow map with no filtering.}
+        \caption{The \textit{Chinese Dragon} rendered with a \(4096\times 4096\) shadow map with no filtering.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/bilinear/cropped/dragon_bilinear_fhd_4096.png}
-        \caption{The Chinese Dragon rendered with a \(4096\times 4096\) shadow map with bilinear filtering.}
+        \caption{The \textit{Chinese Dragon} rendered with a \(4096\times 4096\) shadow map with bilinear filtering.}
     \end{subfigure}
 
-    \caption{The Chinese Dragon rendered with and without bilinear comparison filtering.}
+    \caption{The \textit{Chinese Dragon} rendered with and without bilinear comparison filtering.}
     \label{fig:test_bilinear_dragon_screens}
 \end{figure}
 
@@ -549,7 +549,7 @@ PCF is another filtering technique that allows for the creation of arbitrarily s
                     (3,443)(5,144)(7,74)(9,46)(11,31)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for Chinese Dragon scene.}
+        \caption{Results for the \textit{Chinese Dragon} scene.}
         \label{fig:plot:pcf_dragon}
     \end{subfigure}
     \hfill
@@ -591,7 +591,7 @@ PCF is another filtering technique that allows for the creation of arbitrarily s
                     (3,945)(5,260)(7,128)(9,78)(11,52)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Cube scene.}
+        \caption{Results for the \textit{Cube} scene.}
         \label{fig:plot:pcf_cube}
     \end{subfigure}
 
@@ -634,7 +634,7 @@ PCF is another filtering technique that allows for the creation of arbitrarily s
                     (3,155)(5,72)(7,40)(9,25)(11,18)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Power Plant scene.}
+        \caption{Results for the \textit{Power Plant} scene.}
         \label{fig:plot:pcf_power}
     \end{subfigure}
     \hfill
@@ -676,54 +676,54 @@ PCF is another filtering technique that allows for the creation of arbitrarily s
                     (3,306)(5,94)(7,47)(9,29)(11,19)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Crytek Sponza scene.}
+        \caption{Results for the \textit{Crytek Sponza} scene.}
         \label{fig:plot:pcf_sponza}
     \end{subfigure}
     \caption{Frames per second for all test scenes, for different sizes of the filter kernel and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the basic shadow mapping technique with PCF at constant shadow map size \(1024\times 1024\).}
     \label{fig:plot:pcf_results}
 \end{figure}
 
-The results show performance dropping exponentially with regard to increasing filter kernel size. This is expected, as for a kernel of size \(n\) there are \(n^2\) depth comparisons performed. This fact makes high kernel sizes impractical and limits the usability of the approach. A larger smoothing effect is better achieved by using a scale factor to scale the sample offsets within the filter kernel than by increasing the kernel size.
+The results show performance dropping exponentially with regard to increasing filter kernel size. This is expected, as for a kernel of size \(n\) there are \(n^2\) depth comparisons performed per output pixel. This fact makes high kernel sizes impractical and limits the usability of the approach. A larger smoothing effect is better achieved by using a scale factor to scale the sample offsets within the filter kernel than by increasing the kernel size.
 
 \begin{figure}[p]
     \centering
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_3x3.png}
-        \caption{The shadow of the Chinese Dragon filtered with a \(3\times 3\) kernel.}
+        \caption{The shadow of the \textit{Chinese Dragon} filtered with a \(3\times 3\) kernel.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_11x11.png}
-        \caption{The shadow of the Chinese Dragon filtered with an \(11\times 11\) kernel.}
+        \caption{The shadow of the \textit{Chinese Dragon} filtered with an \(11\times 11\) kernel.}
     \end{subfigure}
 
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_3x3_offset05.png}
-        \caption{The shadow of the Chinese Dragon filtered with a \(3\times 3\) kernel and a scale of \(0.5\) applied to each kernel offset.}
+        \caption{The shadow of the \textit{Chinese Dragon} filtered with a \(3\times 3\) kernel and a scale of \(0.5\) applied to each kernel offset.}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_11x11_offset05.png}
-        \caption{The shadow of the Chinese Dragon filtered with an \(11\times 11\) kernel and a scale of \(0.5\) applied to each kernel offset.}
+        \caption{The shadow of the \textit{Chinese Dragon} filtered with an \(11\times 11\) kernel and a scale of \(0.5\) applied to each kernel offset.}
     \end{subfigure}
 
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_3x3_offset3.png}
-        \caption{The shadow of the Chinese Dragon filtered with a \(3\times 3\) kernel and a scale of \(3\) applied to each kernel offset.}
+        \caption{The shadow of the \textit{Chinese Dragon} filtered with a \(3\times 3\) kernel and a scale of \(3\) applied to each kernel offset.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.48\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_1024_11x11_offset3.png}
-        \caption{The shadow of the Chinese Dragon filtered with an \(11\times 11\) kernel and a scale of \(3\) applied to each kernel offset.}
+        \caption{The shadow of the \textit{Chinese Dragon} filtered with an \(11\times 11\) kernel and a scale of \(3\) applied to each kernel offset.}
     \end{subfigure}    
 
-    \caption{The Chinese Dragon rendered with \(3\times 3\) and \(11\times 11\) kernels with different offset scales.}
+    \caption{The \textit{Chinese Dragon} rendered with \(3\times 3\) and \(11\times 11\) kernels with different offset scales.}
     \label{fig:test_pcf_dragon_screens}
 \end{figure}
 
@@ -739,27 +739,27 @@ The usage of even the smallest \(3\times 3\) kernel requires adjusting the depth
     \begin{subfigure}[t]{0.45\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_512_3x3.png}
-        \caption{The Chinese Dragon rendered with basic \(3\times 3\) PCF.}
+        \caption{The \textit{Chinese Dragon} rendered with basic \(3\times 3\) PCF.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.45\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_512_3x3_bilinear.png}
-        \caption{The Chinese Dragon rendered with \(3\times 3\) PCF enhanced by bilinear filtering.}
+        \caption{The \textit{Chinese Dragon} rendered with \(3\times 3\) PCF enhanced by bilinear filtering.}
     \end{subfigure}
     \begin{subfigure}[t]{0.45\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_512_11x11.png}
-        \caption{The Chinese Dragon rendered with basic \(11\times 11\) PCF.}
+        \caption{The \textit{Chinese Dragon} rendered with basic \(11\times 11\) PCF.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.45\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcf/cropped/dragon_pcf_fhd_512_11x11_bilinear.png}
-        \caption{The Chinese Dragon rendered with \(11\times 11\) PCF enhanced by bilinear filtering.}
+        \caption{The \textit{Chinese Dragon} rendered with \(11\times 11\) PCF enhanced by bilinear filtering.}
     \end{subfigure}
 
-    \caption{The Chinese Dragon rendered with PCF and with and without additional bilinear comparison filtering, using a \(512\times 512\) shadow map resolution.}
+    \caption{The \textit{Chinese Dragon} rendered with PCF and with and without additional bilinear comparison filtering, using a \(512\times 512\) shadow map resolution.}
     \label{fig:test_pfc_bilinear_dragon_screens}
 \end{figure}
 
@@ -810,7 +810,7 @@ Adaptive PCF aims to improve the performance of regular PCF by allowing only som
                     (4,748)(6,553)(8,394)(10,295)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for Chinese Dragon scene.}
+        \caption{Results for the \textit{Chinese Dragon} scene.}
         \label{fig:plot:pcf_adaptive_dragon}
     \end{subfigure}
     \hfill
@@ -852,7 +852,7 @@ Adaptive PCF aims to improve the performance of regular PCF by allowing only som
                     (4,1690)(6,1314)(8,1048)(10,865)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Cube scene.}
+        \caption{Results for the \textit{Cube} scene.}
         \label{fig:plot:pcf_adaptive_cube}
     \end{subfigure}
 
@@ -895,7 +895,7 @@ Adaptive PCF aims to improve the performance of regular PCF by allowing only som
                     (4,190)(6,161)(8,126)(10,102)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Power Plant scene.}
+        \caption{Results for the \textit{Power Plant} scene.}
         \label{fig:plot:pcf_adaptive_power}
     \end{subfigure}
     \hfill
@@ -937,7 +937,7 @@ Adaptive PCF aims to improve the performance of regular PCF by allowing only som
                     (4,642)(6,439)(8,277)(10,207)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Crytek Sponza scene.}
+        \caption{Results for the \textit{Crytek Sponza} scene.}
         \label{fig:plot:pcf_adaptive_sponza}
     \end{subfigure}
     \caption{Frames per second for all test scenes, for different sizes of the filter kernel and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the basic shadow mapping technique with adaptive PCF at constant shadow map size \(1024\times 1024\).}
@@ -980,27 +980,27 @@ Adaptive PCF in this implementation uses \(m\times m\) sets of randomized kernel
     \begin{subfigure}[t]{0.45\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/adaptive/cropped/dragon_adaptive_fhd_1024_2x2_8x8_offset5.png}
-        \caption{The Chinese Dragon rendered with \(2\times 2\) set of kernels with adaptive PCF.}
+        \caption{The \textit{Chinese Dragon} rendered with \(2\times 2\) set of kernels with adaptive PCF.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.45\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/adaptive/cropped/dragon_adaptive_fhd_1024_6x6_8x8_offset5.png}
-        \caption{The Chinese Dragon rendered with \(6\times 6\) set of kernels with adaptive PCF.}
+        \caption{The \textit{Chinese Dragon} rendered with \(6\times 6\) set of kernels with adaptive PCF.}
     \end{subfigure}
     \begin{subfigure}[t]{0.45\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/adaptive/cropped/dragon_adaptive_fhd_1024_14x14_8x8_offset5.png}
-        \caption{The Chinese Dragon rendered with \(14\times 14\) set of kernels with adaptive PCF.}
+        \caption{The \textit{Chinese Dragon} rendered with \(14\times 14\) set of kernels with adaptive PCF.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.45\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/adaptive/cropped/dragon_adaptive_fhd_1024_24x24_8x8_offset5.png}
-        \caption{The Chinese Dragon rendered with \(24\times 24\) set of kernels with adaptive PCF.}
+        \caption{The \textit{Chinese Dragon} rendered with \(24\times 24\) set of kernels with adaptive PCF.}
     \end{subfigure}
 
-    \caption{The Chinese Dragon rendered with adaptive PCF, using a \(1024\times 1024\) shadow map resolution, kernel size of \(8\times 8\), kernel offset scale of \(5\) and varying counts of kernel sets.}
+    \caption{The \textit{Chinese Dragon} rendered with adaptive PCF, using a \(1024\times 1024\) shadow map resolution, kernel size of \(8\times 8\), kernel offset scale of \(5\) and varying counts of kernel sets.}
     \label{fig:test_adaptive_sets_dragon_screens}
 \end{figure}
 
@@ -1057,7 +1057,7 @@ Variance shadow maps were implemented with a separable box filter for blurring o
                     (3,1164)(7,1112)(11,1065)(15,1025)(19,990)(23,958)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for Chinese Dragon scene.}
+        \caption{Results for the \textit{Chinese Dragon} scene.}
         \label{fig:plot:vsm_dragon}
     \end{subfigure}
     \hfill
@@ -1099,7 +1099,7 @@ Variance shadow maps were implemented with a separable box filter for blurring o
                     (3,2947)(7,2851)(11,2836)(15,2776)(19,2565)(23,2362)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Cube scene.}
+        \caption{Results for the \textit{Cube} scene.}
         \label{fig:plot:vsm_cube}
     \end{subfigure}
 
@@ -1142,7 +1142,7 @@ Variance shadow maps were implemented with a separable box filter for blurring o
                     (3,234)(7,232)(11,230)(15,228)(19,226)(23,224)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Power Plant scene.}
+        \caption{Results for the \textit{Power Plant} scene.}
         \label{fig:plot:vsm_power}
     \end{subfigure}
     \hfill
@@ -1184,7 +1184,7 @@ Variance shadow maps were implemented with a separable box filter for blurring o
                     (3,1669)(7,1548)(11,1460)(15,1382)(19,1315)(23,1248)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Crytek Sponza scene.}
+        \caption{Results for the \textit{Crytek Sponza} scene.}
         \label{fig:plot:vsm_sponza}
     \end{subfigure}
     \caption{Frames per second for all test scenes, for different sizes of the filter kernel and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with the variance shadow mapping technique with box filtering, at constant shadow map size \(1024\times 1024\).}
@@ -1204,24 +1204,24 @@ Visually, VSM is very good at anti-aliasing and smoothing shadows. Large filter 
     \begin{subfigure}[t]{0.49\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/vsm/cropped/dragon_vsm_512_23_smooth.png}
-        \caption{The Chinese Dragon rendered with \(11\times 11\) kernel with bilinear filtering and low resolution \(512\times 512\) shadow map. The shadow is very smooth, but has lost some detail.}
+        \caption{The \textit{Chinese Dragon} rendered with \(11\times 11\) kernel with bilinear filtering and low resolution \(512\times 512\) shadow map. The shadow is very smooth, but has lost some detail.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.49\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/vsm/cropped/sponza_vsm_4096_23.png}
-        \caption{The Crytek Sponza scene rendered with VSM producing very pleasant shadows.}
+        \caption{The \textit{Crytek Sponza} scene rendered with VSM producing very pleasant shadows.}
     \end{subfigure}
     \begin{subfigure}[t]{0.49\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/vsm/cropped/sponza_vsm_4096_23_badsetup.png}
-        \caption{The Crytek Sponza scene rendered with VSM exhibiting light leaking due to wrong selection of parameters.}
+        \caption{The \textit{Crytek Sponza} scene rendered with VSM exhibiting light leaking due to wrong selection of parameters.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.49\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/vsm/cropped/sponza_vsm_4096_23_leaks.png}
-        \caption{The Crytek Sponza scene rendered with VSM with visible light leaks due to incorrect parameters.}
+        \caption{The \textit{Crytek Sponza} scene rendered with VSM with visible light leaks due to incorrect parameters.}
     \end{subfigure}
 
     \caption{Test scenes showcasing pros and cons of VSM.}
@@ -1273,7 +1273,7 @@ Implementation of percentage-closer soft shadows was presented in section \ref{s
                     (0.1,244)(0.4,102)(0.7,93)(1.0,83)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for Chinese Dragon scene.}
+        \caption{Results for the \textit{Chinese Dragon} scene.}
         \label{fig:plot:pcss_dragon}
     \end{subfigure}
     \hfill
@@ -1315,7 +1315,7 @@ Implementation of percentage-closer soft shadows was presented in section \ref{s
                     (0.1,404)(0.4,151)(0.7,136)(1.0,125)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Cube scene.}
+        \caption{Results for the \textit{Cube} scene.}
         \label{fig:plot:pcss_cube}
     \end{subfigure}
 
@@ -1358,7 +1358,7 @@ Implementation of percentage-closer soft shadows was presented in section \ref{s
                     (0.1,69)(0.4,57)(0.7,52)(1.0,46)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Power Plant scene.}
+        \caption{Results for the \textit{Power Plant} scene.}
         \label{fig:plot:pss_power}
     \end{subfigure}
     \hfill
@@ -1400,14 +1400,14 @@ Implementation of percentage-closer soft shadows was presented in section \ref{s
                     (0.1,83)(0.4,60)(0.7,52)(1.0,47)}; %\addlegendentry{2k}
             \end{axis} 
         \end{tikzpicture}
-        \caption{Results for the Crytek Sponza scene.}
+        \caption{Results for the \textit{Crytek Sponza} scene.}
         \label{fig:plot:pcss_sponza}
     \end{subfigure}
     \caption{Frames per second for all test scenes, for different sizes of the light source and output resolutions. In green \(1280\times 720\), in black \(1920\times 1080\) and in brown \(2560\times 1440\). Rendering with shadow mapping with PCSS at constant shadow map size \(1024\times 1024\) and \(16\times 16\) \(8\times 8\) kernels.}
     \label{fig:plot:pcss_results}
 \end{figure}
 
-Performance is affected more negatively than with adaptive PCF. This decrease happens because PCSS basically performs two adaptive filtering-like steps per pixel. It first has to sample the shadow map to find the average occluder depth and then again for PCF with a calculated size. For simpler scenes however, as the size of the light source increases, there seems to be a threshold value beyond which the performance degradation slows down. This is probably because in the case of a simple scene like the Chinese Dragon or the Cube, once the light source is large enough almost all surfaces will be evaluated as if in a penumbra. Additionally, very high light source sizes produce unpleasant results and should not be used in a real application anyway.
+Performance is affected more negatively than with adaptive PCF. This decrease happens because PCSS basically performs two adaptive filtering-like steps per-pixel. It first has to sample the shadow map to find the average occluder depth and then again for PCF with a calculated size. For simpler scenes however, as the size of the light source increases, there seems to be a threshold value beyond which the performance degradation slows down. This is probably because in the case of a simple scene like the \textit{Chinese Dragon} or the \textit{Cube}, once the light source is large enough almost all surfaces will be evaluated as if in a penumbra. Additionally, very high light source sizes produce unpleasant results and should not be used in a real application anyway.
 
 The light size needs to be carefully tuned on a per-scene basis to get plausible results. Additionally, bias has to be adjusted to account for wider kernels. Images rendered with PCSS are presented in Fig \ref{fig:test_pcss_screens}.
 \begin{figure}[h]
@@ -1415,24 +1415,24 @@ The light size needs to be carefully tuned on a per-scene basis to get plausible
     \begin{subfigure}[t]{0.49\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcss/cropped/cube_pcss_1.png}
-        \caption{The Cube scene showing smooth shadow penumbra falloff with changing distance between shadow caster and receiver.}
+        \caption{The \textit{Cube} scene showing smooth shadow penumbra falloff with changing distance between shadow caster and receiver.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.49\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcss/cropped/dragon_pcss_1.png}
-        \caption{The Chinese Dragon showcasing contact hardening shadows.}
+        \caption{The \textit{Chinese Dragon} showcasing contact hardening shadows.}
     \end{subfigure}
     \begin{subfigure}[t]{0.49\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcss/cropped/sponza_pcss_1.png}
-        \caption{PCSS shadows in Crytek Sponza, creating soft shadows cast by the rooftop above and harder shadows cast by the hanging bowl.}
+        \caption{PCSS shadows in \textit{Crytek Sponza}, creating soft shadows cast by the rooftop above and harder shadows cast by the hanging bowl.}
     \end{subfigure}
 	\hfill
     \begin{subfigure}[t]{0.49\textwidth}
 		\centering
         \includegraphics[width=\textwidth]{./graf/tests/pcss/cropped/sponza_pcss_2.png}
-        \caption{Shadows hardening with changing distance to occluder in Crytek Sponza.}
+        \caption{Shadows hardening with changing distance to occluder in \textit{Crytek Sponza}.}
     \end{subfigure}
 
     \caption{The results of PCSS in different scenes, rendered with \(4096\times 4096\) shadow map resolution.}
@@ -1445,11 +1445,124 @@ PCSS has its performance cost, but the results it produces can certainly elevate
 
 Basic shadow mapping lays the foundation on which more advanced techniques can be built. It has a performance cost that is slightly smaller than double the main render pass. On its own it requires very high resolution to get pleasant results, so that aliasing it eliminated.
 
-It can be enhanced with various filtering methods. Bilinear comparison filtering is implemented within GPU hardware, so it can be very fast. It can be used to blur the edges of shadows for almost no performance cost. This helps separate hard shadows from actual geometry. Percentage-closer filtering allows control over the strength and quality of the shadow smoothing effect. It uses a square filter kernel to average shadow function results. The performance drops very rapidly with increase in the filer size and the results feature quite severe banding and visible shadow map texel borders. This can be greatly improved by combining PCF with hardware bilinear filtering. Then, even a very small shadow map and a modestly sized kernel can produce very pleasant shadows. The last filtering method, adaptive PCF, improves both performance and visual results. By using sets of filter kernels stored in a 3D texture, the algorithm can quit filtering early where further samples are not required. The blurring gives very smooth results, hiding any banding or texel boundaries and is easily controllable. Adaptive PCF increases the memory consumption by \(m\times m\times (n^2 / 2)\). It can also unfortunately introduce high-contrast noise in specific areas of the shadows. VSM offers outstanding performance by enabling the use of typical texture filtering operations and separable manual filtering. It does not suffer from shadow acne, but has its own issues with light leaks. It produces very pleasant shadows that exhibit certain softness, but at the same time they can lack in detail. Additionally, VSM requires up to five times more memory than regular shadow mapping.
+\begin{figure}[t]
+    \centering
+    \definecolor{color1}{HTML}{329BC8}
+    \definecolor{color2}{HTML}{DC8952}
+    \definecolor{color3}{HTML}{228E8E}
+    \definecolor{color4}{HTML}{E58E98}
+    \begin{tikzpicture}
+        \begin{semilogyaxis}[
+            % xlabel={Shadow rendering technique},
+            xlabel style = {align=center},
+            ylabel={FPS},
+            width  = 0.9*\textwidth,
+            % height = 8cm,
+            major x tick style = transparent,
+            ybar=2*\pgflinewidth,
+            bar width=8pt,
+            ymajorgrids = true,
+            ylabel = {FPS},
+            ytick = {0, 10, 30, 60, 100, 250, 500, 1000, 2000},
+            yticklabels = {0, 10, 30, 60, 100, 250, 500, 1000, 2000},
+            x tick label style = {align=center},
+            % symbolic x style = {align=center},
+            symbolic x coords={Shadow\\Mapping,HW\\Filtering,PCF,Adaptive\\PCF,VSM,PCSS},
+            xtick = data,
+            scaled y ticks = false,
+            enlarge x limits=0.1,
+            % ymin=0,
+            legend cell align=left,
+            legend style={
+                    at={(1,1.05)},
+                    anchor=south east,
+                    column sep=1ex
+            }
+        ]
+            \addplot[style={color1,fill=color1,mark=none}]
+                coordinates {(Shadow\\Mapping, 1428) (HW\\Filtering,1416) (PCF,50) (Adaptive\\PCF, 447) (VSM, 1192) (PCSS, 170)}; % dragon
 
-Finally, percentage-closer soft shadows can be used to render contact-hardening shadows. This technique gives the most robust visuals, but requires careful hand tuning of the parameters such as bias and light size. It gives realistic looking results, which are however not physically correct, and are only an approximation. The performance is approximately half of adaptive PCF on its own.
+            \addplot[style={color2,fill=color2,mark=none}]
+                coordinates {(Shadow\\Mapping, 2978) (HW\\Filtering,2861) (PCF,93) (Adaptive\\PCF, 1463) (VSM, 2888) (PCSS, 267)}; % cube
 
-If the visuals are of the highest importance and the application has a lot of frame time budget available, PCSS is the best choice. VSM is both very performant and gives very smooth shadows, but should be reconsidered if shadow detail is important. In other cases, a balance between shadow map resolution, kernel size and kernel offset scale should be found within adaptive PCF. Basic PCF should probably be avoided, unless combining a small kernel size with hardware bilinear filtering and high shadow map resolution for basic anti-aliasing of shadows.
+            \addplot[style={color3,fill=color3,mark=none}]
+                coordinates {(Shadow\\Mapping, 251) (HW\\Filtering,250) (PCF,28) (Adaptive\\PCF, 138) (VSM, 241) (PCSS, 84)}; % power
+
+            \addplot[style={color4,fill=color4,mark=none}]
+                coordinates {(Shadow\\Mapping, 2795) (HW\\Filtering,2736) (PCF,34) (Adaptive\\PCF, 343) (VSM, 1800) (PCSS, 99)}; % sponza
+
+            \legend{\textit{Chinese Dragon},\textit{Cube},\textit{Power Plant},\textit{Crytek Sponza}}
+        \end{semilogyaxis}
+    \end{tikzpicture}
+    \caption{Average measured frame rates for all test scenes and all tested techniques, at \(1024\times 1024\) shadow map resolution, \(1920\times 1080\) screen resolution, \(11\times 11\) filter kernel size (for PCF, adaptive PCF, PCSS and VSM). For PCSS light source size of 0.4 was assumed.}
+    \label{fig:plot:summary_fps}
+\end{figure}
+
+It can be enhanced with various filtering methods. Bilinear comparison filtering is implemented within GPU hardware, so it can be very fast. It can be used to blur the edges of shadows for almost no performance cost. This helps separate hard shadows from actual geometry. Percentage-closer filtering allows control over the strength and quality of the shadow smoothing effect. It uses a square filter kernel to average shadow function results. The performance drops very rapidly with increase in the filer size and the results feature quite severe banding and visible shadow map texel borders. This can be greatly improved by combining PCF with hardware bilinear filtering. Then, even a very small shadow map and a modestly sized kernel can produce very pleasant shadows. Adaptive PCF improves both performance and visual results. By using sets of filter kernels stored in a 3D texture, the algorithm can quit filtering early where further samples are not required. The blurring gives very smooth results, hiding any banding or texel boundaries and is easily controllable. Adaptive PCF increases the memory consumption by \(m\times m\times (n^2 / 2)\). It can also unfortunately introduce high-contrast noise in specific areas of the shadows. VSM offers outstanding performance by enabling the use of typical texture filtering operations and separable manual filtering. It does not suffer from shadow acne, but has its own issues with light leaks. It produces very pleasant shadows that exhibit certain softness, but at the same time they can lack in detail. Additionally, VSM requires up to five times more memory than regular shadow mapping.
+
+Finally, percentage-closer soft shadows can be used to render contact-hardening shadows. This technique gives the most robust visuals, but requires careful hand tuning of the parameters such as bias and light size. It gives realistic looking results, which are however not physically correct, and are only an approximation. The performance cost is approximately twice that of adaptive PCF on its own.
+
+Figure \ref{fig:plot:summary_fps} presents aggregated frame rate results for all tested algorithms for \(1024\times 1024\) shadow maps, filter kernel size \(11\times 11\) (where applicable) and output resolution of \(1920\times 1080\).
+
+If the visuals are of the highest importance and the application has a lot of frame time budget available, PCSS is the best choice. VSM is both very performant and gives very smooth shadows, but should be reconsidered if shadow detail is important. In other cases, a balance between shadow map resolution, kernel size and kernel offset scale should be found within adaptive PCF. Basic PCF should probably be avoided, unless combining a small kernel size with hardware bilinear filtering and high shadow map resolution for basic anti-aliasing of shadows. Table \ref{fig:table:breakdown} contains a summary of visual aspects of the techniques.
+
+\begin{table}[h]
+    \centering
+    \caption{Breakdown of visual characteristics of all tested techniques. `$\sim$' means partially applicable.}
+    \label{fig:table:breakdown}
+    \begin{tabular}{|>{\columncolor[HTML]{EFEFEF}}l |l|l|l|l|l|l|}
+    \hline
+    \cellcolor[HTML]{D0D0D0}{\color[HTML]{000000} Characteristics} &
+      \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}{\color[HTML]{000000} \textbf{\begin{tabular}[c]{@{}c@{}}Shadow\\ mapping\end{tabular}}}} &
+      \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}{\color[HTML]{000000} \textbf{\begin{tabular}[c]{@{}c@{}}HW\\ Filtering\end{tabular}}}} &
+      \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}{\color[HTML]{000000} \textbf{PCF}}} &
+      \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}{\color[HTML]{000000} \textbf{\begin{tabular}[c]{@{}c@{}}Adaptive\\ PCF\end{tabular}}}} &
+      \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}{\color[HTML]{000000} \textbf{VSM}}} &
+      \multicolumn{1}{c|}{\cellcolor[HTML]{EFEFEF}{\color[HTML]{000000} \textbf{PCSS}}} \\ \hline
+    {\color[HTML]{000000} \textbf{\begin{tabular}[c]{@{}l@{}}Precise\\ shadows\end{tabular}}} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} $\sim$} &
+      {\color[HTML]{000000} Yes} \\ \hline
+    {\color[HTML]{000000} \textbf{Soft shadows}} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} \\ \hline
+    {\color[HTML]{000000} \textbf{Anti-aliasing}} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} $\sim$} &
+      {\color[HTML]{000000} $\sim$} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} \\ \hline
+    {\color[HTML]{000000} \textbf{\begin{tabular}[c]{@{}l@{}}Contact-hardening\\ shadows\end{tabular}}} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} Yes} \\ \hline
+    {\color[HTML]{000000} \textbf{Surface acne-free}} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} No} \\ \hline
+    {\color[HTML]{000000} \textbf{Noise-free}} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} Yes} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} &
+      {\color[HTML]{000000} No} \\ \hline
+    \end{tabular}
+\end{table}
 
 % \begin{table}
 % \centering
