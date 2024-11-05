@@ -136,7 +136,7 @@ void ImGuiRenderingOptions::DisplayVarianceShadowMapOptions()
     }
 
     bool useBlur = static_cast<bool>(engineState->GetRenderingState().useGaussianBlurOnVSM);
-    if(ImGui::Checkbox("Filter VSM with Gaussian blur", &useBlur)) {
+    if(ImGui::Checkbox("Filter VSM with separable filter", &useBlur)) {
         engineState->GetRenderingState().useGaussianBlurOnVSM = static_cast<int>(useBlur);
     }
 
