@@ -21,8 +21,8 @@ Timer::Timer()
     QueryPerformanceCounter(&li);
     lastFrameTime = li.QuadPart;
 
-    fpsRollingAvg.SetRollingWindowSize(60*5);
-    deltaTimeRollingAvg.SetRollingWindowSize(60*5);
+    fpsRollingAvg.SetRollingWindowSize(60*10);
+    deltaTimeRollingAvg.SetRollingWindowSize(60*10);
 }
 
 Timer *Timer::GetInstance()

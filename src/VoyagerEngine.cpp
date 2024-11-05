@@ -432,7 +432,7 @@ void VoyagerEngine::LoadAssets()
             groundPlane.UpdateBoundingBox();
         }
 
-        // Load the full screen quad.
+        // Create the full screen quad.
         {
             std::vector<Vertex> vertices;
             std::vector<DWORD> indices;
@@ -486,7 +486,7 @@ void VoyagerEngine::LoadAssets()
         // 1024
         // 2048
         // 4096
-        const unsigned int shadowMapResolution = 512U;
+        const unsigned int shadowMapResolution = 1024U;
 
         // Create the shadow map depth buffer / depth texture.
         {

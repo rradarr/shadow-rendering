@@ -18,7 +18,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     // 1280, 720
     // 1920, 1080
     // 2560, 1440
-    VoyagerEngine voyager(1920, 1080, "Shadow Rendering");
+    VoyagerEngine voyager(1280, 720, "Shadow Rendering");
     int returnCode = WindowsApplication::Run(&voyager, hInstance, nCmdShow);
 
     return returnCode;
