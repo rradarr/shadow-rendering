@@ -1,7 +1,7 @@
 # shadow-rendering
 Master's project implementing and testing chosen shadow rendering techniques.
 
-![Exemplary view of the program, with UI visible.]()
+![Exemplary view of the program, with UI visible.](Resources/app.png)
 
 The final thesis is available as a PDF under [/Master Thesis/main.pdf](Master%20Thesis/main.pdf). It contains theoretical descriptions of the techniques in the contexts of their introductory publications, details on implementation and tests with results and conclusions.
 
